@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lingkaran - Matematika Wajib SMA">
+    <title>Lingkaran - Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Fraction Styles */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-family: var(--font-display);
+        }
+        .fraction-numerator { padding: 2px 6px; font-size: 0.9rem; line-height: 1.2; }
+        .fraction-line { width: 100%; height: 2px; background: var(--text-primary); border-radius: 1px; }
+        .fraction-denominator { padding: 2px 6px; font-size: 0.9rem; line-height: 1.2; }
+        .material-content sub, .material-content sup { font-size: 0.75em; }
+
+        /* Layout */
+        .lab-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 900px) { .lab-layout { grid-template-columns: 3fr 2fr; } }
+        
+        .canvas-box { background: var(--bg-secondary); border-radius: var(--radius-lg); padding: 10px; position: relative; }
+        .axis { stroke: var(--text-muted); stroke-width: 1; }
+        .grid-line { stroke: var(--border-light); stroke-width: 0.5; }
+        .drag-point { cursor: grab; transition: r 0.1s; }
+        .drag-point:active { cursor: grabbing; }
+        
+        .info-badge { display: inline-block; padding: 5px 15px; border-radius: 100px; font-weight: bold; font-size: 0.9rem; margin-top: 10px; }
+        .badge-inside { background: #d4edda; color: #155724; }
+        .badge-on { background: #fff3cd; color: #856404; }
+        .badge-outside { background: #f8d7da; color: #721c24; }
+        
+        .control-panel { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 20px; }
+        
+        .tab-controls { display: flex; border-bottom: 2px solid var(--border-color); margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 10px; background: none; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+        .tab-btn.active { color: var(--accent-primary); border-bottom-color: var(--accent-primary); }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                    </svg>
+                    <span class="logo-text">Media Belajar Daffa</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a><span>/</span><a href="index.html">Matematika Wajib</a><span>/</span><span class="current">Lingkaran</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Lingkaran</h1>
+                    <p class="page-subtitle">Menguasai persamaan lingkaran, kedudukan titik, dan sudut pusat.</p>
+                </div>
+
+                <div class="nav-btn-group">
+                    <a href="index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Kembali ke Daftar Materi</a>
+                    <a href="../index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a>
+                </div>
+
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#materi-inti" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Materi Inti</a>
+                    <a href="#animasi-interaktif" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animasi</a>
+                    <a href="#contoh-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Contoh Soal</a>
+                    <a href="#latihan-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Latihan</a>
+                    <a href="#kuis" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Kuis</a>
+                </nav>
+
+                <section class="content-section" id="materi-inti">
+                    <div class="section-header"><h2 class="section-title">Materi Inti</h2></div>
+                    <div class="material-content">
+                        <h3>1. Persamaan Lingkaran</h3>
+                        <p>Lingkaran adalah tempat kedudukan titik-titik yang berjarak sama (jari-jari) dari suatu titik tetap (pusat).</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Bentuk Pusat dan Jari-jari</div>
+                            <div class="formula">(x - a)² + (y - b)² = r²</div>
+                            <div class="formula-label" style="margin-top:10px;">Bentuk Umum</div>
+                            <div class="formula">x² + y² + Ax + By + C = 0</div>
+                        </div>
+
+                        <h3>2. Hubungan Bentuk Umum</h3>
+                        <p>Dari bentuk umum <strong>x² + y² + Ax + By + C = 0</strong>:</p>
+                        <ul>
+                            <li>Pusat: <strong>P(-A/2, -B/2)</strong></li>
+                            <li>Jari-jari: <strong>r = ½√(A² + B² - 4C)</strong></li>
+                        </ul>
+
+                        <h3>3. Kedudukan Titik</h3>
+                        <p>Titik <strong>P(x₁, y₁)</strong> dan lingkaran <strong>(x-a)² + (y-b)² = r²</strong>.</p>
+                        <p>Hitung <strong>d² = (x₁-a)² + (y₁-b)²</strong>:</p>
+                        <ul>
+                            <li>Jika <strong>d² < r²</strong> → Di dalam</li>
+                            <li>Jika <strong>d² = r²</strong> → Pada lingkaran</li>
+                            <li>Jika <strong>d² > r²</strong> → Di luar</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="content-section" id="animasi-interaktif">
+                    <div class="section-header"><h2 class="section-title">Circle Lab</h2></div>
+                    <div class="lab-layout">
+                        <div class="canvas-box">
+                            <svg id="circSvg" viewBox="-110 -110 220 220" style="width: 100%; height: auto;">
+                                <g id="gridGrp"></g>
+                                <line x1="-100" y1="0" x2="100" y2="0" class="axis" />
+                                <line x1="0" y1="-100" x2="0" y2="100" class="axis" />
+                                <circle id="mainCircle" cx="0" cy="0" r="50" fill="none" stroke="var(--accent-primary)" stroke-width="2" />
+                                <circle id="centerPt" cx="0" cy="0" r="4" fill="var(--text-primary)" />
+                                <circle id="testPt" cx="30" cy="-30" r="6" fill="#27ae60" class="drag-point" />
+                                <text id="testTxt" x="35" y="-35" font-size="12" fill="#27ae60">P(30,30)</text>
+                                <line id="distLine" x1="0" y1="0" x2="30" y2="-30" stroke="#95a5a6" stroke-dasharray="4,4" />
+                            </svg>
+                        </div>
+                        <div class="control-panel">
+                            <div class="tab-controls">
+                                <button class="tab-btn active" onclick="setTab('params')">Persamaan</button>
+                                <button class="tab-btn" onclick="setTab('point')">Kedudukan</button>
+                            </div>
+                            <div id="panelContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="contoh-soal">
+                    <div class="section-header"><h2 class="section-title">Contoh Soal</h2></div>
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">1</span><span class="example-title">Bentuk Umum</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Tentukan pusat dan jari-jari lingkaran: x² + y² - 6x + 4y - 12 = 0</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content">
+                                    <p>A = -6, B = 4, C = -12.</p>
+                                    <span class="step-math">a = 3, b = -2</span>
+                                </div></div>
+                                <div class="solution-step"><span class="step-marker">2</span><div class="step-content">
+                                    <p>r = ½√(36 + 16 + 48) = ½√100 = 5</p>
+                                </div></div>
+                            </div>
+                            <div class="example-answer"><span class="answer-text">Pusat (3, -2), r = 5</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Latihan Soal Baru -->
+                <section class="content-section" id="latihan-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        <h2 class="section-title">Latihan Soal</h2>
+                    </div>
+                    <div class="practice-grid">
+                        <div class="practice-item">
+                            <span class="practice-number">1</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Tentukan pusat dan jari-jari lingkaran: x² + y² - 8x + 6y - 11 = 0.</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">2</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Tentukan persamaan lingkaran dengan pusat P(2, -3) dan jari-jari 5.</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">3</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Tentukan kedudukan titik (4, 3) terhadap lingkaran x² + y² = 25.</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">4</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Tentukan kedudukan titik (5, 1) terhadap lingkaran x² + y² - 4x + 2y - 20 = 0.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="kuis">
+                    <div class="section-header"><h2 class="section-title">Kuis</h2></div>
+                    <div id="quizContainer"></div>
+                </section>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand"><span class="footer-name">Media Belajar Daffa</span><span class="footer-class">XII-M4-1</span></div>
+                <div class="footer-info">Platform Pembelajaran Mandiri</div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+    <script>
+        const quizQuestions = [
+            { question: "Pusat lingkaran x² + y² = 16 adalah...", options: ["(0,0)", "(4,0)", "(0,4)", "(4,4)"], correct: 0 },
+            { question: "Jari-jari lingkaran (x-2)² + (y+3)² = 49 adalah...", options: ["7", "49", "14", "√49"], correct: 0 },
+            { question: "Titik (3,4) terhadap lingkaran x²+y²=25 berada...", options: ["Pada lingkaran", "Di dalam", "Di luar", "Di pusat"], correct: 0 },
+            { question: "Persamaan lingkaran dengan pusat (2,-1) dan r=5 adalah...", options: ["(x-2)²+(y+1)²=25", "(x+2)²+(y-1)²=25", "(x-2)²+(y-1)²=5", "x²+y²=25"], correct: 0 }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            new QuizEngine('quizContainer', quizQuestions).init();
+            const quickNav = document.getElementById('quickNav');
+            window.addEventListener('scroll', () => quickNav.classList.toggle('scrolled', window.scrollY > 200));
+
+            // Grid
+            const gridGrp = document.getElementById('gridGrp');
+            for(let i=-100; i<=100; i+=20) if(i!==0) { gridGrp.innerHTML += `<line x1="${i}" y1="-100" x2="${i}" y2="100" class="grid-line"/>`; gridGrp.innerHTML += `<line x1="-100" y1="${i}" x2="100" y2="${i}" class="grid-line"/>`; }
+
+            let cx=0, cy=0, r=50; let testX=30, testY=30; let currentTab = 'params';
+            const svg = document.getElementById('circSvg'), circle = document.getElementById('mainCircle'), centerPt = document.getElementById('centerPt'), testPt = document.getElementById('testPt'), testTxt = document.getElementById('testTxt'), distLine = document.getElementById('distLine');
+            const toSVG = (x, y) => [x, -y];
+
+            function updateVisuals() {
+                const [scx, scy] = toSVG(cx, cy);
+                circle.setAttribute('cx', scx); circle.setAttribute('cy', scy); circle.setAttribute('r', r);
+                centerPt.setAttribute('cx', scx); centerPt.setAttribute('cy', scy);
+                const [tpx, tpy] = toSVG(testX, testY);
+                testPt.setAttribute('cx', tpx); testPt.setAttribute('cy', tpy);
+                testTxt.setAttribute('x', tpx + 5); testTxt.setAttribute('y', tpy - 5); testTxt.textContent = `P(${testX},${testY})`;
+                distLine.setAttribute('x2', tpx); distLine.setAttribute('y2', tpy); distLine.setAttribute('x1', scx); distLine.setAttribute('y1', scy);
+                updateEquation();
+                if(currentTab === 'point') {
+                    const d2 = Math.pow(testX-cx, 2) + Math.pow(testY-cy, 2); const r2 = r*r;
+                    let status, cls;
+                    if(Math.abs(d2 - r2) < 0.1) { status = "PADA LINGKARAN"; cls = "badge-on"; }
+                    else if(d2 < r2) { status = "DI DALAM"; cls = "badge-inside"; }
+                    else { status = "DI LUAR"; cls = "badge-outside"; }
+                    document.getElementById('pointStatus').innerHTML = `<h4 style="margin:10px 0 5px; font-size:0.9rem; color:var(--text-muted);">Analisis:</h4><p style="font-size:0.9rem;">d² = ${d2.toFixed(1)}, r² = ${r2}</p><span class="info-badge ${cls}">${status}</span>`;
+                }
+            }
+
+            function updateEquation() { const el = document.getElementById('eqDisplay'); if(!el) return; let str = (cx===0 && cy===0) ? `x² + y² = ${r*r}` : `${cx===0 ? "x²" : "(x "+(cx>0?"- ":"+ ")+Math.abs(cx)+")²"} + ${cy===0 ? "y²" : "(y "+(cy>0?"- ":"+ ")+Math.abs(cy)+")²"} = ${r*r}`; el.textContent = str; }
+            
+            window.setTab = function(tab) { currentTab = tab; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); renderControls(); updateVisuals(); }
+            window.update = function(key, val) { if(key==='cx') cx = parseInt(val); if(key==='cy') cy = parseInt(val); if(key==='r') r = parseInt(val); updateVisuals(); }
+
+            function renderControls() {
+                const area = document.getElementById('panelContent');
+                if(currentTab === 'params') area.innerHTML = `<div class="slider-control"><span class="slider-label">Pusat x:</span><input type="range" class="slider-input" min="-50" max="50" value="${cx}" oninput="update('cx', this.value)"><span class="slider-value">${cx}</span></div><div class="slider-control"><span class="slider-label">Pusat y:</span><input type="range" class="slider-input" min="-50" max="50" value="${cy}" oninput="update('cy', this.value)"><span class="slider-value">${cy}</span></div><div class="slider-control"><span class="slider-label">Jari-jari:</span><input type="range" class="slider-input" min="10" max="80" value="${r}" oninput="update('r', this.value)"><span class="slider-value">${r}</span></div><hr style="margin: 15px 0; border:none; border-top:1px solid var(--border-color);"><h4 style="text-align:center; margin-bottom:5px;">Persamaan:</h4><div id="eqDisplay" style="text-align:center; font-family:monospace; font-size:1.1rem; font-weight:bold; color:var(--accent-primary);"></div>`;
+                else area.innerHTML = `<p style="text-align:center; margin-bottom:15px;">Tarik titik hijau atau gunakan slider.</p><div class="slider-control"><span class="slider-label">Titik x:</span><input type="range" class="slider-input" min="-80" max="80" value="${testX}" oninput="testX=parseInt(this.value); updateVisuals();"><span class="slider-value">${testX}</span></div><div class="slider-control"><span class="slider-label">Titik y:</span><input type="range" class="slider-input" min="-80" max="80" value="${testY}" oninput="testY=parseInt(this.value); updateVisuals();"><span class="slider-value">${testY}</span></div><div id="pointStatus" style="margin-top:10px; text-align:center;"></div>`;
+            }
+
+            let dragging = false;
+            testPt.addEventListener('mousedown', () => dragging = true); testPt.addEventListener('touchstart', (e) => { dragging = true; e.preventDefault(); });
+            window.addEventListener('mouseup', () => dragging = false); window.addEventListener('touchend', () => dragging = false);
+            window.addEventListener('mousemove', (e) => { if(!dragging || currentTab !== 'point') return; const rect = svg.getBoundingClientRect(); const scaleX = 220 / rect.width; const scaleY = 220 / rect.height; let mx = (e.clientX - rect.left) * scaleX - 110; let my = (e.clientY - rect.top) * scaleY - 110; testX = mx; testY = -my; updateVisuals(); });
+
+            renderControls(); updateVisuals();
+        });
+    </script>
+</body>
+</html>

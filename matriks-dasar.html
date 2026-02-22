@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Matriks Dasar - Matematika Wajib SMA">
+    <title>Matriks Dasar - Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific Styles */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-family: var(--font-display);
+        }
+        .fraction-numerator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; }
+        .fraction-line { width: 100%; height: 2px; background: var(--text-primary); border-radius: 1px; }
+        .fraction-denominator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; }
+        .formula-box .fraction { background: var(--bg-card); padding: 8px 12px; border-radius: var(--radius-sm); margin: 0 8px; }
+        .formula-box .fraction-line { background: var(--accent-primary); }
+
+        /* Rapi Matrix Layout */
+        .matrix-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .matrix-box {
+            display: flex;
+            align-items: center;
+        }
+        
+        .matrix-bracket {
+            font-family: monospace;
+            font-size: 4rem;
+            line-height: 1;
+            color: var(--text-primary);
+            font-weight: 200;
+        }
+        
+        .matrix-grid {
+            display: grid;
+            gap: 8px;
+            padding: 5px 10px;
+        }
+        
+        .matrix-cell {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--accent-primary);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .matrix-cell input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            outline: none;
+        }
+        
+        .matrix-cell:focus-within {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 2px var(--accent-lighter);
+        }
+
+        .op-sign {
+            font-size: 2rem;
+            color: var(--text-muted);
+            font-weight: bold;
+            padding: 0 5px;
+        }
+        
+        /* Highlight Classes for Multiplication */
+        .highlight-row-a {
+            background: rgba(52, 152, 219, 0.2) !important;
+            border-color: #3498db !important;
+            color: #2980b9 !important;
+        }
+        
+        .highlight-col-b {
+            background: rgba(46, 204, 113, 0.2) !important;
+            border-color: #2ecc71 !important;
+            color: #27ae60 !important;
+        }
+        
+        .highlight-result {
+            background: var(--accent-lighter) !important;
+            border-color: var(--accent-primary) !important;
+            color: var(--accent-primary) !important;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--accent-light);
+        }
+
+        .mult-info-panel {
+            background: var(--bg-secondary);
+            padding: 15px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .mult-info-panel p { margin: 0; font-size: 1rem; color: var(--text-primary); }
+        .mult-info-panel .math-exp {
+            font-family: var(--font-display);
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--accent-primary);
+            margin-top: 5px;
+        }
+
+        /* Determinant Visualization */
+        .det-canvas-container {
+            position: relative;
+            width: 200px;
+            height: 150px;
+            margin: 0 auto;
+        }
+        
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--accent-lighter);
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+        .result-box h3 { margin-bottom: 5px; font-size: 1rem; }
+        .result-box .val { font-size: 2rem; font-weight: 800; color: var(--accent-primary); }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                    </svg>
+                    <span class="logo-text">Media Belajar Daffa</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a><span>/</span>
+                        <a href="index.html">Matematika Wajib</a><span>/</span>
+                        <span class="current">Matriks Dasar</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Matriks Dasar</h1>
+                    <p class="page-subtitle">Memahami konsep matriks, operasi dasar, determinan, dan invers matriks.</p>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="nav-btn-group">
+                    <a href="index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Kembali ke Daftar Materi</a>
+                    <a href="../index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a>
+                </div>
+
+                <!-- Quick Navigation -->
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#materi-inti" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Materi Inti</a>
+                    <a href="#animasi-interaktif" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animasi</a>
+                    <a href="#contoh-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Contoh Soal</a>
+                    <a href="#latihan-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Latihan</a>
+                    <a href="#kuis" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Kuis</a>
+                </nav>
+
+                <!-- Material Content -->
+                <section class="content-section" id="materi-inti">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                        <h2 class="section-title">Materi Inti</h2>
+                    </div>
+                    <div class="material-content">
+                        <h3>1. Konsep Matriks</h3>
+                        <p>Matriks adalah susunan bilangan dalam baris dan kolom. Ordo matriks adalah jumlah baris × kolom.</p>
+                        
+                        <h3>2. Operasi Matriks</h3>
+                        <h4>a. Penjumlahan</h4>
+                        <p>Dilakukan pada elemen yang bersesuaian (ordo harus sama).</p>
+                        
+                        <h4>b. Perkalian</h4>
+                        <p>Hasil kali baris dan kolom: A(m×n) × B(n×p) = C(m×p). Elemen C<sub>ij</sub> didapat dari perkalian baris i matriks A dengan kolom j matriks B.</p>
+
+                        <h3>3. Determinan</h3>
+                        <div class="formula-box">
+                            <div class="formula-label">Determinan 2x2</div>
+                            <div class="formula">det(A) = a<sub>11</sub>.a<sub>22</sub> - a<sub>12</sub>.a<sub>21</sub></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Interactive Animations -->
+                <section class="content-section" id="animasi-interaktif">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <h2 class="section-title">Animasi Interaktif</h2>
+                    </div>
+
+                    <!-- Animation 1: Matrix Multiplication Visualizer -->
+                    <div class="animation-container">
+                        <div class="animation-header"><span class="animation-title">Visualisasi Perkalian Matriks (A × B = C)</span></div>
+                        
+                        <div class="mult-info-panel" id="multInfo">
+                            <p>Klik "Langkah Berikutnya" untuk melihat proses perkalian baris dan kolom.</p>
+                            <span class="math-exp" id="multExp"></span>
+                        </div>
+
+                        <div class="matrix-wrapper">
+                            <!-- Matrix A -->
+                            <div class="matrix-box">
+                                <span class="matrix-bracket">[</span>
+                                <div class="matrix-grid" style="grid-template-columns: repeat(2, 1fr);" id="matrixA">
+                                    <div class="matrix-cell" id="a00">1</div>
+                                    <div class="matrix-cell" id="a01">2</div>
+                                    <div class="matrix-cell" id="a10">3</div>
+                                    <div class="matrix-cell" id="a11">4</div>
+                                </div>
+                                <span class="matrix-bracket">]</span>
+                            </div>
+                            
+                            <span class="op-sign">×</span>
+                            
+                            <!-- Matrix B -->
+                            <div class="matrix-box">
+                                <span class="matrix-bracket">[</span>
+                                <div class="matrix-grid" style="grid-template-columns: repeat(2, 1fr);" id="matrixB">
+                                    <div class="matrix-cell" id="b00">5</div>
+                                    <div class="matrix-cell" id="b01">6</div>
+                                    <div class="matrix-cell" id="b10">7</div>
+                                    <div class="matrix-cell" id="b11">8</div>
+                                </div>
+                                <span class="matrix-bracket">]</span>
+                            </div>
+                            
+                            <span class="op-sign">=</span>
+                            
+                            <!-- Matrix C (Result) -->
+                            <div class="matrix-box">
+                                <span class="matrix-bracket">[</span>
+                                <div class="matrix-grid" style="grid-template-columns: repeat(2, 1fr);" id="matrixC">
+                                    <div class="matrix-cell" id="c00">?</div>
+                                    <div class="matrix-cell" id="c01">?</div>
+                                    <div class="matrix-cell" id="c10">?</div>
+                                    <div class="matrix-cell" id="c11">?</div>
+                                </div>
+                                <span class="matrix-bracket">]</span>
+                            </div>
+                        </div>
+                        
+                        <div class="animation-controls" style="justify-content: center; margin-top: 20px;">
+                            <button class="control-btn" id="btnPrevStep" disabled>Sebelumnya</button>
+                            <button class="control-btn active" id="btnNextStep">Langkah Berikutnya</button>
+                            <button class="control-btn" id="btnReset">Reset</button>
+                        </div>
+                    </div>
+
+                    <!-- Animation 2: Matrix Addition -->
+                    <div class="animation-container">
+                        <div class="animation-header"><span class="animation-title">Simulasi Penjumlahan Matriks</span></div>
+                        <div class="matrix-wrapper">
+                            <div class="matrix-box">
+                                <span class="matrix-bracket">[</span>
+                                <div class="matrix-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                    <div class="matrix-cell"><input type="number" id="add_a11" value="1" onchange="calcAdd()"></div>
+                                    <div class="matrix-cell"><input type="number" id="add_a12" value="2" onchange="calcAdd()"></div>
+                                    <div class="matrix-cell"><input type="number" id="add_a21" value="3" onchange="calcAdd()"></div>
+                                    <div class="matrix-cell"><input type="number" id="add_a22" value="4" onchange="calcAdd()"></div>
+                                </div>
+                                <span class="matrix-bracket">]</span>
+                            </div>
+                            
+                            <span class="op-sign">+</span>
+                            
+                            <div class="matrix-box">
+                                <span class="matrix-bracket">[</span>
+                                <div class="matrix-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                    <div class="matrix-cell"><input type="number" id="add_b11" value="5" onchange="calcAdd()"></div>
+                                    <div class="matrix-cell"><input type="number" id="add_b12" value="6" onchange="calcAdd()"></div>
+                                    <div class="matrix-cell"><input type="number" id="add_b21" value="7" onchange="calcAdd()"></div>
+                                    <div class="matrix-cell"><input type="number" id="add_b22" value="8" onchange="calcAdd()"></div>
+                                </div>
+                                <span class="matrix-bracket">]</span>
+                            </div>
+                            
+                            <span class="op-sign">=</span>
+                            
+                            <div class="matrix-box">
+                                <span class="matrix-bracket">[</span>
+                                <div class="matrix-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                    <div class="matrix-cell" id="add_c11">6</div>
+                                    <div class="matrix-cell" id="add_c12">8</div>
+                                    <div class="matrix-cell" id="add_c21">10</div>
+                                    <div class="matrix-cell" id="add_c22">12</div>
+                                </div>
+                                <span class="matrix-bracket">]</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Animation 3: Determinant -->
+                    <div class="animation-container">
+                        <div class="animation-header"><span class="animation-title">Visualisasi Determinan (ad - bc)</span></div>
+                        <div class="matrix-wrapper" style="flex-direction: column; gap: 20px;">
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <span style="font-size: 1.2rem;">A = </span>
+                                <div class="matrix-box">
+                                    <span class="matrix-bracket">[</span>
+                                    <div class="matrix-grid" style="grid-template-columns: repeat(2, 1fr);">
+                                        <div class="matrix-cell" id="det_a">4</div>
+                                        <div class="matrix-cell" id="det_b">2</div>
+                                        <div class="matrix-cell" id="det_c">3</div>
+                                        <div class="matrix-cell" id="det_d">1</div>
+                                    </div>
+                                    <span class="matrix-bracket">]</span>
+                                </div>
+                            </div>
+                            
+                            <div class="det-canvas-container" id="detCanvas">
+                                <svg width="100%" height="100%" style="position: absolute; top:0; left:0;">
+                                    <line id="lineAd" x1="15" y1="15" x2="135" y2="135" stroke="#2ecc71" stroke-width="3" stroke-dasharray="5,5" style="display:none;"/>
+                                    <line id="lineBc" x1="135" y1="15" x2="15" y2="135" stroke="#e74c3c" stroke-width="3" stroke-dasharray="5,5" style="display:none;"/>
+                                </svg>
+                            </div>
+                            
+                            <div class="result-box">
+                                <h3 id="detLabel">Determinan</h3>
+                                <div class="val" id="detResult">-2</div>
+                            </div>
+                            
+                            <div class="animation-controls">
+                                <button class="control-btn" id="btnDet1">Langkah 1: ad</button>
+                                <button class="control-btn" id="btnDet2">Langkah 2: bc</button>
+                                <button class="control-btn" id="btnDet3">Hasil</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Example Problems -->
+                <section class="content-section" id="contoh-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <h2 class="section-title">Contoh Soal</h2>
+                    </div>
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">1</span><span class="example-title">Determinan</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Tentukan determinan matriks A = [3 4; 2 5]</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content"><span class="step-label">Rumus</span><p class="step-text">det = ad - bc</p><span class="step-math">det = (3)(5) - (4)(2) = 15 - 8 = 7</span></div></div>
+                            </div>
+                            <div class="example-answer"><svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="answer-text">Determinan = 7</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Practice Problems -->
+                <section class="content-section" id="latihan-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        <h2 class="section-title">Latihan Soal</h2>
+                    </div>
+                    <div class="practice-grid">
+                        <div class="practice-item"><span class="practice-number">1</span><div class="practice-content"><p class="practice-question">Tentukan ordo matriks [1 2 3; 4 5 6].</p></div></div>
+                        <div class="practice-item"><span class="practice-number">2</span><div class="practice-content"><p class="practice-question">Hitung determinan matriks [4 2; 3 1].</p></div></div>
+                    </div>
+                </section>
+
+                <!-- Quiz Section -->
+                <section class="content-section" id="kuis">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <h2 class="section-title">Kuis Matriks</h2>
+                    </div>
+                    <div id="quizContainer"></div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-name">Media Belajar Daffa</span>
+                    <span class="footer-class">Muhammad Daffa Athallah - XII-M4-1</span>
+                </div>
+                <div class="footer-info">Platform Pembelajaran Mandiri</div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+    <script>
+        // Quiz Data
+        const quizQuestions = [
+            { question: "Ordo matriks A (2x3) berarti...", options: ["2 baris 3 kolom", "3 baris 2 kolom", "5 baris", "6 kolom"], correct: 0 },
+            { question: "Determinan matriks [2 0; 0 2] adalah...", options: ["4", "0", "2", "1"], correct: 0 },
+            { question: "Matriks identitas 2x2 adalah...", options: ["[1 0; 0 1]", "[0 1; 1 0]", "[1 1; 1 1]", "[0 0; 0 0]"], correct: 0 },
+            { question: "Hasil [1 2; 3 4] + [1 2; 3 4] adalah...", options: ["[2 4; 6 8]", "[1 4; 9 16]", "[2 2; 6 8]", "[0 0; 0 0]"], correct: 0 }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            new QuizEngine('quizContainer', quizQuestions).init();
+            const quickNav = document.getElementById('quickNav');
+            window.addEventListener('scroll', () => quickNav.classList.toggle('scrolled', window.scrollY > 200));
+
+            // ==========================================
+            // MULTIPLICATION VISUALIZATION LOGIC
+            // ==========================================
+            
+            // Data Matrix: A=[[1,2],[3,4]], B=[[5,6],[7,8]]
+            // Expected C: [[19,22],[43,50]]
+            // 1*5 + 2*7 = 19
+            // 1*6 + 2*8 = 22
+            // 3*5 + 4*7 = 43
+            // 3*6 + 4*8 = 50
+
+            const multSteps = [
+                { row: 0, col: 0, ops: "(1×5) + (2×7)", res: 19 },
+                { row: 0, col: 1, ops: "(1×6) + (2×8)", res: 22 },
+                { row: 1, col: 0, ops: "(3×5) + (4×7)", res: 43 },
+                { row: 1, col: 1, ops: "(3×6) + (4×8)", res: 50 }
+            ];
+            
+            let currentStep = -1;
+            
+            const btnNext = document.getElementById('btnNextStep');
+            const btnPrev = document.getElementById('btnPrevStep');
+            const btnReset = document.getElementById('btnReset');
+            const infoPanel = document.getElementById('multInfo');
+            const expText = document.getElementById('multExp');
+
+            function clearHighlights() {
+                document.querySelectorAll('.matrix-cell').forEach(c => {
+                    c.classList.remove('highlight-row-a', 'highlight-col-b', 'highlight-result');
+                });
+            }
+
+            function updateStep(stepIndex) {
+                clearHighlights();
+                const step = multSteps[stepIndex];
+                
+                // Highlight Row in A
+                document.getElementById(`a${step.row}0`).classList.add('highlight-row-a');
+                document.getElementById(`a${step.row}1`).classList.add('highlight-row-a');
+                
+                // Highlight Col in B
+                document.getElementById(`b0${step.col}`).classList.add('highlight-col-b');
+                document.getElementById(`b1${step.col}`).classList.add('highlight-col-b');
+                
+                // Highlight Result in C
+                const resultCell = document.getElementById(`c${step.row}${step.col}`);
+                resultCell.classList.add('highlight-result');
+                resultCell.textContent = step.res;
+
+                // Update Info
+                infoPanel.innerHTML = `
+                    <p>Hitung C<sub>${step.row+1}${step.col+1}</sub>: Baris ${step.row+1} A × Kolom ${step.col+1} B</p>
+                    <span class="math-exp">${step.ops} = ${step.res}</span>
+                `;
+
+                // Button states
+                btnPrev.disabled = stepIndex === 0;
+                btnNext.disabled = stepIndex === multSteps.length - 1;
+            }
+
+            btnNext.addEventListener('click', () => {
+                currentStep++;
+                if(currentStep >= multSteps.length) currentStep = multSteps.length - 1;
+                updateStep(currentStep);
+            });
+
+            btnPrev.addEventListener('click', () => {
+                currentStep--;
+                if(currentStep < 0) currentStep = 0;
+                updateStep(currentStep);
+            });
+
+            btnReset.addEventListener('click', () => {
+                currentStep = -1;
+                clearHighlights();
+                // Reset C values
+                ['c00', 'c01', 'c10', 'c11'].forEach(id => document.getElementById(id).textContent = '?');
+                infoPanel.innerHTML = '<p>Klik "Langkah Berikutnya" untuk melihat proses perkalian baris dan kolom.</p>';
+                btnNext.disabled = false;
+                btnPrev.disabled = true;
+            });
+
+            // ==========================================
+            // ADDITION LOGIC
+            // ==========================================
+            window.calcAdd = function() {
+                const get = (id) => parseFloat(document.getElementById(id).value) || 0;
+                document.getElementById('add_c11').textContent = get('add_a11') + get('add_b11');
+                document.getElementById('add_c12').textContent = get('add_a12') + get('add_b12');
+                document.getElementById('add_c21').textContent = get('add_a21') + get('add_b21');
+                document.getElementById('add_c22').textContent = get('add_a22') + get('add_b22');
+            }
+            
+            // ==========================================
+            // DETERMINANT LOGIC
+            // ==========================================
+            const lineAd = document.getElementById('lineAd');
+            const lineBc = document.getElementById('lineBc');
+            const detResult = document.getElementById('detResult');
+
+            function resetDet() {
+                lineAd.style.display = 'none';
+                lineBc.style.display = 'none';
+                detResult.textContent = '?';
+            }
+
+            document.getElementById('btnDet1').onclick = () => {
+                resetDet();
+                lineAd.style.display = 'block';
+                detResult.textContent = '4 × 1 = 4';
+            };
+            document.getElementById('btnDet2').onclick = () => {
+                resetDet();
+                lineBc.style.display = 'block';
+                detResult.textContent = '2 × 3 = 6';
+            };
+            document.getElementById('btnDet3').onclick = () => {
+                lineAd.style.display = 'block';
+                lineBc.style.display = 'block';
+                detResult.textContent = '4 - 6 = -2';
+            };
+            
+            calcAdd();
+        });
+    </script>
+</body>
+</html>

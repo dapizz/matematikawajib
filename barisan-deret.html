@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Barisan dan Deret - Matematika Wajib SMA">
+    <title>Barisan dan Deret - Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific Styles */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-family: var(--font-display);
+        }
+        .fraction-numerator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; }
+        .fraction-line { width: 100%; height: 2px; background: var(--text-primary); border-radius: 1px; }
+        .fraction-denominator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; }
+        .fraction-sm .fraction-numerator, .fraction-sm .fraction-denominator { font-size: 0.875rem; padding: 1px 6px; }
+        .fraction-lg .fraction-numerator, .fraction-lg .fraction-denominator { font-size: 1.25rem; padding: 4px 12px; }
+        .formula-box .fraction { background: var(--bg-card); padding: 8px 12px; border-radius: var(--radius-sm); margin: 0 8px; }
+        .formula-box .fraction-line { background: var(--accent-primary); }
+        .step-math .fraction { background: var(--bg-card); padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
+
+        /* Custom Styles for Sequence Visualization */
+        .term-block {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 5px;
+            padding: 10px;
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            min-width: 50px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease;
+        }
+        .term-value { font-weight: bold; font-size: 1.2rem; color: var(--accent-primary); }
+        .term-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 5px; }
+        
+        .sequence-container {
+            display: flex;
+            align-items: flex-end; /* Align bottom for bar chart effect */
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            min-height: 200px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                    </svg>
+                    <span class="logo-text">Media Belajar Daffa</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a><span>/</span>
+                        <a href="index.html">Matematika Wajib</a><span>/</span>
+                        <span class="current">Barisan dan Deret</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Barisan dan Deret</h1>
+                    <p class="page-subtitle">Memahami pola bilangan, barisan aritmetika, geometri, serta penjumlahan deretnya.</p>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="nav-btn-group">
+                    <a href="index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Kembali ke Daftar Materi</a>
+                    <a href="../index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a>
+                </div>
+
+                <!-- Quick Navigation -->
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#materi-inti" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Materi Inti</a>
+                    <a href="#animasi-interaktif" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animasi</a>
+                    <a href="#contoh-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Contoh Soal</a>
+                    <a href="#latihan-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Latihan</a>
+                    <a href="#kuis" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Kuis</a>
+                </nav>
+
+                <!-- Learning Objectives -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <h2 class="section-title">Tujuan Pembelajaran</h2>
+                    </div>
+                    <div class="objectives-list">
+                        <div class="objective-item"><span class="objective-number">1</span><span class="objective-text">Memahami konsep barisan dan deret aritmetika</span></div>
+                        <div class="objective-item"><span class="objective-number">2</span><span class="objective-text">Menentukan suku ke-n dan jumlah n suku aritmetika</span></div>
+                        <div class="objective-item"><span class="objective-number">3</span><span class="objective-text">Memahami konsep barisan dan deret geometri</span></div>
+                        <div class="objective-item"><span class="objective-number">4</span><span class="objective-text">Menentukan suku ke-n dan jumlah n suku geometri</span></div>
+                    </div>
+                </section>
+
+                <!-- Material Content -->
+                <section class="content-section" id="materi-inti">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                        <h2 class="section-title">Materi Inti</h2>
+                    </div>
+                    <div class="material-content">
+                        <h3>1. Barisan Aritmetika</h3>
+                        <p>Barisan aritmetika adalah barisan bilangan yang selisih antara dua suku yang berurutan selalu tetap. Selisih tetap ini disebut beda (<strong>b</strong>).</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Rumus Suku ke-n (Un)</div>
+                            <div class="formula">Un = a + (n - 1)b</div>
+                            <div class="formula-label" style="margin-top: 8px;">Keterangan</div>
+                            <div class="formula" style="font-size: 1rem; font-weight: 400;">a = suku pertama, b = beda, n = banyak suku</div>
+                        </div>
+
+                        <div class="info-box note">
+                            <svg class="info-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            <div class="info-box-content">
+                                <div class="info-box-title">Contoh</div>
+                                <p class="info-box-text">2, 5, 8, 11, ... (a = 2, b = 3)</p>
+                            </div>
+                        </div>
+
+                        <h3>2. Deret Aritmetika</h3>
+                        <p>Deret aritmetika adalah penjumlahan suku-suku barisan aritmetika.</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Rumus Jumlah n Suku (Sn)</div>
+                            <div class="formula">Sn = <span class="fraction fraction-lg"><span class="fraction-numerator">n</span><span class="fraction-line"></span><span class="fraction-denominator">2</span></span> (2a + (n - 1)b)</div>
+                            <div style="margin-top: 10px; font-size: 1rem; color: var(--text-muted);">atau</div>
+                            <div class="formula" style="margin-top: 10px;">Sn = <span class="fraction fraction-lg"><span class="fraction-numerator">n</span><span class="fraction-line"></span><span class="fraction-denominator">2</span></span> (a + Un)</div>
+                        </div>
+
+                        <h3>3. Barisan Geometri</h3>
+                        <p>Barisan geometri adalah barisan bilangan yang perbandingan antara dua suku yang berurutan selalu tetap. Perbandingan tetap ini disebut rasio (<strong>r</strong>).</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Rumus Suku ke-n (Un)</div>
+                            <div class="formula">Un = a . r<sup>n-1</sup></div>
+                        </div>
+
+                        <h3>4. Deret Geometri</h3>
+                        <p>Deret geometri adalah penjumlahan suku-suku barisan geometri.</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Rumus Jumlah n Suku (Sn)</div>
+                            <div class="formula">Sn = a . <span class="fraction fraction-lg"><span class="fraction-numerator">r<sup>n</sup> - 1</span><span class="fraction-line"></span><span class="fraction-denominator">r - 1</span></span> (untuk r > 1)</div>
+                        </div>
+
+                        <div class="formula-box">
+                            <div class="formula">Sn = a . <span class="fraction fraction-lg"><span class="fraction-numerator">1 - r<sup>n</sup></span><span class="fraction-line"></span><span class="fraction-denominator">1 - r</span></span> (untuk r < 1)</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Interactive Animations -->
+                <section class="content-section" id="animasi-interaktif">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <h2 class="section-title">Animasi Interaktif</h2>
+                    </div>
+
+                    <!-- Animation 1: Arithmetic Sequence -->
+                    <div class="animation-container">
+                        <div class="animation-header"><span class="animation-title">Visualisasi Barisan Aritmetika</span></div>
+                        <div class="slider-control">
+                            <span class="slider-label">Suku Pertama (a):</span>
+                            <input type="range" class="slider-input" id="arithA" min="1" max="5" step="1" value="2">
+                            <span class="slider-value" id="arithAVal">2</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Beda (b):</span>
+                            <input type="range" class="slider-input" id="arithB" min="1" max="5" step="1" value="3">
+                            <span class="slider-value" id="arithBVal">3</span>
+                        </div>
+                        <div class="sequence-container" id="arithCanvas">
+                            <!-- Terms generated by JS -->
+                        </div>
+                        <div class="animation-info" id="arithInfo">
+                            Barisan: 2, 5, 8, 11, 14...
+                        </div>
+                    </div>
+
+                    <!-- Animation 2: Geometric Sequence -->
+                    <div class="animation-container">
+                        <div class="animation-header"><span class="animation-title">Visualisasi Barisan Geometri</span></div>
+                        <div class="slider-control">
+                            <span class="slider-label">Suku Pertama (a):</span>
+                            <input type="range" class="slider-input" id="geoA" min="1" max="5" step="1" value="2">
+                            <span class="slider-value" id="geoAVal">2</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Rasio (r):</span>
+                            <input type="range" class="slider-input" id="geoR" min="1" max="4" step="1" value="2">
+                            <span class="slider-value" id="geoRVal">2</span>
+                        </div>
+                        <div class="sequence-container" id="geoCanvas">
+                            <!-- Terms generated by JS -->
+                        </div>
+                        <div class="animation-info" id="geoInfo">
+                            Barisan: 2, 4, 8, 16, 32...
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Example Problems -->
+                <section class="content-section" id="contoh-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <h2 class="section-title">Contoh Soal dan Pembahasan</h2>
+                    </div>
+
+                    <!-- Example 1 -->
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">1</span><span class="example-title">Suku ke-n Aritmetika</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Diketahui barisan aritmetika: 3, 7, 11, 15, ... Tentukan suku ke-10.</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content"><span class="step-label">Identifikasi</span><p class="step-text">Suku pertama (a) = 3, Beda (b) = 7 - 3 = 4.</p></div></div>
+                                <div class="solution-step"><span class="step-marker">2</span><div class="step-content"><span class="step-label">Substitusi</span><p class="step-text">Gunakan rumus Un = a + (n - 1)b:</p><span class="step-math">U₁₀ = 3 + (10 - 1)4</span></div></div>
+                                <div class="solution-step"><span class="step-marker">3</span><div class="step-content"><span class="step-label">Hitung</span><p class="step-text"></p><span class="step-math">U₁₀ = 3 + 36 = 39</span></div></div>
+                            </div>
+                            <div class="example-answer"><svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="answer-text">Suku ke-10 adalah 39</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Example 2 -->
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">2</span><span class="example-title">Deret Geometri</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Tentukan jumlah 5 suku pertama dari barisan geometri 2, 6, 18, ...</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content"><span class="step-label">Identifikasi</span><p class="step-text">a = 2, r = 6/2 = 3, n = 5.</p></div></div>
+                                <div class="solution-step"><span class="step-marker">2</span><div class="step-content"><span class="step-label">Rumus</span><p class="step-text">Karena r > 1, gunakan Sn = a(rⁿ - 1)/(r - 1).</p><span class="step-math">S₅ = 2(3⁵ - 1) / (3 - 1)</span></div></div>
+                                <div class="solution-step"><span class="step-marker">3</span><div class="step-content"><span class="step-label">Hitung</span><p class="step-text"></p><span class="step-math">S₅ = 2(243 - 1) / 2 = 242</span></div></div>
+                            </div>
+                            <div class="example-answer"><svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="answer-text">Jumlah 5 suku pertama = 242</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Practice Problems -->
+                <section class="content-section" id="latihan-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        <h2 class="section-title">Latihan Soal</h2>
+                    </div>
+                    <div class="practice-grid">
+                        <div class="practice-item"><span class="practice-number">1</span><div class="practice-content"><p class="practice-question">Tentukan suku ke-8 dari barisan aritmetika: 5, 8, 11, ...</p></div></div>
+                        <div class="practice-item"><span class="practice-number">2</span><div class="practice-content"><p class="practice-question">Hitung jumlah 10 suku pertama dari barisan aritmetika dengan a = 4 dan b = 3.</p></div></div>
+                        <div class="practice-item"><span class="practice-number">3</span><div class="practice-content"><p class="practice-question">Diketahui barisan geometri 1, 2, 4, ... Tentukan suku ke-7.</p></div></div>
+                        <div class="practice-item"><span class="practice-number">4</span><div class="practice-content"><p class="practice-question">Tentukan jumlah 6 suku pertama deret geometri dengan a = 3 dan r = 2.</p></div></div>
+                    </div>
+                </section>
+
+                <!-- Quiz Section -->
+                <section class="content-section" id="kuis">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <h2 class="section-title">Kuis Barisan dan Deret</h2>
+                    </div>
+                    <div id="quizContainer"></div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-name">Media Belajar Daffa</span>
+                    <span class="footer-class">Muhammad Daffa Athallah - XII-M4-1</span>
+                </div>
+                <div class="footer-info">Platform Pembelajaran Mandiri</div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+    <script>
+        // Quiz Data
+        const quizQuestions = [
+            { question: "Suku ke-5 barisan aritmetika 2, 5, 8, ... adalah...", options: ["11", "14", "17", "20"], correct: 1, explanation: "a=2, b=3. U5 = 2 + 4(3) = 14." },
+            { question: "Beda dari barisan aritmetika 10, 7, 4, 1, ... adalah...", options: ["3", "-3", "2", "-2"], correct: 1, explanation: "Beda = U2 - U1 = 7 - 10 = -3." },
+            { question: "Jumlah 5 suku pertama barisan aritmetika 1, 3, 5, ... adalah...", options: ["15", "20", "25", "30"], correct: 2, explanation: "S5 = 5/2(2(1) + 4(2)) = 5/2(10) = 25." },
+            { question: "Rasio dari barisan geometri 2, 6, 18, ... adalah...", options: ["2", "3", "4", "6"], correct: 1, explanation: "r = 6/2 = 3." },
+            { question: "Suku ke-4 barisan geometri dengan a=3 dan r=2 adalah...", options: ["12", "18", "24", "48"], correct: 2, explanation: "U4 = 3 * 2^(4-1) = 3 * 8 = 24." },
+            { question: "Jika U3 = 12 dan U5 = 20 pada barisan aritmetika, maka bedanya adalah...", options: ["2", "4", "6", "8"], correct: 1, explanation: "U5 - U3 = 2b -> 20 - 12 = 8 -> 2b = 8 -> b = 4." },
+            { question: "Jumlah 3 suku pertama deret geometri 1, 2, 4 adalah...", options: ["5", "7", "8", "15"], correct: 1, explanation: "S3 = 1 + 2 + 4 = 7." },
+            { question: "Rumus umum suku ke-n barisan aritmetika adalah...", options: ["Un = a + (n-1)b", "Un = a * r^(n-1)", "Un = a + nb", "Un = a * r^n"], correct: 0, explanation: "Rumus standar barisan aritmetika." },
+            { question: "Barisan 5, 10, 20, 40, ... merupakan barisan...", options: ["Aritmetika", "Geometri", "Fibonacci", "Acak"], correct: 1, explanation: "Rasio antar suku tetap (r=2), sehingga geometri." },
+            { question: "Jika suku pertama a=4 dan beda b=-2, maka U6 adalah...", options: ["-6", "-4", "4", "6"], correct: 0, explanation: "U6 = 4 + 5(-2) = 4 - 10 = -6." }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Init Quiz
+            new QuizEngine('quizContainer', quizQuestions).init();
+
+            // Quick Nav Shadow
+            const quickNav = document.getElementById('quickNav');
+            window.addEventListener('scroll', () => quickNav.classList.toggle('scrolled', window.scrollY > 200));
+
+            // Animation 1: Arithmetic Sequence
+            const arithA = document.getElementById('arithA');
+            const arithB = document.getElementById('arithB');
+            const arithCanvas = document.getElementById('arithCanvas');
+            const arithInfo = document.getElementById('arithInfo');
+
+            function updateArith() {
+                const a = parseInt(arithA.value);
+                const b = parseInt(arithB.value);
+                document.getElementById('arithAVal').textContent = a;
+                document.getElementById('arithBVal').textContent = b;
+                
+                let html = '';
+                let terms = [];
+                for(let i=1; i<=6; i++) {
+                    const val = a + (i-1)*b;
+                    terms.push(val);
+                    // Height logic for visualization
+                    const height = Math.min(val * 20, 150); // Cap height
+                    html += `<div class="term-block" style="height: ${height}px; justify-content: flex-end;">
+                        <div class="term-value">${val}</div>
+                        <div class="term-label">U${i}</div>
+                    </div>`;
+                }
+                arithCanvas.innerHTML = html;
+                arithInfo.textContent = `Barisan: ${terms.join(', ')}...`;
+            }
+
+            if(arithA) { arithA.oninput = updateArith; arithB.oninput = updateArith; updateArith(); }
+
+            // Animation 2: Geometric Sequence
+            const geoA = document.getElementById('geoA');
+            const geoR = document.getElementById('geoR');
+            const geoCanvas = document.getElementById('geoCanvas');
+            const geoInfo = document.getElementById('geoInfo');
+
+            function updateGeo() {
+                const a = parseInt(geoA.value);
+                const r = parseInt(geoR.value);
+                document.getElementById('geoAVal').textContent = a;
+                document.getElementById('geoRVal').textContent = r;
+                
+                let html = '';
+                let terms = [];
+                for(let i=1; i<=6; i++) {
+                    const val = a * Math.pow(r, i-1);
+                    terms.push(val);
+                    // Height logic for visualization
+                    const height = Math.min(val * 20, 150); // Cap height to prevent overflow
+                    html += `<div class="term-block" style="height: ${height}px; justify-content: flex-end; border-color: var(--info);">
+                        <div class="term-value" style="color: var(--info);">${val}</div>
+                        <div class="term-label">U${i}</div>
+                    </div>`;
+                }
+                geoCanvas.innerHTML = html;
+                geoInfo.textContent = `Barisan: ${terms.join(', ')}...`;
+            }
+
+            if(geoA) { geoA.oninput = updateGeo; geoR.oninput = updateGeo; updateGeo(); }
+        });
+    </script>
+</body>
+</html>

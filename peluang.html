@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Peluang - Matematika Wajib SMA">
+    <title>Peluang - Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Fraction Styles */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-family: var(--font-display);
+        }
+        .fraction-numerator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; border-bottom: 2px solid var(--text-primary); }
+        .fraction-denominator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; }
+        
+        /* Layout */
+        .prob-layout {
+            display: grid; grid-template-columns: 1fr; gap: 20px;
+        }
+        @media (min-width: 900px) {
+            .prob-layout { grid-template-columns: 1fr 1.5fr; }
+        }
+
+        /* Simulator Styles */
+        .sim-box {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            text-align: center;
+        }
+        
+        /* Dice Visual */
+        .dice-stage {
+            width: 120px; height: 120px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 0 rgba(0,0,0,0.15), 0 15px 30px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            padding: 15px;
+            transform: rotate(0deg);
+            transition: transform 0.1s;
+        }
+        .dot {
+            width: 18px; height: 18px;
+            background: #2c3e50;
+            border-radius: 50%;
+            margin: auto;
+            opacity: 0;
+        }
+        /* Positions */
+        .dot.center { grid-area: 2 / 2; opacity: 1; }
+        .dot.top-left { grid-area: 1 / 1; opacity: 1; }
+        .dot.top-right { grid-area: 1 / 3; opacity: 1; }
+        .dot.mid-left { grid-area: 2 / 1; opacity: 1; }
+        .dot.mid-right { grid-area: 2 / 3; opacity: 1; }
+        .dot.bot-left { grid-area: 3 / 1; opacity: 1; }
+        .dot.bot-right { grid-area: 3 / 3; opacity: 1; }
+
+        /* Result Table */
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+        .result-table th { color: var(--text-muted); padding: 5px; border-bottom: 2px solid var(--border-color); }
+        .result-table td { padding: 8px 5px; border-bottom: 1px solid var(--border-light); font-family: monospace; }
+        .result-table .val { font-weight: bold; color: var(--accent-primary); font-family: var(--font-body); }
+        
+        /* Bar Chart */
+        .chart-container {
+            margin-top: 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 15px;
+        }
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 150px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 25px; /* Space for labels */
+            position: relative;
+        }
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 15%;
+            height: 100%;
+            justify-content: flex-end;
+        }
+        .bar {
+            width: 100%;
+            background: var(--accent-secondary);
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: height 0.3s ease;
+        }
+        .bar-label {
+            margin-top: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+        }
+        .bar-val {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--accent-secondary);
+        }
+        /* Theoretical Line */
+        .theory-line {
+            position: absolute;
+            left: 0; right: 0;
+            bottom: 25px; /* Match padding bottom of container */
+            height: 0;
+            border-top: 2px dashed var(--error);
+            z-index: 2;
+        }
+        .theory-label {
+            position: absolute;
+            right: 0;
+            top: -20px;
+            font-size: 0.75rem;
+            color: var(--error);
+            font-weight: bold;
+        }
+
+        .btn-roll {
+            padding: 12px 30px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 5px;
+        }
+        .btn-roll:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .btn-roll:active { transform: translateY(0); }
+        .btn-roll:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* Summary Box */
+        .summary-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--accent-lighter);
+            border-left: 5px solid var(--accent-primary);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            text-align: left;
+        }
+        .summary-box h4 { margin-top: 0; color: var(--accent-primary); margin-bottom: 5px; }
+        .summary-box p { margin: 0; font-size: 0.95rem; color: var(--text-primary); }
+
+        /* Venn Diagram */
+        .venn-container {
+            position: relative;
+            width: 260px;
+            height: 160px;
+            margin: 30px auto 20px;
+        }
+        .venn-circle {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 3px solid;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.4s ease;
+        }
+        .circle-a { left: 0; top: 0; border-color: #e74c3c; background: rgba(231, 76, 60, 0.1); color: #e74c3c; }
+        .circle-b { right: 0; top: 0; border-color: #3498db; background: rgba(52, 152, 219, 0.1); color: #3498db; }
+        
+        .highlight-union { background: rgba(46, 204, 113, 0.3) !important; border-color: #27ae60 !important; color: #27ae60 !important; }
+        .highlight-inter { opacity: 0.2; transform: scale(0.9); }
+
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                    </svg>
+                    <span class="logo-text">Media Belajar Daffa</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a><span>/</span><a href="index.html">Matematika Wajib</a><span>/</span><span class="current">Peluang</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Peluang</h1>
+                    <p class="page-subtitle">Mengukur kemungkinan terjadinya suatu kejadian menggunakan konsep ruang sampel dan kaidah pencacahan.</p>
+                </div>
+
+                <div class="nav-btn-group">
+                    <a href="index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Kembali ke Daftar Materi</a>
+                    <a href="../index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a>
+                </div>
+
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#materi-inti" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Materi Inti</a>
+                    <a href="#animasi-interaktif" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animasi</a>
+                    <a href="#contoh-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Contoh Soal</a>
+                    <a href="#latihan-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Latihan</a>
+                    <a href="#kuis" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Kuis</a>
+                </nav>
+
+                <section class="content-section" id="materi-inti">
+                    <div class="section-header"><h2 class="section-title">Materi Inti</h2></div>
+                    <div class="material-content">
+                        <h3>1. Ruang Sampel dan Kejadian</h3>
+                        <p><strong>Ruang Sampel (S)</strong>: Himpunan semua hasil yang mungkin dari suatu percobaan.</p>
+                        <p><strong>Kejadian (A)</strong>: Bagian dari ruang sampel.</p>
+                        <div class="formula-box">
+                            <div class="formula-label">Rumus Peluang</div>
+                            <div class="formula">P(A) = <span class="fraction"><span class="fraction-numerator">n(A)</span><span class="fraction-denominator">n(S)</span></span></div>
+                        </div>
+
+                        <h3>2. Kaidah Pencacahan</h3>
+                        <p>Aturan untuk menghitung kemungkinan susunan objek.</p>
+                        <ul>
+                            <li><strong>Aturan Pengisian Tempat:</strong> Jika tempat 1 dapat diisi n₁ cara, tempat 2 n₂ cara, dst → n₁ × n₂ × ...</li>
+                            <li><strong>Permutasi:</strong> Susunan berbeda dari unsur berbeda (Urutan penting).
+                                <br>P(n, r) = n! / (n-r)!</li>
+                            <li><strong>Kombinasi:</strong> Susunan tidak memperhatikan urutan.
+                                <br>C(n, r) = n! / [r!(n-r)!]</li>
+                        </ul>
+
+                        <h3>3. Peluang Majemuk</h3>
+                        <p>Hubungan antar kejadian:</p>
+                        <div class="formula-box">
+                            <div class="formula-label">Gabungan (A ∪ B)</div>
+                            <div class="formula">P(A ∪ B) = P(A) + P(B) - P(A ∩ B)</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-label">Irisan (A ∩ B) - Kejadian Independen</div>
+                            <div class="formula">P(A ∩ B) = P(A) × P(B)</div>
+                        </div>
+
+                        <h3>4. Peluang Bersyarat</h3>
+                        <p>Peluang terjadinya A dengan syarat B sudah terjadi.</p>
+                        <div class="formula-box">
+                            <div class="formula">P(A|B) = <span class="fraction"><span class="fraction-numerator">P(A ∩ B)</span><span class="fraction-denominator">P(B)</span></span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="animasi-interaktif">
+                    <div class="section-header"><h2 class="section-title">Probability Lab</h2></div>
+                    
+                    <div class="prob-layout">
+                        <!-- Kolom Kiri: Dadu & Kontrol -->
+                        <div class="sim-box">
+                            <h3>Simulasi Lempar Dadu</h3>
+                            <div class="dice-stage" id="diceStage">
+                                <!-- Dots drawn by JS -->
+                            </div>
+                            <div id="currentResult" style="font-size: 1.5rem; font-weight:bold; min-height: 40px; margin: 10px 0;">Tekan tombol!</div>
+                            
+                            <div style="margin-top:15px;">
+                                <button class="btn-roll" onclick="rollDice(1)" id="btn1">Lempar 1x</button>
+                                <button class="btn-roll" onclick="rollDice(50)" style="background:var(--accent-secondary)">Lempar 50x</button>
+                                <button class="control-btn" onclick="resetSim()" style="display:block; margin:10px auto;">Reset</button>
+                            </div>
+
+                            <div class="summary-box">
+                                <h4 id="summaryTitle">Kesimpulan</h4>
+                                <p id="summaryText">Tekan tombol lempar untuk memulai simulasi. Perhatikan bagaimana grafik peluang berubah seiring banyaknya lemparan.</p>
+                            </div>
+                        </div>
+
+                        <!-- Kolom Kanan: Grafik & Tabel -->
+                        <div class="sim-box">
+                            <h3>Perbandingan Teori vs Percobaan</h3>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom:10px;">Garis putus-putus merah = Peluang Teori (16.67%)</div>
+                            
+                            <div class="chart-container">
+                                <div class="chart-bars">
+                                    <div class="theory-line" style="bottom: 150px;"><span class="theory-label">Teori</span></div> <!-- 16.7% of 150px approx 25px from top, so bottom is 150-25=125? No. Height 150px. 16.7% is ~25px. -->
+                                    <!-- Correct calculation for 16.67% of 150px height -->
+                                    <div class="theory-line" style="bottom: calc(15px + 25px + 25px);"><span class="theory-label">Teori</span></div> 
+                                    
+                                    <!-- Bars -->
+                                    <div class="bar-group"><div class="bar" id="bar1" style="height:0"><span class="bar-val">0%</span></div><span class="bar-label">1</span></div>
+                                    <div class="bar-group"><div class="bar" id="bar2" style="height:0"><span class="bar-val">0%</span></div><span class="bar-label">2</span></div>
+                                    <div class="bar-group"><div class="bar" id="bar3" style="height:0"><span class="bar-val">0%</span></div><span class="bar-label">3</span></div>
+                                    <div class="bar-group"><div class="bar" id="bar4" style="height:0"><span class="bar-val">0%</span></div><span class="bar-label">4</span></div>
+                                    <div class="bar-group"><div class="bar" id="bar5" style="height:0"><span class="bar-val">0%</span></div><span class="bar-label">5</span></div>
+                                    <div class="bar-group"><div class="bar" id="bar6" style="height:0"><span class="bar-val">0%</span></div><span class="bar-label">6</span></div>
+                                </div>
+                            </div>
+
+                            <table class="result-table">
+                                <thead><tr><th>Mata</th><th>Hasil</th><th>Peluang</th><th>Selisih</th></tr></thead>
+                                <tbody id="resultTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Venn Diagram -->
+                    <div style="margin-top: 40px; background: var(--bg-secondary); padding: 20px; border-radius: var(--radius-lg);">
+                        <h3 style="text-align:center;">Visualisasi Kejadian Majemuk</h3>
+                        <div class="venn-container">
+                            <div class="venn-circle circle-a" id="vennA">A</div>
+                            <div class="venn-circle circle-b" id="vennB">B</div>
+                        </div>
+                        <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+                            <button class="control-btn active" onclick="showVenn('all')">Normal</button>
+                            <button class="control-btn" onclick="showVenn('union')">Gabungan (A ∪ B)</button>
+                            <button class="control-btn" onclick="showVenn('inter')">Irisan (A ∩ B)</button>
+                        </div>
+                        <p id="vennInfo" style="text-align:center; font-size:0.9rem; margin-top:15px; color:var(--text-secondary);">
+                            Diagram menunjukkan dua kejadian A dan B.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="content-section" id="contoh-soal">
+                    <div class="section-header"><h2 class="section-title">Contoh Soal</h2></div>
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">1</span><span class="example-title">Peluang Bersyarat</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Sebuah kantong berisi 5 bola merah dan 3 bola putih. Diambil 2 bola satu per satu tanpa pengembalian. Hitung peluang bola kedua merah jika bola pertama merah!</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content">
+                                    <span class="step-label">Analisis</span>
+                                    <p>Awal: 5 Merah, 3 Putih (Total 8).</p>
+                                    <p>Syarat: Bola pertama sudah merah, sisa bola = 4 Merah, 3 Putih (Total 7).</p>
+                                </div></div>
+                                <div class="solution-step"><span class="step-marker">2</span><div class="step-content">
+                                    <span class="step-label">Hitung</span>
+                                    <span class="step-math">P(Merah ke-2 | Merah ke-1) = 4/7</span>
+                                </div></div>
+                            </div>
+                            <div class="example-answer"><span class="answer-text">Peluang = 4/7</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="latihan-soal">
+                    <div class="section-header"><h2 class="section-title">Latihan Soal</h2></div>
+                    <div class="practice-grid">
+                        <div class="practice-item"><span class="practice-number">1</span><div class="practice-content"><p class="practice-question">Sebuah dadu dilempar. Tentukan peluang muncul mata dadu genap.</p></div></div>
+                        <div class="practice-item"><span class="practice-number">2</span><div class="practice-content"><p class="practice-question">Tentukan banyaknya susunan huruf dari kata "MATEMATIKA".</p></div></div>
+                        <div class="practice-item"><span class="practice-number">3</span><div class="practice-content"><p class="practice-question">Diketahui P(A) = 0.6, P(B) = 0.5, dan P(A∩B) = 0.3. Hitung P(A∪B).</p></div></div>
+                        <div class="practice-item"><span class="practice-number">4</span><div class="practice-content"><p class="practice-question">Dalam sebuah kelas, 70% siswa suka Matematika, 60% suka Fisika, dan 50% suka keduanya. Berapa % siswa yang suka Matematika atau Fisika?</p></div></div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="kuis">
+                    <div class="section-header"><h2 class="section-title">Kuis</h2></div>
+                    <div id="quizContainer"></div>
+                </section>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand"><span class="footer-name">Media Belajar Daffa</span><span class="footer-class">XII-M4-1</span></div>
+                <div class="footer-info">Platform Pembelajaran Mandiri</div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+    <script>
+        const quizQuestions = [
+            { question: "Peluang muncul angka 5 pada pelemparan dadu adalah...", options: ["1/6", "1/3", "1/2", "5/6"], correct: 0 },
+            { question: "Jika P(A)=0.4 dan P(B)=0.5 serta A dan B saling lepas, maka P(A∪B)=...", options: ["0.9", "0.2", "0.0", "1.0"], correct: 0 },
+            { question: "Banyak cara menyusun 3 orang dari 5 orang adalah...", options: ["60", "10", "15", "120"], correct: 0 },
+            { question: "Jika P(A∩B) = P(A) × P(B), maka A dan B disebut kejadian...", options: ["Independen", "Saling Lepas", "Komplemen", "Bersyarat"], correct: 0 },
+            { question: "Peluang komplemen A (A') adalah...", options: ["1 - P(A)", "P(A) - 1", "1 + P(A)", "1 / P(A)"], correct: 0 }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            new QuizEngine('quizContainer', quizQuestions).init();
+            const quickNav = document.getElementById('quickNav');
+            window.addEventListener('scroll', () => quickNav.classList.toggle('scrolled', window.scrollY > 200));
+
+            // --- SIMULATOR LOGIC ---
+            let rolls = [0,0,0,0,0,0,0];
+            let total = 0;
+            let isRolling = false;
+
+            // Init Table
+            const tbody = document.getElementById('resultTable');
+            for(let i=1; i<=6; i++) {
+                tbody.innerHTML += `<tr>
+                    <td><strong>${i}</strong></td>
+                    <td id="c${i}">0</td>
+                    <td id="p${i}">0%</td>
+                    <td id="d${i}">-</td>
+                </tr>`;
+            }
+
+            function drawDice(num) {
+                const stage = document.getElementById('diceStage');
+                const patterns = {
+                    1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8]
+                };
+                let html = '';
+                for(let i=0; i<9; i++) {
+                    const show = patterns[num].includes(i) ? 'block' : 'none';
+                    html += `<div class="dot" style="opacity:${patterns[num].includes(i) ? 1 : 0}"></div>`;
+                }
+                stage.innerHTML = html;
+            }
+
+            function updateStats() {
+                const theory = 16.667;
+                for(let i=1; i<=6; i++) {
+                    document.getElementById(`c${i}`).innerText = rolls[i];
+                    const prob = total > 0 ? (rolls[i]/total*100).toFixed(1) : 0;
+                    document.getElementById(`p${i}`).innerText = `${prob}%`;
+                    document.getElementById(`d${i}`).innerText = total > 0 ? Math.abs(prob - theory).toFixed(1) + "%" : "-";
+                    
+                    // Update Bars (Max height 150px)
+                    const bar = document.getElementById(`bar${i}`);
+                    const height = total > 0 ? (rolls[i]/total*150) : 0;
+                    bar.style.height = `${height}px`;
+                    bar.querySelector('.bar-val').innerText = `${prob}%`;
+                }
+                
+                // Update Summary
+                const title = document.getElementById('summaryTitle');
+                const text = document.getElementById('summaryText');
+                
+                if(total === 0) {
+                    title.innerText = "Menunggu Input";
+                    text.innerText = "Tekan tombol lempar untuk memulai.";
+                } else if(total < 30) {
+                    title.innerText = "Data Terlalu Sedikit";
+                    text.innerText = `Dengan ${total} lemparan, hasil masih sangat acak. Coba lempar lebih banyak!`;
+                } else if(total < 200) {
+                    title.innerText = "Mulai Stabil";
+                    text.innerText = `Total ${total} lemparan. Grafik mulai mendekati garis teori (16.67%), tapi masih fluktuatif.`;
+                } else {
+                    title.innerText = "Hukum Bilangan Besar Terbukti!";
+                    text.innerText = `Dengan ${total} lemparan, hasil percobaan hampir sama dengan peluang teori. Semakin banyak data, semakin mendekati kebenaran.`;
+                }
+            }
+
+            window.rollDice = function(times) {
+                if(isRolling) return;
+                isRolling = true;
+                document.getElementById('btn1').disabled = true;
+
+                let count = 0;
+                const speed = times > 10 ? 30 : 100;
+                
+                const interval = setInterval(() => {
+                    const rand = Math.floor(Math.random()*6)+1;
+                    drawDice(rand);
+                    document.getElementById('currentResult').innerText = `Lemparan ke-${count+1}`;
+                    document.getElementById('diceStage').style.transform = `rotate(${Math.random()*20-10}deg)`;
+                    
+                    count++;
+                    if(count >= times) {
+                        clearInterval(interval);
+                        
+                        // Final Result
+                        const final = Math.floor(Math.random()*6)+1;
+                        drawDice(final);
+                        rolls[final]++;
+                        total++;
+                        document.getElementById('diceStage').style.transform = "rotate(0deg)";
+                        document.getElementById('currentResult').innerHTML = `<span style="color:var(--accent-primary)">Hasil: ${final}</span>`;
+                        
+                        updateStats();
+                        isRolling = false;
+                        document.getElementById('btn1').disabled = false;
+                    }
+                }, speed);
+            }
+
+            window.resetSim = function() {
+                rolls = [0,0,0,0,0,0,0]; total = 0;
+                drawDice(1);
+                document.getElementById('currentResult').innerText = "Data direset.";
+                updateStats();
+            }
+
+            // Init
+            drawDice(1);
+            updateStats();
+
+            // --- VENN LOGIC ---
+            window.showVenn = function(type) {
+                document.querySelectorAll('.prob-layout .control-btn').forEach(b => b.classList.remove('active'));
+                event.target.classList.add('active');
+                
+                const va = document.getElementById('vennA');
+                const vb = document.getElementById('vennB');
+                const info = document.getElementById('vennInfo');
+                
+                va.className = 'venn-circle circle-a';
+                vb.className = 'venn-circle circle-b';
+
+                if(type==='union') {
+                    va.classList.add('highlight-union');
+                    vb.classList.add('highlight-union');
+                    info.innerHTML = "<strong>Gabungan (A ∪ B):</strong> Elemen yang ada di A <em>atau</em> di B.";
+                } else if(type==='inter') {
+                    va.classList.add('highlight-inter');
+                    vb.classList.add('highlight-inter');
+                    info.innerHTML = "<strong>Irisan (A ∩ B):</strong> Elemen yang ada di A <em>dan</em> B. (Diagram perbandingan menyusut untuk menonjolkan irisan).";
+                } else {
+                    info.innerHTML = "Diagram menunjukkan dua kejadian A dan B.";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

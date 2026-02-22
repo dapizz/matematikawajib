@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Transformasi Geometri - Matematika Wajib SMA">
+    <title>Transformasi Geometri - Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Layout Styles */
+        .playground-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media (min-width: 900px) {
+            .playground-layout { grid-template-columns: 2fr 1fr; }
+        }
+        
+        .canvas-box {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .shape-original { fill: rgba(231, 76, 60, 0.2); stroke: #e74c3c; stroke-width: 2.5; transition: all 0.3s; }
+        .shape-image { fill: rgba(52, 152, 219, 0.2); stroke: #3498db; stroke-width: 2.5; transition: all 0.3s; }
+        
+        .grid-line { stroke: var(--border-light); stroke-width: 0.5; }
+        .axis { stroke: var(--text-muted); stroke-width: 1; }
+        
+        .controls-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            height: fit-content;
+        }
+        
+        .mode-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .mode-btn.active {
+            border-color: var(--accent-primary);
+            background: var(--accent-lighter);
+            color: var(--accent-primary);
+        }
+        
+        .refl-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .refl-btn {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-primary);
+        }
+        .refl-btn:hover { background: var(--bg-tertiary); }
+        .refl-btn.active { background: var(--accent-primary); color: white; border-color: var(--accent-primary); }
+        
+        .animate-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .animate-btn:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                    </svg>
+                    <span class="logo-text">Media Belajar Daffa</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a><span>/</span><a href="index.html">Matematika Wajib</a><span>/</span><span class="current">Transformasi Geometri</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Transformasi Geometri</h1>
+                    <p class="page-subtitle">Memahami perpindahan objek geometri melalui translasi, refleksi, rotasi, dan dilatasi.</p>
+                </div>
+
+                <div class="nav-btn-group">
+                    <a href="index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Kembali ke Daftar Materi</a>
+                    <a href="../index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a>
+                </div>
+
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#materi-inti" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Materi Inti</a>
+                    <a href="#animasi-interaktif" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animasi</a>
+                    <a href="#contoh-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Contoh Soal</a>
+                    <a href="#latihan-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Latihan</a>
+                    <a href="#kuis" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Kuis</a>
+                </nav>
+
+                <section class="content-section" id="materi-inti">
+                    <div class="section-header"><h2 class="section-title">Materi Inti</h2></div>
+                    <div class="material-content">
+                        <h3>1. Translasi (Pergeseran)</h3>
+                        <p>Memindahkan setiap titik dengan jarak dan arah yang sama. Ditentukan oleh vektor translasi T(a, b).</p>
+                        <div class="formula-box"><div class="formula">P(x, y) → P'(x+a, y+b)</div></div>
+
+                        <h3>2. Refleksi (Pencerminan)</h3>
+                        <p>Memindahkan titik terhadap suatu garis cermin.</p>
+                        <ul>
+                            <li>Cermin Sumbu-X: (x, y) → (x, -y)</li>
+                            <li>Cermin Sumbu-Y: (x, y) → (-x, y)</li>
+                            <li>Cermin y = x: (x, y) → (y, x)</li>
+                            <li>Cermin y = -x: (x, y) → (-y, -x)</li>
+                        </ul>
+
+                        <h3>3. Rotasi (Perputaran)</h3>
+                        <p>Memutar titik terhadap pusat rotasi dengan sudut tertentu.</p>
+                        <div class="formula-box">
+                            <div class="formula">Rotasi Pusat O(0,0) sejauh θ (Berlawanan Jarum Jam):</div>
+                            <div class="formula" style="margin-top:10px;">
+                                x' = x cos θ - y sin θ<br>
+                                y' = x sin θ + y cos θ
+                            </div>
+                        </div>
+
+                        <h3>4. Dilatasi (Penskalaan)</h3>
+                        <p>Mengubah ukuran objek dengan faktor skala k.</p>
+                        <div class="formula-box"><div class="formula">Pusat O(0,0): P(x, y) → P'(kx, ky)</div></div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="animasi-interaktif">
+                    <div class="section-header"><h2 class="section-title">Transformation Playground</h2></div>
+                    
+                    <div class="playground-layout">
+                        <div class="canvas-box">
+                            <svg id="geoSvg" viewBox="-150 -150 300 300" style="width: 100%; height: auto; display: block;">
+                                <g id="gridGrp"></g>
+                                <line x1="-150" y1="0" x2="150" y2="0" class="axis" />
+                                <line x1="0" y1="-150" x2="0" y2="150" class="axis" />
+                                <line id="mirrorLine" x1="-150" y1="0" x2="150" y2="0" stroke="#f1c40f" stroke-width="1" stroke-dasharray="5,5" style="display:none;"/>
+                                <polygon id="shapeOrig" class="shape-original" points="" />
+                                <polygon id="shapeImg" class="shape-image" points="" />
+                            </svg>
+                            <div style="position: absolute; bottom: 10px; left: 10px; background: rgba(255,255,255,0.8); padding: 5px 10px; border-radius: 4px; font-size: 0.8rem;">
+                                <span style="color:#e74c3c; margin-right:10px;">■ Objek Awal</span>
+                                <span style="color:#3498db;">■ Bayangan</span>
+                            </div>
+                        </div>
+
+                        <div class="controls-panel">
+                            <div class="mode-tabs">
+                                <button class="mode-btn active" onclick="setMode('trans')">Translasi</button>
+                                <button class="mode-btn" onclick="setMode('refl')">Refleksi</button>
+                                <button class="mode-btn" onclick="setMode('rot')">Rotasi</button>
+                                <button class="mode-btn" onclick="setMode('dil')">Dilatasi</button>
+                            </div>
+                            <div id="controlsArea"></div>
+                            <button class="animate-btn" onclick="playAnimation()">▶ Animasikan</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="contoh-soal">
+                    <div class="section-header"><h2 class="section-title">Contoh Soal</h2></div>
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">1</span><span class="example-title">Refleksi</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Tentukan bayangan titik A(3, 4) dicerminkan terhadap garis y = -x.</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content">
+                                    <p class="step-text">Rumus: (x, y) → (-y, -x)</p>
+                                    <span class="step-math">(3, 4) → (-4, -3)</span>
+                                </div></div>
+                            </div>
+                            <div class="example-answer"><span class="answer-text">A'(-4, -3)</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Latihan Soal Baru -->
+                <section class="content-section" id="latihan-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        <h2 class="section-title">Latihan Soal</h2>
+                    </div>
+                    <div class="practice-grid">
+                        <div class="practice-item">
+                            <span class="practice-number">1</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Tentukan bayangan titik P(2, 5) oleh translasi T(-3, 4).</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">2</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Tentukan bayangan titik Q(6, -2) oleh refleksi terhadap sumbu X.</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">3</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Tentukan bayangan titik R(1, √3) oleh rotasi pusat O(0,0) sejauh 60° CCW.</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">4</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Tentukan bayangan titik S(4, 6) oleh dilatasi dengan pusat O dan faktor skala ½.</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">5</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Tentukan bayangan titik T(-2, 5) oleh refleksi terhadap garis y = x.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="kuis">
+                    <div class="section-header"><h2 class="section-title">Kuis</h2></div>
+                    <div id="quizContainer"></div>
+                </section>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand"><span class="footer-name">Media Belajar Daffa</span><span class="footer-class">XII-M4-1</span></div>
+                <div class="footer-info">Platform Pembelajaran Mandiri</div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+    <script>
+        const quizQuestions = [
+            { question: "Bayangan titik (3, 2) oleh translasi T(1, 4) adalah...", options: ["(4, 6)", "(2, -2)", "(4, -2)", "(2, 6)"], correct: 0 },
+            { question: "Refleksi terhadap sumbu X pada titik (5, -3) menghasilkan...", options: ["(5, 3)", "(-5, -3)", "(-5, 3)", "(3, 5)"], correct: 0 },
+            { question: "Rotasi 90° CCW pada titik (2, 0) menghasilkan...", options: ["(0, 2)", "(0, -2)", "(-2, 0)", "(2, 2)"], correct: 0 },
+            { question: "Dilatasi [O, k=2] pada titik (1, 3) menghasilkan...", options: ["(2, 6)", "(2, 3)", "(1, 6)", "(0.5, 1.5)"], correct: 0 }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            new QuizEngine('quizContainer', quizQuestions).init();
+            const quickNav = document.getElementById('quickNav');
+            window.addEventListener('scroll', () => quickNav.classList.toggle('scrolled', window.scrollY > 200));
+
+            // Init Grid
+            const gridGrp = document.getElementById('gridGrp');
+            for(let i=-150; i<=150; i+=20) {
+                if(i!==0) {
+                    gridGrp.innerHTML += `<line x1="${i}" y1="-150" x2="${i}" y2="150" class="grid-line"/>`;
+                    gridGrp.innerHTML += `<line x1="-150" y1="${i}" x2="150" y2="${i}" class="grid-line"/>`;
+                }
+            }
+
+            // Logic
+            const original = [[20, 20], [60, 20], [40, 50]]; 
+            let currentMode = 'trans';
+            let params = { tx: 40, ty: 0, axis: 'x', angle: 90, k: 1.5 };
+            let animFrame = null;
+
+            window.setMode = function(mode) {
+                currentMode = mode;
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                event.target.classList.add('active');
+                document.getElementById('mirrorLine').style.display = 'none';
+                renderControls();
+                applyTransform();
+            }
+
+            window.updateParam = function(key, val, isString = false) {
+                if(isString) params[key] = val;
+                else params[key] = parseFloat(val);
+                applyTransform();
+                if(isString) renderControls(); 
+            }
+
+            function renderControls() {
+                const area = document.getElementById('controlsArea');
+                let html = '';
+                
+                if(currentMode === 'trans') {
+                    html = `<div class="slider-control"><span class="slider-label">Geser X:</span><input type="range" class="slider-input" min="-100" max="100" value="${params.tx}" oninput="updateParam('tx', this.value)"><span class="slider-value">${params.tx}</span></div><div class="slider-control"><span class="slider-label">Geser Y:</span><input type="range" class="slider-input" min="-100" max="100" value="${params.ty}" oninput="updateParam('ty', this.value)"><span class="slider-value">${params.ty}</span></div>`;
+                } else if(currentMode === 'refl') {
+                    html = `<span class="control-group-title" style="display:block; margin-bottom:10px; font-weight:bold;">Pilih Sumbu Cermin:</span><div class="refl-grid"><button class="refl-btn ${params.axis==='x'?'active':''}" onclick="updateParam('axis', 'x', true)">Sumbu X</button><button class="refl-btn ${params.axis==='y'?'active':''}" onclick="updateParam('axis', 'y', true)">Sumbu Y</button><button class="refl-btn ${params.axis==='y=x'?'active':''}" onclick="updateParam('axis', 'y=x', true)">y = x</button><button class="refl-btn ${params.axis==='y=-x'?'active':''}" onclick="updateParam('axis', 'y=-x', true)">y = -x</button></div>`;
+                } else if(currentMode === 'rot') {
+                    html = `<div class="slider-control"><span class="slider-label">Sudut:</span><input type="range" class="slider-input" min="0" max="360" value="${params.angle}" oninput="updateParam('angle', this.value)"><span class="slider-value">${params.angle}°</span></div>`;
+                } else if(currentMode === 'dil') {
+                    html = `<div class="slider-control"><span class="slider-label">Faktor k:</span><input type="range" class="slider-input" min="0.5" max="3" step="0.1" value="${params.k}" oninput="updateParam('k', this.value)"><span class="slider-value">${params.k}</span></div>`;
+                }
+                area.innerHTML = html;
+            }
+
+            function applyTransform(progress = 1) {
+                const toSVG = (p) => `${p[0]},${-p[1]}`;
+                document.getElementById('shapeOrig').setAttribute('points', original.map(toSVG).join(' '));
+                let transformed = original.map(p => {
+                    let [x, y] = p;
+                    let xp, yp;
+                    if(currentMode === 'trans') { xp = x + (params.tx * progress); yp = y + (params.ty * progress); }
+                    else if(currentMode === 'refl') {
+                        if(params.axis === 'x') { xp = x; yp = -y; document.getElementById('mirrorLine').style.display = 'block'; }
+                        else if(params.axis === 'y') { xp = -x; yp = y; document.getElementById('mirrorLine').style.display = 'block'; }
+                        else if(params.axis === 'y=x') { xp = y; yp = x; document.getElementById('mirrorLine').style.display = 'block'; }
+                        else if(params.axis === 'y=-x') { xp = -y; yp = -x; document.getElementById('mirrorLine').style.display = 'block'; }
+                    } else if(currentMode === 'rot') {
+                        const rad = (params.angle * progress) * Math.PI / 180;
+                        xp = x * Math.cos(rad) - y * Math.sin(rad);
+                        yp = x * Math.sin(rad) + y * Math.cos(rad);
+                    } else if(currentMode === 'dil') {
+                        const kCurr = 1 + (params.k - 1) * progress;
+                        xp = x * kCurr; yp = y * kCurr;
+                    }
+                    return [xp, yp];
+                });
+                document.getElementById('shapeImg').setAttribute('points', transformed.map(toSVG).join(' '));
+            }
+
+            window.playAnimation = function() {
+                if(animFrame) cancelAnimationFrame(animFrame);
+                let start = null;
+                const duration = 1000;
+                function step(timestamp) {
+                    if (!start) start = timestamp;
+                    const progress = Math.min((timestamp - start) / duration, 1);
+                    applyTransform(progress);
+                    if (progress < 1) animFrame = requestAnimationFrame(step);
+                }
+                animFrame = requestAnimationFrame(step);
+            }
+
+            renderControls();
+            applyTransform();
+        });
+    </script>
+</body>
+</html>

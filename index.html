@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Media Belajar Daffa - Platform Pembelajaran Mandiri untuk Siswa SMA">
+    <title>Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Decorative Background Elements -->
+    <div class="bg-decoration">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="grid-pattern"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                        <rect x="8" y="24" width="16" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+                    </svg>
+                </div>
+                <span class="logo-text">Media Belajar Daffa</span>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"/>
+                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                </svg>
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a>
+                        <span>/</span>
+                        <span class="current">Matematika Wajib</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Matematika Wajib</h1>
+                    <p class="page-subtitle">
+                        Pelajari materi matematika wajib SMA secara mandiri dengan materi lengkap, animasi interaktif, 
+                        contoh soal, dan kuis untuk menguji pemahamanmu.
+                    </p>
+                </div>
+
+                <!-- Back Button -->
+                <a href="../index.html" class="nav-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                    Kembali ke Beranda
+                </a>
+
+                <!-- Materials Grid -->
+                <section class="content-section" style="margin-top: 30px;">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+                            <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+                        </svg>
+                        <h2 class="section-title">Daftar Materi</h2>
+                    </div>
+                    <p style="color: var(--text-secondary); margin-bottom: 20px;">Pilih bab untuk mulai belajar.</p>
+                
+                <div class="materials-grid">
+                    <a href="bilangan-aljabar.html" class="material-card">
+                        <div class="material-number">1</div>
+                        <h3 class="material-title">Bilangan dan Aljabar</h3>
+                        <p class="material-desc">Operasi bilangan real, pangkat, akar, notasi ilmiah, dan operasi aljabar dasar.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                5 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="persamaan-pertidaksamaan.html" class="material-card">
+                        <div class="material-number">2</div>
+                        <h3 class="material-title">Persamaan dan Pertidaksamaan</h3>
+                        <p class="material-desc">Persamaan linear, kuadrat, pertidaksamaan, SPLDV, dan SPLTV dasar.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                6 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="fungsi.html" class="material-card">
+                        <div class="material-number">3</div>
+                        <h3 class="material-title">Fungsi</h3>
+                        <p class="material-desc">Konsep relasi dan fungsi, domain, kodomain, range, komposisi dan invers.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                6 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="sistem-koordinat-grafik.html" class="material-card">
+                        <div class="material-number">4</div>
+                        <h3 class="material-title">Sistem Koordinat dan Grafik</h3>
+                        <p class="material-desc">Koordinat Kartesius, gradien, persamaan garis lurus, kedudukan dua garis.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                4 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="barisan-deret.html" class="material-card">
+                        <div class="material-number">5</div>
+                        <h3 class="material-title">Barisan dan Deret</h3>
+                        <p class="material-desc">Barisan dan deret aritmetika, barisan dan deret geometri sederhana.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                4 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="trigonometri-dasar.html" class="material-card">
+                        <div class="material-number">6</div>
+                        <h3 class="material-title">Trigonometri Dasar</h3>
+                        <p class="material-desc">Perbandingan trigonometri, sudut istimewa, identitas, aturan sinus dan cosinus.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                6 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="matriks-dasar.html" class="material-card">
+                        <div class="material-number">7</div>
+                        <h3 class="material-title">Matriks Dasar</h3>
+                        <p class="material-desc">Konsep matriks, operasi, determinan, invers, dan penerapan pada SPLDV.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                5 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="transformasi-geometri.html" class="material-card">
+                        <div class="material-number">8</div>
+                        <h3 class="material-title">Transformasi Geometri</h3>
+                        <p class="material-desc">Translasi, refleksi, rotasi, dan dilatasi dengan visualisasi interaktif.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                4 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="lingkaran.html" class="material-card">
+                        <div class="material-number">9</div>
+                        <h3 class="material-title">Lingkaran</h3>
+                        <p class="material-desc">Unsur lingkaran, persamaan, kedudukan titik dan garis, garis singgung.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                9 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="statistika-dasar.html" class="material-card">
+                        <div class="material-number">10</div>
+                        <h3 class="material-title">Statistika Dasar</h3>
+                        <p class="material-desc">Penyajian data, ukuran pemusatan, ukuran penyebaran, dan analisis data.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                5 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="analisis-regresi-linier.html" class="material-card">
+                        <div class="material-number">11</div>
+                        <h3 class="material-title">Analisis Regresi Linier</h3>
+                        <p class="material-desc">Konsep regresi linier, scatter plot, persamaan garis, korelasi, dan prediksi.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                7 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+
+                    <a href="peluang.html" class="material-card">
+                        <div class="material-number">12</div>
+                        <h3 class="material-title">Peluang </h3>
+                        <p class="material-desc">Kaidah pencacahan, kombinasi, permutasi, peluang bersyarat.</p>
+                        <div class="material-meta">
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="2" y="2" width="12" height="12" rx="2"/>
+                                </svg>
+                                7 Submateri
+                            </span>
+                            <span class="meta-badge">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="8" cy="8" r="5"/>
+                                    <path d="M8 5v3l2 2"/>
+                                </svg>
+                                10 Soal
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-name">Media Belajar Daffa</span>
+                    <span class="footer-class">Muhammad Daffa Athallah - XII-M4-1</span>
+                </div>
+                <div class="footer-info">
+                    Platform Pembelajaran Mandiri
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
