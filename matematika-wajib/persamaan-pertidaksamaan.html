@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Persamaan dan Pertidaksamaan - Matematika Wajib SMA">
+    <title>Persamaan dan Pertidaksamaan - Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ============================================
+           Fraction Styles - Pecahan Vertikal
+        ============================================ */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-family: var(--font-display);
+        }
+
+        .fraction-numerator {
+            padding: 2px 8px;
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .fraction-line {
+            width: 100%;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 1px;
+        }
+
+        .fraction-denominator {
+            padding: 2px 8px;
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .fraction-sm .fraction-numerator,
+        .fraction-sm .fraction-denominator {
+            font-size: 0.875rem;
+            padding: 1px 6px;
+        }
+
+        .fraction-lg .fraction-numerator,
+        .fraction-lg .fraction-denominator {
+            font-size: 1.25rem;
+            padding: 4px 12px;
+        }
+
+        .formula-box .fraction {
+            background: var(--bg-card);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            margin: 0 8px;
+        }
+
+        .formula-box .fraction-line {
+            background: var(--accent-primary);
+        }
+
+        .step-math .fraction {
+            background: var(--bg-card);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Inequality Number Line */
+        .number-line-container {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin: 16px 0;
+            overflow-x: auto;
+        }
+
+        .number-line {
+            position: relative;
+            height: 60px;
+            min-width: 400px;
+        }
+
+        .number-line-axis {
+            position: absolute;
+            top: 30px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--text-primary);
+        }
+
+        .number-line-arrow-right {
+            position: absolute;
+            top: 24px;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-left: 8px solid var(--text-primary);
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+        }
+
+        .number-line-point {
+            position: absolute;
+            top: 22px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-primary);
+            transform: translateX(-50%);
+        }
+
+        .number-line-point.filled {
+            background: var(--accent-primary);
+        }
+
+        .number-line-label {
+            position: absolute;
+            top: 42px;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .number-line-shade {
+            position: absolute;
+            top: 26px;
+            height: 10px;
+            background: var(--accent-primary);
+            opacity: 0.3;
+        }
+
+        /* Coordinate system for animations */
+        .coord-label {
+            font-size: 12px;
+            fill: var(--text-muted);
+        }
+
+        .axis-line {
+            stroke: var(--border-color);
+            stroke-width: 1;
+        }
+
+        .grid-line {
+            stroke: var(--border-light);
+            stroke-width: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                        <rect x="8" y="24" width="16" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+                    </svg>
+                    <span class="logo-text">Media Belajar Daffa</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a>
+                        <span>/</span>
+                        <a href="index.html">Matematika Wajib</a>
+                        <span>/</span>
+                        <span class="current">Persamaan dan Pertidaksamaan</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Persamaan dan Pertidaksamaan</h1>
+                    <p class="page-subtitle">
+                        Memahami persamaan linear, kuadrat, pertidaksamaan, serta sistem persamaan linear dua dan tiga variabel.
+                    </p>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="nav-btn-group">
+                    <a href="index.html" class="nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Kembali ke Daftar Materi
+                    </a>
+                    <a href="../index.html" class="nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        Beranda
+                    </a>
+                </div>
+
+                <!-- Quick Navigation Bar (NEW) -->
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#materi-inti" class="quick-nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+                        </svg>
+                        Materi Inti
+                    </a>
+                    <a href="#animasi-interaktif" class="quick-nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        Animasi Interaktif
+                    </a>
+                    <a href="#contoh-soal" class="quick-nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        Contoh Soal
+                    </a>
+                    <a href="#latihan-soal" class="quick-nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        Latihan Soal
+                    </a>
+                    <a href="#kuis" class="quick-nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        Kuis
+                    </a>
+                </nav>
+
+                <!-- Learning Objectives -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <h2 class="section-title">Tujuan Pembelajaran</h2>
+                    </div>
+                    <div class="objectives-list">
+                        <div class="objective-item">
+                            <span class="objective-number">1</span>
+                            <span class="objective-text">Menyelesaikan persamaan linear satu variabel</span>
+                        </div>
+                        <div class="objective-item">
+                            <span class="objective-number">2</span>
+                            <span class="objective-text">Menyelesaikan persamaan kuadrat dengan faktorisasi dan rumus kuadrat</span>
+                        </div>
+                        <div class="objective-item">
+                            <span class="objective-number">3</span>
+                            <span class="objective-text">Menyelesaikan pertidaksamaan linear dan kuadrat</span>
+                        </div>
+                        <div class="objective-item">
+                            <span class="objective-number">4</span>
+                            <span class="objective-text">Menyelesaikan SPLDV dengan metode substitusi dan eliminasi</span>
+                        </div>
+                        <div class="objective-item">
+                            <span class="objective-number">5</span>
+                            <span class="objective-text">Menyelesaikan SPLTV dasar</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Material Content -->
+                <section class="content-section" id="materi-inti">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+                        </svg>
+                        <h2 class="section-title">Materi Inti</h2>
+                    </div>
+
+                    <div class="material-content">
+                        <h3>1. Persamaan Linear Satu Variabel (PLSV)</h3>
+                        <p>Persamaan linear satu variabel adalah persamaan yang mempunyai satu variabel dengan pangkat satu. Bentuk umumnya adalah:</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Bentuk Umum PLSV</div>
+                            <div class="formula">ax + b = 0, dengan a ≠ 0</div>
+                        </div>
+
+                        <h4>Langkah Penyelesaian:</h4>
+                        <ol>
+                            <li>Pindahkan konstanta ke ruas kanan</li>
+                            <li>Pindahkan variabel ke ruas kiri</li>
+                            <li>Sederhanakan kedua ruas</li>
+                            <li>Bagi dengan koefisien variabel</li>
+                        </ol>
+
+                        <h3>2. Persamaan Kuadrat</h3>
+                        <p>Persamaan kuadrat adalah persamaan dengan variabel berpangkat dua. Bentuk umumnya:</p>
+
+                        <div class="formula-box">
+                            <div class="formula-label">Bentuk Umum Persamaan Kuadrat</div>
+                            <div class="formula">ax² + bx + c = 0, dengan a ≠ 0</div>
+                        </div>
+
+                        <h4>Metode 1: Faktorisasi</h4>
+                        <p>Ubah persamaan menjadi bentuk perkalian faktor-faktor:</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Contoh Faktorisasi</div>
+                            <div class="formula">x² - 5x + 6 = 0</div>
+                            <div class="formula">(x - 2)(x - 3) = 0</div>
+                            <div class="formula">x = 2 atau x = 3</div>
+                        </div>
+
+                        <h4>Metode 2: Rumus Kuadrat (ABC Formula)</h4>
+                        <p>Gunakan rumus ketika faktorisasi sulit dilakukan:</p>
+
+                        <div class="formula-box">
+                            <div class="formula-label">Rumus Kuadrat</div>
+                            <div class="formula">
+                                x = 
+                                <span class="fraction fraction-lg">
+                                    <span class="fraction-numerator">-b ± √(b² - 4ac)</span>
+                                    <span class="fraction-line"></span>
+                                    <span class="fraction-denominator">2a</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <h4>Diskriminan (D = b² - 4ac):</h4>
+                        <ul>
+                            <li><strong>D > 0:</strong> Dua akar berbeda</li>
+                            <li><strong>D = 0:</strong> Dua akar kembar</li>
+                            <li><strong>D < 0:</strong> Tidak memiliki akar real</li>
+                        </ul>
+
+                        <h3>3. Pertidaksamaan Linear</h3>
+                        <p>Pertidaksamaan linear menggunakan tanda <, >, ≤, atau ≥. Penyelesaian berupa interval nilai.</p>
+
+                        <div class="info-box warning">
+                            <svg class="info-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                                <line x1="12" y1="9" x2="12" y2="13"/>
+                                <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            </svg>
+                            <div class="info-box-content">
+                                <div class="info-box-title">Penting!</div>
+                                <p class="info-box-text">Jika mengalikan atau membagi dengan bilangan negatif, tanda pertidaksamaan harus dibalik.</p>
+                            </div>
+                        </div>
+
+                        <h4>Contoh Penyelesaian:</h4>
+                        <p>2x - 4 > 6</p>
+                        <div class="number-line-container">
+                            <div class="number-line">
+                                <div class="number-line-axis"></div>
+                                <div class="number-line-arrow-right"></div>
+                                <div class="number-line-point" style="left: 50%;"></div>
+                                <div class="number-line-label" style="left: 50%;">x = 5</div>
+                                <div class="number-line-shade" style="left: 52%; right: 0;"></div>
+                            </div>
+                        </div>
+                        <p>2x > 10 → x > 5</p>
+
+                        <h3>4. Pertidaksamaan Kuadrat</h3>
+                        <p>Langkah penyelesaian:</p>
+                        <ol>
+                            <li>Ubah ke bentuk standar (kanan = 0)</li>
+                            <li>Carikan akar-akar persamaan kuadrat</li>
+                            <li>Buat garis bilangan dan tentukan daerah penyelesaian</li>
+                        </ol>
+
+                        <h4>Aturan Tanda:</h4>
+                        <ul>
+                            <li>Untuk a > 0 (parabola terbuka ke atas): positif di luar akar</li>
+                            <li>Untuk a < 0 (parabola terbuka ke bawah): positif di dalam akar</li>
+                        </ul>
+
+                        <h3>5. Sistem Persamaan Linear Dua Variabel (SPLDV)</h3>
+                        <p>SPLDV adalah dua persamaan linear dengan dua variabel yang harus diselesaikan bersama-sama.</p>
+
+                        <div class="formula-box">
+                            <div class="formula-label">Bentuk Umum SPLDV</div>
+                            <div class="formula">a₁x + b₁y = c₁</div>
+                            <div class="formula">a₂x + b₂y = c₂</div>
+                        </div>
+
+                        <h4>Metode Substitusi:</h4>
+                        <ol>
+                            <li>Ubah salah satu persamaan menjadi x = ... atau y = ...</li>
+                            <li>Substitusikan ke persamaan lainnya</li>
+                            <li>Selesaikan persamaan satu variabel</li>
+                            <li>Substitusikan kembali untuk mencari variabel lain</li>
+                        </ol>
+
+                        <h4>Metode Eliminasi:</h4>
+                        <ol>
+                            <li>Samakan koefisien salah satu variabel</li>
+                            <li>Eliminasi dengan menjumlahkan atau mengurangkan</li>
+                            <li>Selesaikan variabel yang tersisa</li>
+                            <li>Substitusikan untuk mencari variabel lain</li>
+                        </ol>
+
+                        <h3>6. Sistem Persamaan Linear Tiga Variabel (SPLTV)</h3>
+                        <p>SPLTV adalah sistem tiga persamaan dengan tiga variabel. Penyelesaian dengan eliminasi bertahap.</p>
+
+                        <div class="formula-box">
+                            <div class="formula-label">Bentuk Umum SPLTV</div>
+                            <div class="formula">a₁x + b₁y + c₁z = d₁</div>
+                            <div class="formula">a₂x + b₂y + c₂z = d₂</div>
+                            <div class="formula">a₃x + b₃y + c₃z = d₃</div>
+                        </div>
+
+                        <h4>Langkah Penyelesaian:</h4>
+                        <ol>
+                            <li>Eliminasi satu variabel dari dua pasang persamaan</li>
+                            <li>Hasilnya adalah SPLDV</li>
+                            <li>Selesaikan SPLDV tersebut</li>
+                            <li>Substitusikan untuk mencari variabel yang dieliminasi</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- Interactive Animation -->
+                <section class="content-section" id="animasi-interaktif">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        <h2 class="section-title">Animasi Interaktif</h2>
+                    </div>
+
+                    <!-- Animation 1: Linear Graph -->
+                    <div class="animation-container">
+                        <div class="animation-header">
+                            <span class="animation-title">Grafik Persamaan Linear: y = mx + c</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Gradien (m):</span>
+                            <input type="range" class="slider-input" id="linearM" min="-3" max="3" step="0.5" value="1">
+                            <span class="slider-value" id="linearMValue">1</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Konstanta (c):</span>
+                            <input type="range" class="slider-input" id="linearC" min="-5" max="5" step="1" value="0">
+                            <span class="slider-value" id="linearCValue">0</span>
+                        </div>
+                        <div class="animation-canvas">
+                            <svg class="canvas-svg" viewBox="0 0 400 250" id="linearSvg">
+                                <defs>
+                                    <pattern id="gridLinear" width="25" height="25" patternUnits="userSpaceOnUse">
+                                        <path d="M 25 0 L 0 0 0 25" fill="none" class="grid-line"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#gridLinear)"/>
+                                <line x1="200" y1="0" x2="200" y2="250" class="axis-line"/>
+                                <line x1="0" y1="125" x2="400" y2="125" class="axis-line"/>
+                                <text x="390" y="120" class="coord-label">x</text>
+                                <text x="205" y="15" class="coord-label">y</text>
+                                <g id="linearTicks"></g>
+                                <line id="linearLine" x1="0" y1="125" x2="400" y2="125" 
+                                      stroke="var(--accent-primary)" stroke-width="3" stroke-linecap="round"/>
+                                <text x="200" y="240" text-anchor="middle" fill="var(--text-secondary)" font-size="14" id="linearLabel">y = x</text>
+                            </svg>
+                        </div>
+                        <div class="animation-info">
+                            Gradien (m) menentukan kemiringan garis. Konstanta (c) menentukan titik potong dengan sumbu-y.
+                        </div>
+                    </div>
+
+                    <!-- Animation 2: Parabola -->
+                    <div class="animation-container">
+                        <div class="animation-header">
+                            <span class="animation-title">Grafik Persamaan Kuadrat: y = ax² + bx + c</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Koefisien a:</span>
+                            <input type="range" class="slider-input" id="quadA" min="-2" max="2" step="0.25" value="1">
+                            <span class="slider-value" id="quadAValue">1</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Koefisien b:</span>
+                            <input type="range" class="slider-input" id="quadB" min="-4" max="4" step="0.5" value="0">
+                            <span class="slider-value" id="quadBValue">0</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Koefisien c:</span>
+                            <input type="range" class="slider-input" id="quadC" min="-4" max="4" step="0.5" value="0">
+                            <span class="slider-value" id="quadCValue">0</span>
+                        </div>
+                        <div class="animation-canvas">
+                            <svg class="canvas-svg" viewBox="0 0 400 250" id="quadSvg">
+                                <defs>
+                                    <pattern id="gridQuad" width="25" height="25" patternUnits="userSpaceOnUse">
+                                        <path d="M 25 0 L 0 0 0 25" fill="none" class="grid-line"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#gridQuad)"/>
+                                <line x1="200" y1="0" x2="200" y2="250" class="axis-line"/>
+                                <line x1="0" y1="125" x2="400" y2="125" class="axis-line"/>
+                                <text x="390" y="120" class="coord-label">x</text>
+                                <text x="205" y="15" class="coord-label">y</text>
+                                <path id="quadPath" d="" fill="none" stroke="var(--accent-primary)" stroke-width="3" stroke-linecap="round"/>
+                                <g id="rootMarkers"></g>
+                                <text x="200" y="240" text-anchor="middle" fill="var(--text-secondary)" font-size="14" id="quadLabel">y = x²</text>
+                            </svg>
+                        </div>
+                        <div class="animation-info">
+                            Nilai a menentukan arah dan kelengkungan parabola. Akar-akar ditandai dengan titik pada sumbu-x.
+                        </div>
+                    </div>
+
+                    <!-- Animation 3: Inequality Shading -->
+                    <div class="animation-container">
+                        <div class="animation-header">
+                            <span class="animation-title">Daerah Pertidaksamaan Linear</span>
+                        </div>
+                        <div class="animation-controls">
+                            <button class="control-btn active" id="btnLess">y < mx + c</button>
+                            <button class="control-btn" id="btnGreater">y > mx + c</button>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Gradien (m):</span>
+                            <input type="range" class="slider-input" id="ineqM" min="-2" max="2" step="0.5" value="1">
+                            <span class="slider-value" id="ineqMValue">1</span>
+                        </div>
+                        <div class="animation-canvas">
+                            <svg class="canvas-svg" viewBox="0 0 400 250" id="ineqSvg">
+                                <defs>
+                                    <pattern id="gridIneq" width="25" height="25" patternUnits="userSpaceOnUse">
+                                        <path d="M 25 0 L 0 0 0 25" fill="none" class="grid-line"/>
+                                    </pattern>
+                                    <clipPath id="canvasClip">
+                                        <rect width="400" height="250"/>
+                                    </clipPath>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#gridIneq)"/>
+                                <polygon id="ineqRegion" points="" fill="var(--accent-primary)" opacity="0.2" clip-path="url(#canvasClip)"/>
+                                <line x1="200" y1="0" x2="200" y2="250" class="axis-line"/>
+                                <line x1="0" y1="125" x2="400" y2="125" class="axis-line"/>
+                                <text x="390" y="120" class="coord-label">x</text>
+                                <text x="205" y="15" class="coord-label">y</text>
+                                <line id="ineqLine" x1="0" y1="125" x2="400" y2="125" 
+                                      stroke="var(--accent-primary)" stroke-width="3" stroke-dasharray="8,4"/>
+                                <text x="200" y="240" text-anchor="middle" fill="var(--text-secondary)" font-size="14" id="ineqLabel">y < x</text>
+                            </svg>
+                        </div>
+                        <div class="animation-info">
+                            Daerah yang diarsir menunjukkan himpunan penyelesaian pertidaksamaan. Garis putus-putus untuk tanda < atau >.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Example Problems -->
+                <section class="content-section" id="contoh-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <h2 class="section-title">Contoh Soal dan Pembahasan</h2>
+                    </div>
+
+                    <!-- Example 1: Linear Equation -->
+                    <div class="example-card">
+                        <div class="example-header">
+                            <span class="example-number">1</span>
+                            <span class="example-title">Persamaan Linear Satu Variabel</span>
+                        </div>
+                        <div class="example-body">
+                            <p class="example-question">Selesaikan: 3(2x - 4) = 5x + 2</p>
+                            <div class="solution-steps">
+                                <div class="solution-step">
+                                    <span class="step-marker">1</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 1</span>
+                                        <p class="step-text">Kurung dibuka dengan distribusi</p>
+                                        <span class="step-math">6x - 12 = 5x + 2</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">2</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 2</span>
+                                        <p class="step-text">Pindahkan variabel ke kiri, konstanta ke kanan</p>
+                                        <span class="step-math">6x - 5x = 2 + 12</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">3</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 3</span>
+                                        <p class="step-text">Sederhanakan</p>
+                                        <span class="step-math">x = 14</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-answer">
+                                <svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                <span class="answer-text">Jawaban: x = 14</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 2: Quadratic Factorization -->
+                    <div class="example-card">
+                        <div class="example-header">
+                            <span class="example-number">2</span>
+                            <span class="example-title">Persamaan Kuadrat - Faktorisasi</span>
+                        </div>
+                        <div class="example-body">
+                            <p class="example-question">Selesaikan: x² - 7x + 12 = 0</p>
+                            <div class="solution-steps">
+                                <div class="solution-step">
+                                    <span class="step-marker">1</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 1</span>
+                                        <p class="step-text">Cari dua bilangan yang hasil kalinya 12 dan jumlahnya -7</p>
+                                        <span class="step-math">Bilangan: -3 dan -4 (karena -3 × -4 = 12 dan -3 + -4 = -7)</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">2</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 2</span>
+                                        <p class="step-text">Faktorisasi</p>
+                                        <span class="step-math">(x - 3)(x - 4) = 0</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">3</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 3</span>
+                                        <p class="step-text">Tentukan akar-akar</p>
+                                        <span class="step-math">x - 3 = 0 → x = 3</span>
+                                        <span class="step-math">x - 4 = 0 → x = 4</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-answer">
+                                <svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                <span class="answer-text">Jawaban: x = 3 atau x = 4</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 3: Quadratic Formula -->
+                    <div class="example-card">
+                        <div class="example-header">
+                            <span class="example-number">3</span>
+                            <span class="example-title">Persamaan Kuadrat - Rumus Kuadrat</span>
+                        </div>
+                        <div class="example-body">
+                            <p class="example-question">Selesaikan: 2x² + 5x - 3 = 0</p>
+                            <div class="solution-steps">
+                                <div class="solution-step">
+                                    <span class="step-marker">1</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 1</span>
+                                        <p class="step-text">Identifikasi nilai a, b, c</p>
+                                        <span class="step-math">a = 2, b = 5, c = -3</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">2</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 2</span>
+                                        <p class="step-text">Hitung diskriminan</p>
+                                        <span class="step-math">D = b² - 4ac = 25 - 4(2)(-3) = 25 + 24 = 49</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">3</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 3</span>
+                                        <p class="step-text">Substitusi ke rumus kuadrat</p>
+                                        <span class="step-math">
+                                            x = 
+                                            <span class="fraction">
+                                                <span class="fraction-numerator">-5 ± √49</span>
+                                                <span class="fraction-line"></span>
+                                                <span class="fraction-denominator">2(2)</span>
+                                            </span>
+                                            = 
+                                            <span class="fraction">
+                                                <span class="fraction-numerator">-5 ± 7</span>
+                                                <span class="fraction-line"></span>
+                                                <span class="fraction-denominator">4</span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">4</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 4</span>
+                                        <p class="step-text">Hitung kedua nilai</p>
+                                        <span class="step-math">
+                                            x₁ = 
+                                            <span class="fraction">
+                                                <span class="fraction-numerator">-5 + 7</span>
+                                                <span class="fraction-line"></span>
+                                                <span class="fraction-denominator">4</span>
+                                            </span>
+                                            = 
+                                            <span class="fraction">
+                                                <span class="fraction-numerator">2</span>
+                                                <span class="fraction-line"></span>
+                                                <span class="fraction-denominator">4</span>
+                                            </span>
+                                            = 
+                                            <span class="fraction">
+                                                <span class="fraction-numerator">1</span>
+                                                <span class="fraction-line"></span>
+                                                <span class="fraction-denominator">2</span>
+                                            </span>
+                                        </span>
+                                        <span class="step-math">
+                                            x₂ = 
+                                            <span class="fraction">
+                                                <span class="fraction-numerator">-5 - 7</span>
+                                                <span class="fraction-line"></span>
+                                                <span class="fraction-denominator">4</span>
+                                            </span>
+                                            = 
+                                            <span class="fraction">
+                                                <span class="fraction-numerator">-12</span>
+                                                <span class="fraction-line"></span>
+                                                <span class="fraction-denominator">4</span>
+                                            </span>
+                                            = -3
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-answer">
+                                <svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                <span class="answer-text">Jawaban: x = <span class="fraction fraction-sm"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">2</span></span> atau x = -3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 4: Quadratic Inequality -->
+                    <div class="example-card">
+                        <div class="example-header">
+                            <span class="example-number">4</span>
+                            <span class="example-title">Pertidaksamaan Kuadrat</span>
+                        </div>
+                        <div class="example-body">
+                            <p class="example-question">Selesaikan: x² - x - 6 < 0</p>
+                            <div class="solution-steps">
+                                <div class="solution-step">
+                                    <span class="step-marker">1</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 1</span>
+                                        <p class="step-text">Cari akar-akar persamaan x² - x - 6 = 0</p>
+                                        <span class="step-math">(x - 3)(x + 2) = 0 → x = 3 atau x = -2</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">2</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 2</span>
+                                        <p class="step-text">Buat garis bilangan dan uji tanda</p>
+                                        <div class="number-line-container">
+                                            <div class="number-line">
+                                                <div class="number-line-axis"></div>
+                                                <div class="number-line-arrow-right"></div>
+                                                <div class="number-line-point" style="left: 25%;"></div>
+                                                <div class="number-line-label" style="left: 25%;">-2</div>
+                                                <div class="number-line-point" style="left: 75%;"></div>
+                                                <div class="number-line-label" style="left: 75%;">3</div>
+                                                <div class="number-line-shade" style="left: 27%; width: 46%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">3</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 3</span>
+                                        <p class="step-text">Karena a = 1 > 0 (parabola terbuka ke atas) dan kita cari yang < 0, maka ambil daerah di antara akar-akar</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-answer">
+                                <svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                <span class="answer-text">Jawaban: -2 < x < 3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 5: SPLDV -->
+                    <div class="example-card">
+                        <div class="example-header">
+                            <span class="example-number">5</span>
+                            <span class="example-title">SPLDV - Metode Eliminasi</span>
+                        </div>
+                        <div class="example-body">
+                            <p class="example-question">Selesaikan sistem persamaan:</p>
+                            <p style="margin-left: 20px;">
+                                2x + 3y = 12 ... (1)<br>
+                                3x - 2y = 5 ... (2)
+                            </p>
+                            <div class="solution-steps">
+                                <div class="solution-step">
+                                    <span class="step-marker">1</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 1</span>
+                                        <p class="step-text">Eliminasi y: kalikan persamaan (1) dengan 2 dan persamaan (2) dengan 3</p>
+                                        <span class="step-math">4x + 6y = 24 ... (3)</span>
+                                        <span class="step-math">9x - 6y = 15 ... (4)</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">2</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 2</span>
+                                        <p class="step-text">Jumlahkan (3) dan (4)</p>
+                                        <span class="step-math">13x = 39 → x = 3</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">3</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 3</span>
+                                        <p class="step-text">Substitusi x = 3 ke persamaan (1)</p>
+                                        <span class="step-math">2(3) + 3y = 12</span>
+                                        <span class="step-math">6 + 3y = 12</span>
+                                        <span class="step-math">3y = 6 → y = 2</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-answer">
+                                <svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                <span class="answer-text">Jawaban: x = 3, y = 2</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Practice Problems -->
+                <section class="content-section" id="latihan-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        <h2 class="section-title">Latihan Soal</h2>
+                    </div>
+                    <div class="practice-grid">
+                        <div class="practice-item">
+                            <span class="practice-number">1</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Selesaikan: 4x - 7 = 2x + 9</p>
+                                <p class="practice-hint">Hint: Pindahkan variabel ke satu ruas</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">2</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Selesaikan dengan faktorisasi: x² + 8x + 15 = 0</p>
+                                <p class="practice-hint">Hint: Cari dua bilangan yang hasil kalinya 15 dan jumlahnya 8</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">3</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Selesaikan: -2x + 5 > 11</p>
+                                <p class="practice-hint">Hint: Ingat! Bagi dengan bilangan negatif = balik tanda</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">4</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Tentukan penyelesaian: x² - 4x + 3 ≥ 0</p>
+                                <p class="practice-hint">Hint: Gunakan garis bilangan setelah menemukan akar-akar</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">5</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Selesaikan SPLDV:</br>x + y = 7</br>2x - y = 2</p>
+                                <p class="practice-hint">Hint: Coba gunakan metode eliminasi</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz Section -->
+                <section class="content-section" id="kuis">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        <h2 class="section-title">Kuis Persamaan dan Pertidaksamaan</h2>
+                    </div>
+                    <div id="quizContainer"></div>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-name">Media Belajar Daffa</span>
+                    <span class="footer-class">Muhammad Daffa Athallah - XII-M4-1</span>
+                </div>
+                <div class="footer-info">
+                    Platform Pembelajaran Mandiri
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+    <script>
+        // Quiz Questions
+        const quizQuestions = [
+            {
+                question: "Penyelesaian dari 5x - 8 = 2x + 7 adalah...",
+                options: ["x = 5", "x = -5", "x = 3", "x = -3"],
+                correct: 0,
+                explanation: "5x - 2x = 7 + 8 → 3x = 15 → x = 5"
+            },
+            {
+                question: "Akar-akar persamaan x² - 6x + 8 = 0 adalah...",
+                options: ["x = 2 dan x = 4", "x = -2 dan x = -4", "x = 2 dan x = -4", "x = -2 dan x = 4"],
+                correct: 0,
+                explanation: "Faktorisasi: (x-2)(x-4) = 0, sehingga x = 2 atau x = 4"
+            },
+            {
+                question: "Diskriminan persamaan x² - 4x + 4 = 0 adalah...",
+                options: ["D = 0", "D > 0", "D < 0", "D = 4"],
+                correct: 0,
+                explanation: "D = b² - 4ac = 16 - 16 = 0, akar kembar"
+            },
+            {
+                question: "Penyelesaian dari 3x - 6 < 9 adalah...",
+                options: ["x < 5", "x > 5", "x < 3", "x > 3"],
+                correct: 0,
+                explanation: "3x < 15 → x < 5"
+            },
+            {
+                question: "Jika dibagi dengan bilangan negatif, tanda pertidaksamaan...",
+                options: ["Dibalik", "Tetap", "Dihapus", "Diganti dengan ="],
+                correct: 0,
+                explanation: "Ini adalah aturan penting dalam pertidaksamaan"
+            },
+            {
+                question: "Himpunan penyelesaian x² - 9 > 0 adalah...",
+                options: ["x < -3 atau x > 3", "-3 < x < 3", "x > 3", "x < -3"],
+                correct: 0,
+                explanation: "Akar x = ±3, parabola terbuka ke atas, jadi daerah di luar akar"
+            },
+            {
+                question: "Penyelesaian SPLDV: x + 2y = 8 dan 2x - y = 3 adalah...",
+                options: ["x = 2, y = 3", "x = 3, y = 2", "x = 4, y = 2", "x = 2, y = 4"],
+                correct: 0,
+                explanation: "Substitusi atau eliminasi: x = 2 dan y = 3"
+            },
+            {
+                question: "Banyaknya penyelesaian SPLDV dengan D = 0 adalah...",
+                options: ["Tak hingga", "Tunggal", "Tidak ada", "Dua"],
+                correct: 0,
+                explanation: "D = 0 berarti kedua garis berimpit, solusi tak hingga"
+            },
+            {
+                question: "Dengan rumus kuadrat, akar dari x² - 5x + 6 = 0 adalah...",
+                options: ["x = 2 dan x = 3", "x = -2 dan x = -3", "x = 1 dan x = 6", "x = -1 dan x = -6"],
+                correct: 0,
+                explanation: "x = (5 ± √(25-24))/2 = (5 ± 1)/2 → x = 3 atau x = 2"
+            },
+            {
+                question: "Penyelesaian dari -4x + 8 ≤ 16 adalah...",
+                options: ["x ≥ -2", "x ≤ -2", "x ≥ 2", "x ≤ 2"],
+                correct: 0,
+                explanation: "-4x ≤ 8, bagi dengan -4 (balik tanda) → x ≥ -2"
+            }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Quiz
+            const quiz = new QuizEngine('quizContainer', quizQuestions);
+            quiz.init();
+
+            // Quick Nav Scroll Shadow
+            const quickNav = document.getElementById('quickNav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 200) {
+                    quickNav.classList.add('scrolled');
+                } else {
+                    quickNav.classList.remove('scrolled');
+                }
+            });
+
+            // Animation 1: Linear Graph
+            const linearM = document.getElementById('linearM');
+            const linearC = document.getElementById('linearC');
+            const linearMValue = document.getElementById('linearMValue');
+            const linearCValue = document.getElementById('linearCValue');
+            const linearLine = document.getElementById('linearLine');
+            const linearLabel = document.getElementById('linearLabel');
+
+            function updateLinearGraph() {
+                const m = parseFloat(linearM.value);
+                const c = parseInt(linearC.value);
+                
+                linearMValue.textContent = m;
+                linearCValue.textContent = c;
+                
+                const x1 = -10, x2 = 10;
+                const y1 = m * x1 + c;
+                const y2 = m * x2 + c;
+                
+                const svgX1 = 200 + x1 * 25;
+                const svgX2 = 200 + x2 * 25;
+                const svgY1 = 125 - y1 * 25;
+                const svgY2 = 125 - y2 * 25;
+                
+                linearLine.setAttribute('x1', svgX1);
+                linearLine.setAttribute('y1', svgY1);
+                linearLine.setAttribute('x2', svgX2);
+                linearLine.setAttribute('y2', svgY2);
+                
+                let label = 'y = ';
+                if (m !== 0) {
+                    if (m === 1) label += 'x';
+                    else if (m === -1) label += '-x';
+                    else label += m + 'x';
+                }
+                if (c !== 0) {
+                    if (c > 0 && m !== 0) label += ' + ';
+                    else if (c < 0) label += ' - ';
+                    label += Math.abs(c);
+                }
+                if (m === 0 && c === 0) label += '0';
+                linearLabel.textContent = label;
+            }
+
+            if (linearM) {
+                linearM.addEventListener('input', updateLinearGraph);
+                linearC.addEventListener('input', updateLinearGraph);
+                updateLinearGraph();
+            }
+
+            // Animation 2: Quadratic Graph
+            const quadA = document.getElementById('quadA');
+            const quadB = document.getElementById('quadB');
+            const quadC = document.getElementById('quadC');
+            const quadAValue = document.getElementById('quadAValue');
+            const quadBValue = document.getElementById('quadBValue');
+            const quadCValue = document.getElementById('quadCValue');
+            const quadPath = document.getElementById('quadPath');
+            const quadLabel = document.getElementById('quadLabel');
+            const rootMarkers = document.getElementById('rootMarkers');
+
+            function updateQuadGraph() {
+                const a = parseFloat(quadA.value);
+                const b = parseFloat(quadB.value);
+                const c = parseFloat(quadC.value);
+                
+                quadAValue.textContent = a;
+                quadBValue.textContent = b;
+                quadCValue.textContent = c;
+                
+                let pathD = '';
+                const scale = 25;
+                const centerX = 200;
+                const centerY = 125;
+                
+                for (let px = 0; px <= 400; px += 2) {
+                    const x = (px - centerX) / scale;
+                    const y = a * x * x + b * x + c;
+                    const svgY = centerY - y * scale;
+                    
+                    if (px === 0) {
+                        pathD += `M ${px} ${svgY}`;
+                    } else {
+                        pathD += ` L ${px} ${svgY}`;
+                    }
+                }
+                
+                quadPath.setAttribute('d', pathD);
+                
+                let rootsHTML = '';
+                if (a !== 0) {
+                    const D = b * b - 4 * a * c;
+                    if (D >= 0) {
+                        const x1 = (-b + Math.sqrt(D)) / (2 * a);
+                        const x2 = (-b - Math.sqrt(D)) / (2 * a);
+                        
+                        if (D > 0) {
+                            rootsHTML = `
+                                <circle cx="${centerX + x1 * scale}" cy="${centerY}" r="6" fill="var(--success)"/>
+                                <circle cx="${centerX + x2 * scale}" cy="${centerY}" r="6" fill="var(--success)"/>
+                            `;
+                        } else {
+                            rootsHTML = `
+                                <circle cx="${centerX + x1 * scale}" cy="${centerY}" r="6" fill="var(--success)"/>
+                            `;
+                        }
+                    }
+                }
+                rootMarkers.innerHTML = rootsHTML;
+                
+                let label = 'y = ';
+                if (a !== 0) {
+                    if (a === 1) label += 'x²';
+                    else if (a === -1) label += '-x²';
+                    else label += a + 'x²';
+                }
+                if (b !== 0) {
+                    if (b > 0) label += ' + ';
+                    else label += ' - ';
+                    if (Math.abs(b) !== 1) label += Math.abs(b);
+                    label += 'x';
+                }
+                if (c !== 0) {
+                    if (c > 0) label += ' + ';
+                    else label += ' - ';
+                    label += Math.abs(c);
+                }
+                if (a === 0 && b === 0 && c === 0) label += '0';
+                quadLabel.textContent = label;
+            }
+
+            if (quadA) {
+                quadA.addEventListener('input', updateQuadGraph);
+                quadB.addEventListener('input', updateQuadGraph);
+                quadC.addEventListener('input', updateQuadGraph);
+                updateQuadGraph();
+            }
+
+            // Animation 3: Inequality
+            const ineqM = document.getElementById('ineqM');
+            const ineqMValue = document.getElementById('ineqMValue');
+            const ineqLine = document.getElementById('ineqLine');
+            const ineqRegion = document.getElementById('ineqRegion');
+            const ineqLabel = document.getElementById('ineqLabel');
+            const btnLess = document.getElementById('btnLess');
+            const btnGreater = document.getElementById('btnGreater');
+            
+            let isLess = true;
+
+            function updateInequality() {
+                const m = parseFloat(ineqM.value);
+                ineqMValue.textContent = m;
+                
+                const x1 = -10, x2 = 10;
+                const y1 = m * x1;
+                const y2 = m * x2;
+                
+                const svgX1 = 200 + x1 * 25;
+                const svgX2 = 200 + x2 * 25;
+                const svgY1 = 125 - y1 * 25;
+                const svgY2 = 125 - y2 * 25;
+                
+                ineqLine.setAttribute('x1', svgX1);
+                ineqLine.setAttribute('y1', svgY1);
+                ineqLine.setAttribute('x2', svgX2);
+                ineqLine.setAttribute('y2', svgY2);
+                
+                let regionPoints;
+                if (isLess) {
+                    regionPoints = `0,250 400,250 400,${svgY2} ${svgX1},${svgY1} 0,${svgY1 + (svgY2 - svgY1) * (svgX1 / (svgX2 - svgX1))}`;
+                } else {
+                    regionPoints = `0,0 400,0 400,${svgY2} ${svgX1},${svgY1} 0,${svgY1 + (svgY2 - svgY1) * (svgX1 / (svgX2 - svgX1))}`;
+                }
+                ineqRegion.setAttribute('points', regionPoints);
+                
+                const sign = isLess ? '<' : '>';
+                let label = `y ${sign} `;
+                if (m === 1) label += 'x';
+                else if (m === -1) label += '-x';
+                else if (m === 0) label += '0';
+                else label += m + 'x';
+                
+                ineqLabel.textContent = label;
+            }
+
+            if (ineqM) {
+                ineqM.addEventListener('input', updateInequality);
+                
+                btnLess.addEventListener('click', () => {
+                    isLess = true;
+                    btnLess.classList.add('active');
+                    btnGreater.classList.remove('active');
+                    updateInequality();
+                });
+                
+                btnGreater.addEventListener('click', () => {
+                    isLess = false;
+                    btnGreater.classList.add('active');
+                    btnLess.classList.remove('active');
+                    updateInequality();
+                });
+                
+                updateInequality();
+            }
+        });
+    </script>
+</body>
+</html>

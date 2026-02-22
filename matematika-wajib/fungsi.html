@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Fungsi - Matematika Wajib SMA">
+    <title>Fungsi - Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific Styles for this page */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-family: var(--font-display);
+        }
+        .fraction-numerator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; }
+        .fraction-line { width: 100%; height: 2px; background: var(--text-primary); border-radius: 1px; }
+        .fraction-denominator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; }
+        .fraction-sm .fraction-numerator, .fraction-sm .fraction-denominator { font-size: 0.875rem; padding: 1px 6px; }
+        .fraction-lg .fraction-numerator, .fraction-lg .fraction-denominator { font-size: 1.25rem; padding: 4px 12px; }
+        .formula-box .fraction { background: var(--bg-card); padding: 8px 12px; border-radius: var(--radius-sm); margin: 0 8px; }
+        .formula-box .fraction-line { background: var(--accent-primary); }
+        .step-math .fraction { background: var(--bg-card); padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
+
+        /* Mapping Diagram Styles */
+        .mapping-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin: 16px 0;
+            position: relative;
+            min-height: 250px;
+        }
+        .mapping-set {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 2;
+            text-align: center;
+        }
+        .mapping-set-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--accent-primary);
+            padding-bottom: 5px;
+        }
+        .mapping-item {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--accent-primary);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+        .mapping-item.active {
+            background: var(--accent-primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        .mapping-lines-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Composition Machine Styles */
+        .machine-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding: 30px 20px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+        .machine-box {
+            padding: 15px 25px;
+            background: var(--bg-card);
+            border: 2px solid var(--accent-primary);
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+        .machine-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+        .machine-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+        .machine-arrow {
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                    </svg>
+                    <span class="logo-text">Media Belajar Daffa</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a><span>/</span>
+                        <a href="index.html">Matematika Wajib</a><span>/</span>
+                        <span class="current">Fungsi</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Fungsi</h1>
+                    <p class="page-subtitle">Memahami konsep relasi dan fungsi, domain, kodomain, range, komposisi, dan fungsi invers.</p>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="nav-btn-group">
+                    <a href="index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Kembali ke Daftar Materi</a>
+                    <a href="../index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a>
+                </div>
+
+                <!-- Quick Navigation -->
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#materi-inti" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Materi Inti</a>
+                    <a href="#animasi-interaktif" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animasi</a>
+                    <a href="#contoh-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Contoh Soal</a>
+                    <a href="#latihan-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Latihan</a>
+                    <a href="#kuis" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Kuis</a>
+                </nav>
+
+                <!-- Learning Objectives -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <h2 class="section-title">Tujuan Pembelajaran</h2>
+                    </div>
+                    <div class="objectives-list">
+                        <div class="objective-item"><span class="objective-number">1</span><span class="objective-text">Memahami konsep relasi dan fungsi serta perbedaannya</span></div>
+                        <div class="objective-item"><span class="objective-number">2</span><span class="objective-text">Menentukan domain, kodomain, dan range suatu fungsi</span></div>
+                        <div class="objective-item"><span class="objective-number">3</span><span class="objective-text">Menggambar grafik fungsi linear dan kuadrat</span></div>
+                        <div class="objective-item"><span class="objective-number">4</span><span class="objective-text">Memahami fungsi komposisi dan fungsi invers</span></div>
+                    </div>
+                </section>
+
+                <!-- Material Content -->
+                <section class="content-section" id="materi-inti">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                        <h2 class="section-title">Materi Inti</h2>
+                    </div>
+                    <div class="material-content">
+                        <h3>1. Relasi dan Fungsi</h3>
+                        <p><strong>Relasi</strong> adalah hubungan antara anggota dua himpunan. <strong>Fungsi</strong> adalah relasi khusus dimana setiap anggota domain (himpunan A) hanya mempunyai satu pasangan di kodomain (himpunan B).</p>
+                        
+                        <h4>Syarat Fungsi:</h4>
+                        <ul>
+                            <li>Setiap anggota domain memiliki pasangan.</li>
+                            <li>Satu anggota domain hanya boleh memiliki satu pasangan di kodomain.</li>
+                        </ul>
+
+                        <h3>2. Domain, Kodomain, dan Range</h3>
+                        <ul>
+                            <li><strong>Domain (Df):</strong> Himpunan semua nilai input (x).</li>
+                            <li><strong>Kodomain:</strong> Himpunan tujuan yang mungkin menjadi output.</li>
+                            <li><strong>Range (Wf):</strong> Himpunan semua nilai output (y) yang terjadi dari fungsi.</li>
+                        </ul>
+
+                        <h3>3. Jenis-Jenis Fungsi</h3>
+                        
+                        <h4>a. Fungsi Linear</h4>
+                        <div class="formula-box">
+                            <div class="formula-label">Bentuk Umum</div>
+                            <div class="formula">f(x) = ax + b</div>
+                        </div>
+                        <p>Grafik berupa garis lurus.</p>
+
+                        <h4>b. Fungsi Kuadrat</h4>
+                        <div class="formula-box">
+                            <div class="formula-label">Bentuk Umum</div>
+                            <div class="formula">f(x) = ax² + bx + c</div>
+                        </div>
+                        <p>Grafik berupa parabola.</p>
+
+                        <h3>4. Fungsi Komposisi</h3>
+                        <p>Operasi penggabungan dua fungsi atau lebih.</p>
+                        <div class="formula-box">
+                            <div class="formula-label">Notasi</div>
+                            <div class="formula">(f ∘ g)(x) = f(g(x))</div>
+                        </div>
+
+                        <h3>5. Fungsi Invers</h3>
+                        <p>Fungsi yang membalik pemetaan dari fungsi asalnya. Dilambangkan f<sup>-1</sup>(x).</p>
+                        <h4>Langkah mencari invers:</h4>
+                        <ol>
+                            <li>Ubah f(x) menjadi y.</li>
+                            <li>Tukar posisi x dan y.</li>
+                            <li>Selesaikan untuk y.</li>
+                            <li>y menjadi f<sup>-1</sup>(x).</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- Interactive Animations -->
+                <section class="content-section" id="animasi-interaktif">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <h2 class="section-title">Animasi Interaktif</h2>
+                    </div>
+
+                    <!-- Animation 1: Mapping Diagram -->
+                    <div class="animation-container">
+                        <div class="animation-header"><span class="animation-title">Diagram Pemetaan Fungsi</span></div>
+                        <div class="animation-controls">
+                            <button class="control-btn active" id="btnFunction">Fungsi (Benar)</button>
+                            <button class="control-btn" id="btnNonFunction">Bukan Fungsi</button>
+                        </div>
+                        <div class="mapping-container" id="mappingCanvas">
+                            <svg class="mapping-lines-svg" id="mappingSvg" viewBox="0 0 300 250"></svg>
+                            <div class="mapping-set" id="setA">
+                                <div class="mapping-set-title">A (Domain)</div>
+                                <div class="mapping-item" data-val="1">1</div>
+                                <div class="mapping-item" data-val="2">2</div>
+                                <div class="mapping-item" data-val="3">3</div>
+                            </div>
+                            <div class="mapping-set" id="setB">
+                                <div class="mapping-set-title">B (Kodomain)</div>
+                                <div class="mapping-item" data-val="a">a</div>
+                                <div class="mapping-item" data-val="b">b</div>
+                                <div class="mapping-item" data-val="c">c</div>
+                            </div>
+                        </div>
+                        <div class="animation-info" id="mappingInfo" style="background: var(--success-light); border-left: 4px solid var(--success);">
+                            Ini adalah fungsi. Setiap domain memiliki tepat satu pasangan.
+                        </div>
+                    </div>
+
+                    <!-- Animation 2: Function Graph -->
+                    <div class="animation-container">
+                        <div class="animation-header"><span class="animation-title">Grafik Fungsi Kuadrat</span></div>
+                        <div class="slider-control">
+                            <span class="slider-label">Koefisien a:</span>
+                            <input type="range" class="slider-input" id="funcA" min="-2" max="2" step="0.5" value="1">
+                            <span class="slider-value" id="funcAVal">1</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Koefisien b:</span>
+                            <input type="range" class="slider-input" id="funcB" min="-5" max="5" step="1" value="0">
+                            <span class="slider-value" id="funcBVal">0</span>
+                        </div>
+                        <div class="animation-canvas">
+                            <svg class="canvas-svg" viewBox="0 0 400 250" id="graphSvg">
+                                <defs><pattern id="gridFunc" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M 25 0 L 0 0 0 25" fill="none" stroke="var(--border-light)" stroke-width="0.5"/></pattern></defs>
+                                <rect width="100%" height="100%" fill="url(#gridFunc)"/>
+                                <line x1="200" y1="0" x2="200" y2="250" stroke="var(--text-muted)" stroke-width="1"/>
+                                <line x1="0" y1="125" x2="400" y2="125" stroke="var(--text-muted)" stroke-width="1"/>
+                                <path id="graphPath" d="" fill="none" stroke="var(--accent-primary)" stroke-width="3"/>
+                                <text x="200" y="240" text-anchor="middle" fill="var(--text-secondary)" font-size="14" id="graphLabel">f(x) = x²</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Animation 3: Composition Machine -->
+                    <div class="animation-container">
+                        <div class="animation-header"><span class="animation-title">Mesin Komposisi (f ∘ g)(x)</span></div>
+                        <div class="slider-control">
+                            <span class="slider-label">Input x:</span>
+                            <input type="range" class="slider-input" id="compX" min="1" max="5" step="1" value="2">
+                            <span class="slider-value" id="compXVal">2</span>
+                        </div>
+                        <div class="machine-container">
+                            <div class="machine-box">
+                                <div class="machine-label">Input x</div>
+                                <div class="machine-value" id="dispX">2</div>
+                            </div>
+                            <div class="machine-arrow"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                            <div class="machine-box" style="border-color: var(--info);">
+                                <div class="machine-label">g(x) = 2x</div>
+                                <div class="machine-value" id="dispGX" style="color: var(--info);">4</div>
+                            </div>
+                            <div class="machine-arrow"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                            <div class="machine-box" style="border-color: var(--success);">
+                                <div class="machine-label">f(x) = x + 3</div>
+                                <div class="machine-value" id="dispFGX" style="color: var(--success);">7</div>
+                            </div>
+                        </div>
+                        <div class="animation-info">
+                            (f ∘ g)(x) = f(g(x)) = f(2x) = 2x + 3
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Example Problems -->
+                <section class="content-section" id="contoh-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <h2 class="section-title">Contoh Soal dan Pembahasan</h2>
+                    </div>
+
+                    <!-- Example 1 -->
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">1</span><span class="example-title">Komposisi Fungsi</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Diketahui f(x) = 2x + 1 dan g(x) = x - 3. Tentukan (f ∘ g)(x).</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content"><span class="step-label">Substitusi</span><p class="step-text">Masukkan g(x) ke dalam f(x):</p><span class="step-math">(f ∘ g)(x) = f(g(x)) = f(x - 3)</span></div></div>
+                                <div class="solution-step"><span class="step-marker">2</span><div class="step-content"><span class="step-label">Hitung</span><p class="step-text">Ganti variabel x pada f(x) dengan (x - 3):</p><span class="step-math">f(x - 3) = 2(x - 3) + 1</span><span class="step-math">= 2x - 6 + 1 = 2x - 5</span></div></div>
+                            </div>
+                            <div class="example-answer"><svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="answer-text">(f ∘ g)(x) = 2x - 5</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Example 2 -->
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">2</span><span class="example-title">Fungsi Invers</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Tentukan invers dari f(x) = 3x - 6.</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content"><span class="step-label">Ubah variabel</span><p class="step-text">f(x) menjadi y:</p><span class="step-math">y = 3x - 6</span></div></div>
+                                <div class="solution-step"><span class="step-marker">2</span><div class="step-content"><span class="step-label">Tukar x dan y</span><p class="step-text"></p><span class="step-math">x = 3y - 6</span></div></div>
+                                <div class="solution-step"><span class="step-marker">3</span><div class="step-content"><span class="step-label">Selesaikan y</span><p class="step-text"></p><span class="step-math">x + 6 = 3y</span><span class="step-math">y = <span class="fraction"><span class="fraction-numerator">x + 6</span><span class="fraction-line"></span><span class="fraction-denominator">3</span></span></span></div></div>
+                            </div>
+                            <div class="example-answer"><svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="answer-text">f<sup>-1</sup>(x) = <span class="fraction fraction-sm"><span class="fraction-numerator">x + 6</span><span class="fraction-line"></span><span class="fraction-denominator">3</span></span></span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Practice Problems -->
+                <section class="content-section" id="latihan-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        <h2 class="section-title">Latihan Soal</h2>
+                    </div>
+                    <div class="practice-grid">
+                        <div class="practice-item"><span class="practice-number">1</span><div class="practice-content"><p class="practice-question">Jika f(x) = 2x - 3, tentukan f(2).</p></div></div>
+                        <div class="practice-item"><span class="practice-number">2</span><div class="practice-content"><p class="practice-question">Tentukan domain dari f(x) = √(x - 2).</p></div></div>
+                        <div class="practice-item"><span class="practice-number">3</span><div class="practice-content"><p class="practice-question">Diketahui g(x) = x + 4. Tentukan g<sup>-1</sup>(x).</p></div></div>
+                        <div class="practice-item"><span class="practice-number">4</span><div class="practice-content"><p class="practice-question">Diberikan f(x) = x² dan g(x) = x + 1. Tentukan (f ∘ g)(2).</p></div></div>
+                    </div>
+                </section>
+
+                <!-- Quiz Section -->
+                <section class="content-section" id="kuis">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <h2 class="section-title">Kuis Fungsi</h2>
+                    </div>
+                    <div id="quizContainer"></div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-name">Media Belajar Daffa</span>
+                    <span class="footer-class">Muhammad Daffa Athallah - XII-M4-1</span>
+                </div>
+                <div class="footer-info">Platform Pembelajaran Mandiri</div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+    <script>
+        // Quiz Data
+        const quizQuestions = [
+            { question: "Diketahui f(x) = 3x + 1. Nilai f(2) adalah...", options: ["7", "6", "5", "8"], correct: 0, explanation: "f(2) = 3(2) + 1 = 7." },
+            { question: "Invers dari f(x) = x - 5 adalah...", options: ["x + 5", "x - 5", "5 - x", "x/5"], correct: 0, explanation: "y = x - 5 → x = y - 5 → y = x + 5." },
+            { question: "Jika (f ∘ g)(x) = 2x + 2 dan g(x) = x, maka f(x) = ...", options: ["2x + 2", "x + 2", "2x", "x"], correct: 0, explanation: "f(g(x)) = f(x) = 2x + 2." },
+            { question: "Domain dari f(x) = √(x + 1) adalah...", options: ["x ≥ -1", "x > -1", "x ≤ -1", "x = -1"], correct: 0, explanation: "Akar tidak boleh negatif, x + 1 ≥ 0 → x ≥ -1." },
+            { question: "Relasi yang menghubungkan setiap anggota domain dengan tepat satu anggota kodomain disebut...", options: ["Fungsi", "Relasi Biasa", "Grafik", "Himpunan"], correct: 0, explanation: "Definisi fungsi." },
+            { question: "Jika f(x) = x² dan g(x) = x + 2, maka (f ∘ g)(x) = ...", options: ["(x + 2)²", "x² + 2", "x² + 4", "x + 4"], correct: 0, explanation: "f(g(x)) = f(x+2) = (x+2)²." },
+            { question: "Range dari fungsi f(x) = x² dengan domain {1, 2, 3} adalah...", options: ["{1, 4, 9}", "{1, 2, 3}", "{2, 4, 6}", "{1, 2, 4}"], correct: 0, explanation: "f(1)=1, f(2)=4, f(3)=9." },
+            { question: "Grafik fungsi f(x) = ax² + bx + c terbuka ke bawah jika...", options: ["a < 0", "a > 0", "b < 0", "c > 0"], correct: 0, explanation: "Koefisien x² negatif menyebabkan parabola terbuka ke bawah." },
+            { question: "Jika f(x) = 2x - 4, maka f⁻¹(2) adalah...", options: ["3", "2", "4", "0"], correct: 0, explanation: "f⁻¹(x) = (x+4)/2. f⁻¹(2) = 6/2 = 3." },
+            { question: "Daerah hasil (range) adalah himpunan...", options: ["Output", "Input", "Relasi", "Kodomain"], correct: 0, explanation: "Range adalah daerah hasil/output yang terjadi." }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Init Quiz
+            new QuizEngine('quizContainer', quizQuestions).init();
+
+            // Quick Nav Shadow
+            const quickNav = document.getElementById('quickNav');
+            window.addEventListener('scroll', () => quickNav.classList.toggle('scrolled', window.scrollY > 200));
+
+            // Animation 1: Mapping Diagram
+            const mappingSvg = document.getElementById('mappingSvg');
+            const mappingInfo = document.getElementById('mappingInfo');
+            const btnFunction = document.getElementById('btnFunction');
+            const btnNonFunction = document.getElementById('btnNonFunction');
+
+            // Coordinates for SVG mapping (calculated for 300x250 viewbox, centered sets)
+            // Set A at x=50, Set B at x=250. Y positions spread.
+            // Items A: y=60, 125, 190. Items B: y=60, 125, 190.
+            const posA = [60, 125, 190]; 
+            const posB = [60, 125, 190];
+
+            function drawMapping(isFunction) {
+                let lines = '';
+                if (isFunction) {
+                    // 1->a, 2->b, 3->a (Function, a has 2 inputs)
+                    lines = `<path d="M 80 ${posA[0]} Q 150 ${posA[0]} 220 ${posB[0]}" stroke="var(--accent-primary)" stroke-width="2" fill="none"/>`;
+                    lines += `<path d="M 80 ${posA[1]} Q 150 ${posA[1]} 220 ${posB[1]}" stroke="var(--accent-primary)" stroke-width="2" fill="none"/>`;
+                    lines += `<path d="M 80 ${posA[2]} Q 150 ${posA[2]} 220 ${posB[0]}" stroke="var(--accent-primary)" stroke-width="2" fill="none"/>`;
+                    mappingInfo.textContent = "INI FUNGSI. Setiap domain memiliki tepat SATU pasangan. (Boleh ada kodomain tanpa pasangan)";
+                    mappingInfo.style.background = "var(--success-light)";
+                    mappingInfo.style.borderLeftColor = "var(--success)";
+                } else {
+                    // 1->a, 1->b (Not a function)
+                    lines = `<path d="M 80 ${posA[0]} Q 150 ${posA[0]} 220 ${posB[0]}" stroke="var(--error)" stroke-width="2" fill="none"/>`;
+                    lines += `<path d="M 80 ${posA[0]} Q 150 ${posA[0]} 220 ${posB[1]}" stroke="var(--error)" stroke-width="2" fill="none"/>`;
+                    lines += `<path d="M 80 ${posA[1]} Q 150 ${posA[1]} 220 ${posB[2]}" stroke="var(--error)" stroke-width="2" fill="none"/>`;
+                    mappingInfo.textContent = "INI BUKAN FUNGSI. Domain '1' memiliki DUA pasangan (a dan b).";
+                    mappingInfo.style.background = "var(--error-light)";
+                    mappingInfo.style.borderLeftColor = "var(--error)";
+                }
+                mappingSvg.innerHTML = lines;
+            }
+
+            if(btnFunction) {
+                btnFunction.onclick = () => { btnFunction.classList.add('active'); btnNonFunction.classList.remove('active'); drawMapping(true); };
+                btnNonFunction.onclick = () => { btnNonFunction.classList.add('active'); btnFunction.classList.remove('active'); drawMapping(false); };
+                drawMapping(true);
+            }
+
+            // Animation 2: Graph
+            const funcA = document.getElementById('funcA');
+            const funcB = document.getElementById('funcB');
+            const graphPath = document.getElementById('graphPath');
+            const graphLabel = document.getElementById('graphLabel');
+
+            function updateGraph() {
+                const a = parseFloat(funcA.value);
+                const b = parseFloat(funcB.value);
+                document.getElementById('funcAVal').textContent = a;
+                document.getElementById('funcBVal').textContent = b;
+
+                let d = '';
+                for (let px = 0; px <= 400; px += 2) {
+                    const x = (px - 200) / 25; // Scale
+                    const y = a * x * x + b * x;
+                    const svgY = 125 - y * 25; // Scale and invert Y
+                    d += (px === 0 ? 'M' : 'L') + ` ${px} ${svgY}`;
+                }
+                graphPath.setAttribute('d', d);
+                graphLabel.textContent = `f(x) = ${a}x² ${b >= 0 ? '+' : ''} ${b}x`;
+            }
+
+            if(funcA) { funcA.oninput = updateGraph; funcB.oninput = updateGraph; updateGraph(); }
+
+            // Animation 3: Composition
+            const compX = document.getElementById('compX');
+            function updateComposition() {
+                const x = parseInt(compX.value);
+                document.getElementById('compXVal').textContent = x;
+                document.getElementById('dispX').textContent = x;
+                const gx = 2 * x;
+                document.getElementById('dispGX').textContent = gx;
+                document.getElementById('dispFGX').textContent = gx + 3;
+            }
+            if(compX) { compX.oninput = updateComposition; updateComposition(); }
+        });
+    </script>
+</body>
+</html>

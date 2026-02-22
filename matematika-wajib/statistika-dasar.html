@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Statistika Dasar - Matematika Wajib SMA">
+    <title>Statistika Dasar - Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific Styles */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-family: var(--font-display);
+        }
+        .fraction-numerator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; }
+        .fraction-line { width: 100%; height: 2px; background: var(--text-primary); border-radius: 1px; }
+        .fraction-denominator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; }
+        .formula-box .fraction { background: var(--bg-card); padding: 8px 12px; border-radius: var(--radius-sm); margin: 0 8px; }
+        .formula-box .fraction-line { background: var(--accent-primary); }
+
+        /* Input Area */
+        .data-input-area {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 25px;
+        }
+        .data-textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-family: monospace;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.2s;
+        }
+        .data-textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            border-style: solid;
+        }
+
+        /* Stats Result Display */
+        .stats-display {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        @media (min-width: 768px) {
+            .stats-display { grid-template-columns: 1fr 1fr; }
+        }
+
+        .stat-group {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        .stat-group-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border-light);
+        }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-label { font-weight: 500; color: var(--text-secondary); }
+        .stat-val { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; color: var(--accent-primary); }
+
+        /* Visualization Container */
+        .viz-container {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        .viz-title {
+            text-align: center; 
+            font-weight: 600; 
+            margin-bottom: 10px; 
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        
+        /* SVG Styles */
+        .plot-svg { width: 100%; height: auto; display: block; }
+        
+        /* Dots */
+        .data-dot { fill: rgba(52, 152, 219, 0.6); stroke: #3498db; stroke-width: 1; }
+        
+        /* Box Plot Elements */
+        .bp-axis-line { stroke: var(--text-muted); stroke-width: 1; }
+        .bp-tick { stroke: var(--text-muted); stroke-width: 1; }
+        .bp-tick-label { font-family: var(--font-body); font-size: 10px; fill: var(--text-muted); }
+        
+        .bp-box-rect { fill: rgba(52, 152, 219, 0.15); stroke: #3498db; stroke-width: 2; rx: 4; }
+        .bp-median-line { stroke: #e74c3c; stroke-width: 3; stroke-linecap: round; }
+        .bp-whisker-line { stroke: #7f8c8d; stroke-width: 2; stroke-dasharray: 4,2; }
+        .bp-connector-line { stroke: #7f8c8d; stroke-width: 1; opacity: 0.5; }
+        
+        .bp-label-text { font-family: var(--font-display); font-size: 11px; fill: var(--text-primary); font-weight: 600; }
+        .bp-sub-label { font-family: var(--font-body); font-size: 9px; fill: var(--text-muted); text-transform: uppercase; }
+
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                    </svg>
+                    <span class="logo-text">Media Belajar Daffa</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a><span>/</span><a href="index.html">Matematika Wajib</a><span>/</span><span class="current">Statistika Dasar</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Statistika Dasar</h1>
+                    <p class="page-subtitle">Menganalisis data dengan ukuran pemusatan, penyebaran, dan kuartil.</p>
+                </div>
+
+                <div class="nav-btn-group">
+                    <a href="index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Kembali ke Daftar Materi</a>
+                    <a href="../index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a>
+                </div>
+
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#materi-inti" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Materi Inti</a>
+                    <a href="#animasi-interaktif" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animasi</a>
+                    <a href="#contoh-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Contoh Soal</a>
+                    <a href="#latihan-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Latihan</a>
+                    <a href="#kuis" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Kuis</a>
+                </nav>
+
+                <section class="content-section" id="materi-inti">
+                    <div class="section-header"><h2 class="section-title">Materi Inti</h2></div>
+                    <div class="material-content">
+                        <h3>1. Ukuran Pemusatan</h3>
+                        <h4>a. Mean (Rata-rata)</h4>
+                        <p>Nilai rata-rata dari sekumpulan data.</p>
+                        <div class="formula-box">
+                            <div class="formula">Mean = <span class="fraction"><span class="fraction-numerator">Σx<sub>i</sub></span><span class="fraction-line"></span><span class="fraction-denominator">n</span></span></div>
+                        </div>
+
+                        <h4>b. Median</h4>
+                        <p>Nilai tengah dari data terurut. Jika n ganjil ambil tengah, jika genap rata-rata dua tengah.</p>
+
+                        <h4>c. Modus</h4>
+                        <p>Nilai yang paling sering muncul.</p>
+
+                        <h3>2. Ukuran Penyebaran</h3>
+                        <h4>a. Jangkauan (Range)</h4>
+                        <div class="formula-box"><div class="formula">J = X<sub>max</sub> - X<sub>min</sub></div></div>
+                        
+                        <h4>b. Simpangan Baku (Standard Deviasi)</h4>
+                        <div class="formula-box"><div class="formula">s = √<span class="fraction"><span class="fraction-numerator">Σ(x<sub>i</sub> - x̄)²</span><span class="fraction-line"></span><span class="fraction-denominator">n - 1</span></span></div></div>
+
+                        <h3>3. Kuartil</h3>
+                        <p>Membagi data terurut menjadi 4 bagian: Q1 (25%), Q2/Median (50%), Q3 (75%).</p>
+                    </div>
+                </section>
+
+                <section class="content-section" id="animasi-interaktif">
+                    <div class="section-header"><h2 class="section-title">Kalkulator Statistik</h2></div>
+                    
+                    <div class="animation-container">
+                        <div class="data-input-area">
+                            <label style="font-weight:600; display:block; margin-bottom:8px;">Masukkan Data (Pisahkan dengan koma):</label>
+                            <textarea id="dataInput" class="data-textarea" placeholder="Contoh: 4, 6, 8, 10, 12">4, 6, 8, 8, 9, 10, 12, 15</textarea>
+                            <button class="control-btn" style="margin-top:10px;" onclick="calculateStats()">Hitung Statistik</button>
+                        </div>
+
+                        <!-- Hasil Perhitungan -->
+                        <div class="stats-display">
+                            <div class="stat-group">
+                                <div class="stat-group-title">Ukuran Pemusatan</div>
+                                <div class="stat-row"><span class="stat-label">Mean (x̄)</span><span class="stat-val" id="resMean">-</span></div>
+                                <div class="stat-row"><span class="stat-label">Median</span><span class="stat-val" id="resMedian">-</span></div>
+                                <div class="stat-row"><span class="stat-label">Modus</span><span class="stat-val" id="resMode">-</span></div>
+                            </div>
+                            <div class="stat-group">
+                                <div class="stat-group-title">Penyebaran & Kuartil</div>
+                                <div class="stat-row"><span class="stat-label">Jangkauan</span><span class="stat-val" id="resRange">-</span></div>
+                                <div class="stat-row"><span class="stat-label">Simpangan Baku (s)</span><span class="stat-val" id="resSD">-</span></div>
+                                <div class="stat-row"><span class="stat-label">Q1 / Q3</span><span class="stat-val"><span id="resQ1">-</span> / <span id="resQ3">-</span></span></div>
+                            </div>
+                        </div>
+
+                        <!-- Visualisasi Baru (Rapi) -->
+                        <div class="viz-container">
+                            <div class="viz-title">Visualisasi Data & Box Plot</div>
+                            <svg id="plotSvg" class="plot-svg" viewBox="0 0 400 240">
+                                <!-- Layer 1: Dot Plot Area -->
+                                <g id="dotLayer"></g>
+                                
+                                <!-- Layer 2: Box Plot Area -->
+                                <g id="boxLayer"></g>
+                                
+                                <!-- Layer 3: Axis & Labels -->
+                                <g id="axisLayer"></g>
+                            </svg>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="contoh-soal">
+                    <div class="section-header"><h2 class="section-title">Contoh Soal</h2></div>
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">1</span><span class="example-title">Mean dan Median</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Diketahui data: 2, 4, 6, 8, 10. Tentukan Mean dan Median.</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content">
+                                    <span class="step-label">Mean</span>
+                                    <span class="step-math">Mean = (2+4+6+8+10)/5 = 6</span>
+                                </div></div>
+                                <div class="solution-step"><span class="step-marker">2</span><div class="step-content">
+                                    <span class="step-label">Median</span>
+                                    <span class="step-math">Median = Nilai tengah = 6</span>
+                                </div></div>
+                            </div>
+                            <div class="example-answer"><span class="answer-text">Mean = 6, Median = 6</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="latihan-soal">
+                    <div class="section-header"><h2 class="section-title">Latihan Soal</h2></div>
+                    <div class="practice-grid">
+                        <div class="practice-item"><span class="practice-number">1</span><div class="practice-content"><p class="practice-question">Hitung mean dari data: 5, 10, 15, 20, 25.</p></div></div>
+                        <div class="practice-item"><span class="practice-number">2</span><div class="practice-content"><p class="practice-question">Tentukan median dari data: 3, 7, 9, 11, 13, 15.</p></div></div>
+                        <div class="practice-item"><span class="practice-number">3</span><div class="practice-content"><p class="practice-question">Tentukan modus dari data: 4, 5, 5, 6, 7, 8, 8, 8, 9.</p></div></div>
+                        <div class="practice-item"><span class="practice-number">4</span><div class="practice-content"><p class="practice-question">Diketahui Q1 = 10 dan Q3 = 20. Hitung Interquartile Range (IQR).</p></div></div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="kuis">
+                    <div class="section-header"><h2 class="section-title">Kuis</h2></div>
+                    <div id="quizContainer"></div>
+                </section>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand"><span class="footer-name">Media Belajar Daffa</span><span class="footer-class">XII-M4-1</span></div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+    <script>
+        const quizQuestions = [
+            { question: "Mean dari data 1, 2, 3, 4, 5 adalah...", options: ["2", "3", "4", "5"], correct: 1 },
+            { question: "Median dari data 3, 7, 5, 9, 11 adalah...", options: ["5", "7", "9", "6"], correct: 1 },
+            { question: "Modus dari data 2, 3, 3, 4, 5, 5, 5, 6 adalah...", options: ["3", "4", "5", "6"], correct: 2 },
+            { question: "Jangkauan dari data 10, 20, 30, 40, 50 adalah...", options: ["10", "20", "30", "40"], correct: 3 }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            new QuizEngine('quizContainer', quizQuestions).init();
+            const quickNav = document.getElementById('quickNav');
+            window.addEventListener('scroll', () => quickNav.classList.toggle('scrolled', window.scrollY > 200));
+            calculateStats(); // Init
+        });
+
+        function calculateStats() {
+            const input = document.getElementById('dataInput').value;
+            let data = input.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n)).sort((a, b) => a - b);
+
+            if(data.length === 0) return;
+
+            const n = data.length;
+
+            // Mean
+            const sum = data.reduce((a, b) => a + b, 0);
+            const mean = sum / n;
+
+            // Median
+            let median;
+            if (n % 2 === 0) median = (data[n/2 - 1] + data[n/2]) / 2;
+            else median = data[Math.floor(n/2)];
+
+            // Mode
+            const frequency = {};
+            let maxFreq = 0; let mode = [];
+            data.forEach(num => {
+                frequency[num] = (frequency[num] || 0) + 1;
+                if (frequency[num] > maxFreq) { maxFreq = frequency[num]; mode = [num]; }
+                else if (frequency[num] === maxFreq) { mode.push(num); }
+            });
+            const modeString = maxFreq === 1 ? "Tidak Ada" : [...new Set(mode)].join(", ");
+
+            // Quartiles
+            const lowerHalf = data.slice(0, Math.floor(n/2));
+            const upperHalf = (n % 2 === 0) ? data.slice(n/2) : data.slice(Math.floor(n/2) + 1);
+            const q1 = getMedian(lowerHalf);
+            const q3 = getMedian(upperHalf);
+
+            function getMedian(arr) {
+                const len = arr.length;
+                if(len === 0) return 0;
+                if (len % 2 === 0) return (arr[len/2 - 1] + arr[len/2]) / 2;
+                return arr[Math.floor(len/2)];
+            }
+
+            // Range & SD
+            const min = data[0];
+            const max = data[n-1];
+            const range = max - min;
+            const variance = data.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / (n - 1);
+            const stdDev = Math.sqrt(variance);
+
+            // Update UI Text
+            document.getElementById('resMean').textContent = mean.toFixed(2);
+            document.getElementById('resMedian').textContent = median.toFixed(2);
+            document.getElementById('resMode').textContent = modeString;
+            document.getElementById('resQ1').textContent = q1.toFixed(2);
+            document.getElementById('resQ3').textContent = q3.toFixed(2);
+            document.getElementById('resRange').textContent = range.toFixed(2);
+            document.getElementById('resSD').textContent = stdDev.toFixed(2);
+
+            // --- DRAWING ---
+            const svg = document.getElementById('plotSvg');
+            const dotLayer = document.getElementById('dotLayer');
+            const boxLayer = document.getElementById('boxLayer');
+            const axisLayer = document.getElementById('axisLayer');
+            
+            // Clear layers
+            dotLayer.innerHTML = '';
+            boxLayer.innerHTML = '';
+            axisLayer.innerHTML = '';
+
+            // Dimensions
+            const W = 400, H = 240;
+            const padX = 40; // Side padding
+            const padY = 20;
+            const dotPlotHeight = 70;
+            const boxPlotHeight = 40;
+            const boxPlotY = 100; // Y position for box
+            const axisY = 160;
+
+            // Scale Function
+            // Add a small buffer to min/max for visual spacing
+            const buffer = (range === 0) ? 5 : range * 0.05;
+            const minVal = min - buffer;
+            const maxVal = max + buffer;
+            
+            const scaleX = (val) => {
+                return padX + ((val - minVal) / (maxVal - minVal)) * (W - 2*padX);
+            };
+
+            // 1. Draw Axis
+            // Main line
+            axisLayer.innerHTML += `<line x1="${padX}" y1="${axisY}" x2="${W-padX}" y2="${axisY}" class="bp-axis-line"/>`;
+            
+            // Ticks (5 ticks)
+            const step = (maxVal - minVal) / 4;
+            for(let i=0; i<=4; i++) {
+                let val = minVal + (i*step);
+                let x = scaleX(val);
+                axisLayer.innerHTML += `<line x1="${x}" y1="${axisY}" x2="${x}" y2="${axisY+6}" class="bp-tick"/>`;
+                axisLayer.innerHTML += `<text x="${x}" y="${axisY+18}" class="bp-tick-label" text-anchor="middle">${val.toFixed(1)}</text>`;
+            }
+
+            // 2. Draw Box Plot
+            const xMin = scaleX(min);
+            const xMax = scaleX(max);
+            const xQ1 = scaleX(q1);
+            const xQ3 = scaleX(q3);
+            const xMed = scaleX(median);
+
+            // Box (Rect)
+            boxLayer.innerHTML += `<rect x="${xQ1}" y="${boxPlotY}" width="${Math.max(0, xQ3-xQ1)}" height="${boxPlotHeight}" class="bp-box-rect" />`;
+            
+            // Median Line
+            boxLayer.innerHTML += `<line x1="${xMed}" y1="${boxPlotY}" x2="${xMed}" y2="${boxPlotY+boxPlotHeight}" class="bp-median-line"/>`;
+            
+            // Whiskers (Min to Q1, Q3 to Max)
+            boxLayer.innerHTML += `<line x1="${xMin}" y1="${boxPlotY + boxPlotHeight/2}" x2="${xQ1}" y2="${boxPlotY + boxPlotHeight/2}" class="bp-connector-line"/>`;
+            boxLayer.innerHTML += `<line x1="${xQ3}" y1="${boxPlotY + boxPlotHeight/2}" x2="${xMax}" y2="${boxPlotY + boxPlotHeight/2}" class="bp-connector-line"/>`;
+            
+            // Labels for Box Plot
+            boxLayer.innerHTML += `<text x="${xMin}" y="${boxPlotY-5}" class="bp-label-text" text-anchor="middle">${min.toFixed(1)}</text>`;
+            boxLayer.innerHTML += `<text x="${xQ1}" y="${boxPlotY+boxPlotHeight+14}" class="bp-sub-label" text-anchor="middle">Q1</text>`;
+            boxLayer.innerHTML += `<text x="${xMed}" y="${boxPlotY-5}" class="bp-label-text" text-anchor="middle" fill="#e74c3c">${median.toFixed(1)}</text>`;
+            boxLayer.innerHTML += `<text x="${xQ3}" y="${boxPlotY+boxPlotHeight+14}" class="bp-sub-label" text-anchor="middle">Q3</text>`;
+            boxLayer.innerHTML += `<text x="${xMax}" y="${boxPlotY-5}" class="bp-label-text" text-anchor="middle">${max.toFixed(1)}</text>`;
+
+            // 3. Draw Dots (Stacked)
+            const dotRadius = 5;
+            const counts = {}; // To track stacking
+
+            data.forEach(val => {
+                const x = scaleX(val);
+                if (!counts[x]) counts[x] = 0;
+                const stackIndex = counts[x];
+                counts[x]++;
+
+                // Calculate Y position (stack upwards from bottom of dot plot area)
+                const baseY = axisY - 10; // Just above axis
+                const y = baseY - (stackIndex * (dotRadius * 2.2));
+
+                // Add dot
+                dotLayer.innerHTML += `<circle cx="${x}" cy="${y}" r="${dotRadius}" class="data-dot"/>`;
+            });
+        }
+    </script>
+</body>
+</html>

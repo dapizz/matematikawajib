@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Analisis Regresi Linear - Matematika Wajib SMA">
+    <title>Analisis Regresi Linear - Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Fraction Styles */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-family: var(--font-display);
+        }
+        .fraction-numerator { padding: 2px 8px; font-size: 0.9rem; line-height: 1.2; border-bottom: 2px solid var(--text-primary); }
+        .fraction-denominator { padding: 2px 8px; font-size: 0.9rem; line-height: 1.2; }
+        
+        /* Layout */
+        .regression-layout {
+            display: grid; grid-template-columns: 1fr; gap: 20px;
+        }
+        @media (min-width: 900px) {
+            .regression-layout { grid-template-columns: 1.5fr 1fr; }
+        }
+
+        .chart-container {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            position: relative;
+            min-height: 400px;
+        }
+
+        .svg-chart {
+            width: 100%; height: 100%;
+            overflow: visible;
+        }
+        .chart-axis { stroke: var(--text-muted); stroke-width: 1.5; }
+        .chart-grid { stroke: var(--border-light); stroke-width: 0.5; }
+        .data-point { fill: #e74c3c; cursor: pointer; transition: r 0.2s; }
+        .data-point:hover { fill: #c0392b; r: 7; }
+        .reg-line { stroke: #3498db; stroke-width: 3; stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: dash 2s ease forwards; }
+        
+        @keyframes dash { to { stroke-dashoffset: 0; } }
+
+        .sidebar-controls {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            height: fit-content;
+        }
+
+        .input-group {
+            display: flex; gap: 10px; margin-bottom: 10px;
+        }
+        .input-field {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+        }
+        
+        .btn-add {
+            width: 100%; padding: 10px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-add:hover { opacity: 0.9; }
+        
+        .data-list {
+            margin-top: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+        }
+        .data-item {
+            display: flex; justify-content: space-between;
+            padding: 5px 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--accent-lighter);
+            border-radius: var(--radius-md);
+            text-align: center;
+        }
+        .result-box h4 { margin-bottom: 5px; color: var(--accent-primary); }
+        .result-val { font-size: 1.1rem; font-weight: bold; font-family: var(--font-display); color: var(--text-primary); }
+        
+        /* Calculation Steps Table */
+        .calc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        .calc-table th, .calc-table td {
+            border: 1px solid var(--border-color);
+            padding: 8px;
+            text-align: center;
+        }
+        .calc-table th {
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                    </svg>
+                    <span class="logo-text">Media Belajar Daffa</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a><span>/</span><a href="index.html">Matematika Wajib</a><span>/</span><span class="current">Analisis Regresi Linear</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Analisis Regresi Linear</h1>
+                    <p class="page-subtitle">Memahami hubungan antar variabel dan membuat model prediksi menggunakan metode kuadrat terkecil.</p>
+                </div>
+
+                <div class="nav-btn-group">
+                    <a href="index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Kembali ke Daftar Materi</a>
+                    <a href="../index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a>
+                </div>
+
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#materi-inti" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Materi Inti</a>
+                    <a href="#animasi-interaktif" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animasi</a>
+                    <a href="#contoh-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Contoh Soal</a>
+                    <a href="#latihan-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Latihan</a>
+                    <a href="#kuis" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Kuis</a>
+                </nav>
+
+                <section class="content-section" id="materi-inti">
+                    <div class="section-header"><h2 class="section-title">Materi Inti</h2></div>
+                    <div class="material-content">
+                        <h3>1. Konsep Regresi Linear</h3>
+                        <p>Regresi linear adalah metode statistik untuk memodelkan hubungan antara variabel bebas (<strong>x</strong>) dan variabel terikat (<strong>y</strong>) dalam bentuk persamaan garis lurus.</p>
+                        <div class="formula-box">
+                            <div class="formula-label">Persamaan Regresi</div>
+                            <div class="formula">y = a + bx</div>
+                            <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 10px;">
+                                <strong>y</strong> = Variabel Terikat (Prediksi)<br>
+                                <strong>x</strong> = Variabel Bebas<br>
+                                <strong>b</strong> = Koefisien Regresi (Gradien)<br>
+                                <strong>a</strong> = Konstanta (Intersep)
+                            </div>
+                        </div>
+
+                        <h3>2. Rumus Penentuan a dan b</h3>
+                        <p>Menggunakan metode kuadrat terkecil:</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Koefisien b (Gradien)</div>
+                            <div class="formula">
+                                b = 
+                                <span class="fraction">
+                                    <span class="fraction-numerator">nΣx²y - (Σx)(Σy)</span>
+                                    <span class="fraction-denominator">nΣx² - (Σx)²</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="formula-box">
+                            <div class="formula-label">Konstanta a (Intersep)</div>
+                            <div class="formula">a = ȳ - b x̄</div>
+                            <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 5px;">
+                                Keterangan: x̄ = rata-rata x, ȳ = rata-rata y, n = banyak data.
+                            </div>
+                        </div>
+
+                        <h3>3. Koefisien Korelasi (r)</h3>
+                        <p>Mengukur kekuatan hubungan linear.</p>
+                        <div class="formula-box">
+                            <div class="formula">
+                                r = 
+                                <span class="fraction">
+                                    <span class="fraction-numerator">nΣxy - (Σx)(Σy)</span>
+                                    <span class="fraction-denominator">√[nΣx²-(Σx)²][nΣy²-(Σy)²]</span>
+                                </span>
+                            </div>
+                        </div>
+                        <ul>
+                            <li>Jika r mendekati +1 → Hubungan positif sangat kuat.</li>
+                            <li>Jika r mendekati -1 → Hubungan negatif sangat kuat.</li>
+                            <li>Jika r mendekati 0 → Tidak ada hubungan linear.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="content-section" id="animasi-interaktif">
+                    <div class="section-header"><h2 class="section-title">Regresi Lab (Interaktif)</h2></div>
+                    
+                    <div class="regression-layout">
+                        <div class="chart-container">
+                            <svg id="chartSvg" class="svg-chart" viewBox="0 0 400 400">
+                                <!-- Grid -->
+                                <g id="gridGrp"></g>
+                                <!-- Axes -->
+                                <line x1="40" y1="360" x2="380" y2="360" class="chart-axis" />
+                                <line x1="40" y1="20" x2="40" y2="360" class="chart-axis" />
+                                <text x="200" y="395" text-anchor="middle" fill="var(--text-muted)">Variabel X</text>
+                                <text x="15" y="200" text-anchor="middle" fill="var(--text-muted)" transform="rotate(-90 15 200)">Variabel Y</text>
+                                
+                                <!-- Regression Line -->
+                                <line id="regLine" x1="40" y1="360" x2="380" y2="360" class="reg-line" style="display:none;"/>
+                                
+                                <!-- Data Points Group -->
+                                <g id="pointsGrp"></g>
+                            </svg>
+                        </div>
+
+                        <div class="sidebar-controls">
+                            <h3 style="margin-bottom:15px;">Input Data</h3>
+                            <div class="input-group">
+                                <input type="number" id="inputX" class="input-field" placeholder="Nilai X">
+                                <input type="number" id="inputY" class="input-field" placeholder="Nilai Y">
+                            </div>
+                            <button class="btn-add" onclick="addDataPoint()">Tambah Data</button>
+                            <button class="control-btn" style="width:100%; margin-top:5px;" onclick="resetChart()">Reset</button>
+
+                            <div class="data-list" id="dataList">
+                                <!-- List items will appear here -->
+                            </div>
+
+                            <div class="result-box" id="calcResults" style="display:none;">
+                                <h4>Persamaan Regresi:</h4>
+                                <div class="result-val" id="eqResult">y = a + bx</div>
+                                <div style="margin-top:10px; font-size:0.85rem; color:var(--text-secondary);">
+                                    <span id="rResult">r = ?</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="animation-info" style="margin-top: 15px;">
+                        <strong>Cara Pakai:</strong> Masukkan nilai X dan Y, lalu klik "Tambah Data". Minimal 2 titik diperlukan untuk menggambar garis regresi.
+                    </div>
+                </section>
+
+                <section class="content-section" id="contoh-soal">
+                    <div class="section-header"><h2 class="section-title">Contoh Soal</h2></div>
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">1</span><span class="example-title">Perhitungan Regresi</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Diketahui data pasangan (x, y) sebagai berikut: (1, 2), (2, 3), (3, 5). Tentukan persamaan regresinya.</p>
+                            <div class="solution-steps">
+                                <div class="solution-step">
+                                    <span class="step-marker">1</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Buat Tabel</span>
+                                        <table class="calc-table">
+                                            <tr><th>x</th><th>y</th><th>xy</th><th>x²</th></tr>
+                                            <tr><td>1</td><td>2</td><td>2</td><td>1</td></tr>
+                                            <tr><td>2</td><td>3</td><td>6</td><td>4</td></tr>
+                                            <tr><td>3</td><td>5</td><td>15</td><td>9</td></tr>
+                                            <tr><td><strong>Σx=6</strong></td><td><strong>Σy=10</strong></td><td><strong>Σxy=23</strong></td><td><strong>Σx²=14</strong></td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">2</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Hitung b</span>
+                                        <span class="step-math">
+                                            b = (3)(23) - (6)(10) / (3)(14) - 36<br>
+                                            b = 69 - 60 / 42 - 36<br>
+                                            b = 9 / 6 = 1.5
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">3</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Hitung a</span>
+                                        <span class="step-math">
+                                            x̄ = 6/3 = 2, ȳ = 10/3 = 3.33<br>
+                                            a = 3.33 - (1.5)(2) = 0.33
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">4</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Persamaan</span>
+                                        <span class="step-math">y = 0.33 + 1.5x</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-answer"><span class="answer-text">y = 0.33 + 1.5x (atau y = 1/3 + 3/2 x)</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="latihan-soal">
+                    <div class="section-header"><h2 class="section-title">Latihan Soal</h2></div>
+                    <div class="practice-grid">
+                        <div class="practice-item">
+                            <span class="practice-number">1</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Diketahui Σx=50, Σy=80, Σx²=350, Σxy=460, n=10. Tentukan nilai b.</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">2</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Jika persamaan regresi adalah y = 5 + 2x, berapakah nilai y jika x = 4?</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">3</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Dari 5 data diketahui Σx=25, Σy=50, Σxy=300, Σx²=165. Tentukan persamaan regresinya.</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">4</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Jika nilai koefisien korelasi r = 0.9, bagaimana interpretasi hubungan variabel x dan y?</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section" id="kuis">
+                    <div class="section-header"><h2 class="section-title">Kuis</h2></div>
+                    <div id="quizContainer"></div>
+                </section>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand"><span class="footer-name">Media Belajar Daffa</span><span class="footer-class">XII-M4-1</span></div>
+                <div class="footer-info">Platform Pembelajaran Mandiri</div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+    <script>
+        const quizQuestions = [
+            { question: "Persamaan umum regresi linear sederhana adalah...", options: ["y = a + bx", "y = ax² + bx", "y = a/bx", "x = a + by"], correct: 0 },
+            { question: "Jika garis regresi naik dari kiri ke kanan, maka nilai b adalah...", options: ["Positif", "Negatif", "Nol", "Tak terhingga"], correct: 0 },
+            { question: "Nilai r = -0.95 menunjukkan korelasi...", options: ["Sangat kuat negatif", "Sangat kuat positif", "Lemah", "Tidak ada korelasi"], correct: 0 },
+            { question: "Dalam rumus b, pembilang (numerator) adalah...", options: ["nΣxy - (Σx)(Σy)", "nΣx² - (Σx)²", "Σy - bΣx", "Σx / n"], correct: 0 },
+            { question: "Jika Σx=20 dan n=5, maka nilai x̄ adalah...", options: ["4", "25", "15", "100"], correct: 0 }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            new QuizEngine('quizContainer', quizQuestions).init();
+            const quickNav = document.getElementById('quickNav');
+            window.addEventListener('scroll', () => quickNav.classList.toggle('scrolled', window.scrollY > 200));
+
+            // --- Regression Lab Logic ---
+            
+            // Canvas Setup: 400x400 SVG. Margins: Left=40, Bottom=40.
+            // Plot Area: 360 width (x: 0-100 data -> 40-380 px), 340 height (y: 0-100 data -> 360-20 px)
+            const svg = document.getElementById('chartSvg');
+            let dataPoints = [];
+            const scaleX = (val) => 40 + (val * 3.2); // Scale 0-100 range to pixels
+            const scaleY = (val) => 360 - (val * 3.2); // Invert Y for SVG
+
+            // Draw Grid
+            const gridGrp = document.getElementById('gridGrp');
+            for(let i=0; i<=100; i+=10) {
+                // Vertical
+                gridGrp.innerHTML += `<line x1="${scaleX(i)}" y1="20" x2="${scaleX(i)}" y2="360" class="chart-grid"/>`;
+                // Horizontal
+                gridGrp.innerHTML += `<line x1="40" y1="${scaleY(i)}" x2="380" y2="${scaleY(i)}" class="chart-grid"/>`;
+                // Labels
+                if(i%20===0) {
+                    gridGrp.innerHTML += `<text x="${scaleX(i)}" y="375" text-anchor="middle" fill="var(--text-muted)" font-size="10">${i}</text>`;
+                    gridGrp.innerHTML += `<text x="35" y="${scaleY(i)+4}" text-anchor="end" fill="var(--text-muted)" font-size="10">${i}</text>`;
+                }
+            }
+
+            window.addDataPoint = function() {
+                const xIn = document.getElementById('inputX');
+                const yIn = document.getElementById('inputY');
+                const x = parseFloat(xIn.value);
+                const y = parseFloat(yIn.value);
+
+                if(isNaN(x) || isNaN(y) || x < 0 || x > 100 || y < 0 || y > 100) {
+                    alert("Masukkan nilai X dan Y antara 0-100.");
+                    return;
+                }
+
+                dataPoints.push({x, y});
+                
+                // Draw Point
+                const pointsGrp = document.getElementById('pointsGrp');
+                const cx = scaleX(x);
+                const cy = scaleY(y);
+                pointsGrp.innerHTML += `<circle cx="${cx}" cy="${cy}" r="5" class="data-point"/>`;
+
+                // Update List
+                const list = document.getElementById('dataList');
+                list.innerHTML += `<div class="data-item"><span>(${x}, ${y})</span></div>`;
+
+                // Clear inputs
+                xIn.value = ''; yIn.value = '';
+
+                updateRegression();
+            }
+
+            window.resetChart = function() {
+                dataPoints = [];
+                document.getElementById('pointsGrp').innerHTML = '';
+                document.getElementById('dataList').innerHTML = '';
+                document.getElementById('regLine').style.display = 'none';
+                document.getElementById('calcResults').style.display = 'none';
+            }
+
+            function updateRegression() {
+                if(dataPoints.length < 2) return;
+
+                const n = dataPoints.length;
+                let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+
+                dataPoints.forEach(p => {
+                    sumX += p.x;
+                    sumY += p.y;
+                    sumXY += p.x * p.y;
+                    sumX2 += p.x * p.x;
+                    sumY2 += p.y * p.y;
+                });
+
+                const xBar = sumX / n;
+                const yBar = sumY / n;
+
+                // Calculate b
+                const denomB = (n * sumX2) - (sumX * sumX);
+                if(denomB === 0) return; // Prevent divide by zero
+                const b = ((n * sumXY) - (sumX * sumY)) / denomB;
+                
+                // Calculate a
+                const a = yBar - (b * xBar);
+
+                // Calculate r (optional)
+                const denomR1 = (n * sumX2) - (sumX * sumX);
+                const denomR2 = (n * sumY2) - (sumY * sumY);
+                let r = 0;
+                if(denomR1 > 0 && denomR2 > 0) {
+                    r = ((n * sumXY) - (sumX * sumY)) / Math.sqrt(denomR1 * denomR2);
+                }
+
+                // Draw Line
+                // We need two points to draw the line. Let's use x=0 and x=100 (edges)
+                const lineX1 = 0;
+                const lineY1 = a + (b * lineX1);
+                const lineX2 = 100;
+                const lineY2 = a + (b * lineX2);
+
+                const regLine = document.getElementById('regLine');
+                regLine.setAttribute('x1', scaleX(lineX1));
+                regLine.setAttribute('y1', scaleY(lineY1));
+                regLine.setAttribute('x2', scaleX(lineX2));
+                regLine.setAttribute('y2', scaleY(lineY2));
+                regLine.style.display = 'block';
+                
+                // Reset animation
+                regLine.style.animation = 'none';
+                regLine.offsetHeight; /* trigger reflow */
+                regLine.style.animation = 'dash 2s ease forwards';
+
+                // Display Equation
+                const sign = b >= 0 ? ' + ' : ' - ';
+                const bAbs = Math.abs(b).toFixed(2);
+                const aVal = a.toFixed(2);
+                
+                document.getElementById('eqResult').textContent = `y = ${aVal} ${sign} ${bAbs}x`;
+                document.getElementById('rResult').textContent = `r = ${r.toFixed(3)}`;
+                document.getElementById('calcResults').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

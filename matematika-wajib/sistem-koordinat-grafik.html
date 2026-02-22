@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistem Koordinat dan Grafik - Matematika Wajib SMA">
+    <title>Sistem Koordinat dan Grafik - Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific Styles for this page */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-family: var(--font-display);
+        }
+        .fraction-numerator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; }
+        .fraction-line { width: 100%; height: 2px; background: var(--text-primary); border-radius: 1px; }
+        .fraction-denominator { padding: 2px 8px; font-size: 1rem; line-height: 1.3; }
+        .fraction-sm .fraction-numerator, .fraction-sm .fraction-denominator { font-size: 0.875rem; padding: 1px 6px; }
+        .fraction-lg .fraction-numerator, .fraction-lg .fraction-denominator { font-size: 1.25rem; padding: 4px 12px; }
+        .formula-box .fraction { background: var(--bg-card); padding: 8px 12px; border-radius: var(--radius-sm); margin: 0 8px; }
+        .formula-box .fraction-line { background: var(--accent-primary); }
+        .step-math .fraction { background: var(--bg-card); padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); }
+
+        .coord-label { font-size: 12px; fill: var(--text-muted); }
+        .axis-line { stroke: var(--border-color); stroke-width: 1.5; }
+        .grid-line { stroke: var(--border-light); stroke-width: 0.5; }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                    </svg>
+                    <span class="logo-text">Media Belajar Daffa</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a><span>/</span>
+                        <a href="index.html">Matematika Wajib</a><span>/</span>
+                        <span class="current">Sistem Koordinat dan Grafik</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Sistem Koordinat dan Grafik</h1>
+                    <p class="page-subtitle">Memahami sistem koordinat Kartesius, gradien, persamaan garis lurus, dan kedudukan dua garis.</p>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="nav-btn-group">
+                    <a href="index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Kembali ke Daftar Materi</a>
+                    <a href="../index.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Beranda</a>
+                </div>
+
+                <!-- Quick Navigation -->
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#materi-inti" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Materi Inti</a>
+                    <a href="#animasi-interaktif" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animasi</a>
+                    <a href="#contoh-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Contoh Soal</a>
+                    <a href="#latihan-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Latihan</a>
+                    <a href="#kuis" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Kuis</a>
+                </nav>
+
+                <!-- Learning Objectives -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <h2 class="section-title">Tujuan Pembelajaran</h2>
+                    </div>
+                    <div class="objectives-list">
+                        <div class="objective-item"><span class="objective-number">1</span><span class="objective-text">Memahami sistem koordinat Kartesius</span></div>
+                        <div class="objective-item"><span class="objective-number">2</span><span class="objective-text">Menentukan gradien garis dan persamaan garis lurus</span></div>
+                        <div class="objective-item"><span class="objective-number">3</span><span class="objective-text">Menentukan kedudukan dua garis (sejajar, tegak lurus, berpotongan)</span></div>
+                        <div class="objective-item"><span class="objective-number">4</span><span class="objective-text">Menentukan persamaan garis yang sejajar atau tegak lurus dengan garis tertentu</span></div>
+                    </div>
+                </section>
+
+                <!-- Material Content -->
+                <section class="content-section" id="materi-inti">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                        <h2 class="section-title">Materi Inti</h2>
+                    </div>
+                    <div class="material-content">
+                        <h3>1. Sistem Koordinat Kartesius</h3>
+                        <p>Sistem koordinat Kartesius terdiri dari dua garis bilangan yang saling tegak lurus, yaitu sumbu-x (horizontal) dan sumbu-y (vertikal). Titik temu keduanya disebut titik asal (0,0).</p>
+                        <p>Setiap titik pada bidang ditentukan oleh pasangan berurutan (x, y), dimana x adalah absis dan y adalah ordinat.</p>
+                        
+                        <h3>2. Gradien (Kemiringan Garis)</h3>
+                        <p>Gradien menunjukkan kemiringan suatu garis. Gradien (m) didefinisikan sebagai perbandingan antara perubahan nilai y (Δy) terhadap perubahan nilai x (Δx).</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Rumus Gradien</div>
+                            <div class="formula">m = <span class="fraction fraction-lg"><span class="fraction-numerator">y₂ - y₁</span><span class="fraction-line"></span><span class="fraction-denominator">x₂ - x₁</span></span></div>
+                        </div>
+
+                        <h4>Sifat Gradien:</h4>
+                        <ul>
+                            <li>m > 0: Garis condong ke kanan atas (naik)</li>
+                            <li>m < 0: Garis condong ke kanan bawah (turun)</li>
+                            <li>m = 0: Garis horizontal (sejajar sumbu-x)</li>
+                            <li>m tak terdefinisi: Garis vertikal (sejajar sumbu-y)</li>
+                        </ul>
+
+                        <h3>3. Persamaan Garis Lurus</h3>
+                        
+                        <h4>a. Bentuk Slope-Intercept (Gradien-Intersep)</h4>
+                        <div class="formula-box">
+                            <div class="formula-label">y = mx + c</div>
+                            <div class="formula">m = gradien, c = konstanta (titik potong sumbu-y)</div>
+                        </div>
+
+                        <h4>b. Melalui Satu Titik (x₁, y₁)</h4>
+                        <div class="formula-box">
+                            <div class="formula-label">Rumus</div>
+                            <div class="formula">y - y₁ = m(x - x₁)</div>
+                        </div>
+
+                        <h4>c. Melalui Dua Titik (x₁, y₁) dan (x₂, y₂)</h4>
+                        <div class="formula-box">
+                            <div class="formula-label">Rumus</div>
+                            <div class="formula">
+                                <span class="fraction fraction-lg">
+                                    <span class="fraction-numerator">y - y₁</span>
+                                    <span class="fraction-line"></span>
+                                    <span class="fraction-denominator">y₂ - y₁</span>
+                                </span>
+                                =
+                                <span class="fraction fraction-lg">
+                                    <span class="fraction-numerator">x - x₁</span>
+                                    <span class="fraction-line"></span>
+                                    <span class="fraction-denominator">x₂ - x₁</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <h3>4. Kedudukan Dua Garis</h3>
+                        
+                        <h4>a. Sejajar</h4>
+                        <p>Dua garis sejajar jika gradiennya sama (m₁ = m₂) tetapi konstanta berbeda.</p>
+                        
+                        <h4>b. Tegak Lurus</h4>
+                        <p>Dua garis tegak lurus jika hasil kali gradiennya sama dengan -1 (m₁ × m₂ = -1).</p>
+                        
+                        <h4>c. Berpotongan</h4>
+                        <p>Dua garis berpotongan di satu titik jika gradiennya berbeda (m₁ ≠ m₂).</p>
+
+                        <h4>d. Berimpit</h4>
+                        <p>Dua garis berimpit jika gradien sama dan konstanta sama.</p>
+
+                        <div class="info-box tip">
+                            <svg class="info-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            <div class="info-box-content">
+                                <div class="info-box-title">Tips</div>
+                                <p class="info-box-text">Jika gradien garis 1 adalah m, maka gradien garis yang tegak lurus adalah -1/m.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Interactive Animations -->
+                <section class="content-section" id="animasi-interaktif">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        <h2 class="section-title">Animasi Interaktif</h2>
+                    </div>
+
+                    <!-- Animation 1: Interactive Point -->
+                    <div class="animation-container">
+                        <div class="animation-header"><span class="animation-title">Koordinat Titik (x, y)</span></div>
+                        <div class="slider-control">
+                            <span class="slider-label">Nilai x:</span>
+                            <input type="range" class="slider-input" id="pointX" min="-5" max="5" step="1" value="2">
+                            <span class="slider-value" id="pointXVal">2</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Nilai y:</span>
+                            <input type="range" class="slider-input" id="pointY" min="-5" max="5" step="1" value="3">
+                            <span class="slider-value" id="pointYVal">3</span>
+                        </div>
+                        <div class="animation-canvas">
+                            <svg class="canvas-svg" viewBox="0 0 400 300" id="coordSvg">
+                                <defs><pattern id="gridAnim1" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M 25 0 L 0 0 0 25" fill="none" class="grid-line"/></pattern></defs>
+                                <rect width="100%" height="100%" fill="url(#gridAnim1)"/>
+                                <line x1="200" y1="0" x2="200" y2="300" class="axis-line"/>
+                                <line x1="0" y1="150" x2="400" y2="150" class="axis-line"/>
+                                <text x="390" y="145" class="coord-label">x</text>
+                                <text x="205" y="15" class="coord-label">y</text>
+                                <!-- Moving Point -->
+                                <circle id="movingPoint" cx="250" cy="75" r="8" fill="var(--accent-primary)" />
+                                <text id="coordLabel" x="260" y="70" fill="var(--text-primary)" font-size="14">(2, 3)</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Animation 2: Slope Visualization -->
+                    <div class="animation-container">
+                        <div class="animation-header"><span class="animation-title">Pengaruh Gradien (m)</span></div>
+                        <div class="slider-control">
+                            <span class="slider-label">Gradien (m):</span>
+                            <input type="range" class="slider-input" id="slopeSlider" min="-3" max="3" step="0.5" value="1">
+                            <span class="slider-value" id="slopeVal">1</span>
+                        </div>
+                        <div class="animation-canvas">
+                            <svg class="canvas-svg" viewBox="0 0 400 300" id="slopeSvg">
+                                <defs><pattern id="gridAnim2" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M 25 0 L 0 0 0 25" fill="none" class="grid-line"/></pattern></defs>
+                                <rect width="100%" height="100%" fill="url(#gridAnim2)"/>
+                                <line x1="200" y1="0" x2="200" y2="300" class="axis-line"/>
+                                <line x1="0" y1="150" x2="400" y2="150" class="axis-line"/>
+                                <line id="slopeLine" x1="0" y1="300" x2="400" y2="0" stroke="var(--accent-primary)" stroke-width="3"/>
+                                <text x="200" y="290" text-anchor="middle" fill="var(--text-secondary)" font-size="14" id="slopeEq">y = x</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Animation 3: Two Lines Position -->
+                    <div class="animation-container">
+                        <div class="animation-header"><span class="animation-title">Kedudukan Dua Garis</span></div>
+                        <div class="animation-controls">
+                            <button class="control-btn active" id="btnParallel">Sejajar</button>
+                            <button class="control-btn" id="btnPerpendicular">Tegak Lurus</button>
+                            <button class="control-btn" id="btnIntersect">Berpotongan</button>
+                        </div>
+                        <div class="animation-canvas">
+                            <svg class="canvas-svg" viewBox="0 0 400 300" id="twoLinesSvg">
+                                <defs><pattern id="gridAnim3" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M 25 0 L 0 0 0 25" fill="none" class="grid-line"/></pattern></defs>
+                                <rect width="100%" height="100%" fill="url(#gridAnim3)"/>
+                                <line x1="200" y1="0" x2="200" y2="300" class="axis-line"/>
+                                <line x1="0" y1="150" x2="400" y2="150" class="axis-line"/>
+                                <line id="line1" x1="0" y1="200" x2="400" y2="100" stroke="var(--accent-primary)" stroke-width="3"/>
+                                <line id="line2" x1="0" y1="250" x2="400" y2="150" stroke="var(--info)" stroke-width="3"/>
+                            </svg>
+                        </div>
+                        <div class="animation-info" id="lineInfo">
+                            Garis 1: y = x + 2<br>
+                            Garis 2: y = x - 2<br>
+                            Kedua garis sejajar karena gradiennya sama (m₁ = m₂ = 1).
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Example Problems -->
+                <section class="content-section" id="contoh-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <h2 class="section-title">Contoh Soal dan Pembahasan</h2>
+                    </div>
+
+                    <!-- Example 1 -->
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">1</span><span class="example-title">Gradien Garis</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Tentukan gradien garis yang melalui titik A(2, 3) dan B(5, 9).</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content"><span class="step-label">Identifikasi</span><p class="step-text">(x₁, y₁) = (2, 3) dan (x₂, y₂) = (5, 9)</p></div></div>
+                                <div class="solution-step"><span class="step-marker">2</span><div class="step-content"><span class="step-label">Substitusi</span><p class="step-text">Gunakan rumus gradien:</p><span class="step-math">m = <span class="fraction"><span class="fraction-numerator">9 - 3</span><span class="fraction-line"></span><span class="fraction-denominator">5 - 2</span></span> = <span class="fraction"><span class="fraction-numerator">6</span><span class="fraction-line"></span><span class="fraction-denominator">3</span></span> = 2</span></div></div>
+                            </div>
+                            <div class="example-answer"><svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="answer-text">Gradien = 2</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Example 2 -->
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">2</span><span class="example-title">Persamaan Garis</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Tentukan persamaan garis dengan gradien -2 yang melalui titik (3, 4).</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content"><span class="step-label">Rumus</span><p class="step-text">Gunakan rumus y - y₁ = m(x - x₁)</p><span class="step-math">y - 4 = -2(x - 3)</span></div></div>
+                                <div class="solution-step"><span class="step-marker">2</span><div class="step-content"><span class="step-label">Sederhanakan</span><p class="step-text">Kurung dibuka dan dijumlahkan:</p><span class="step-math">y - 4 = -2x + 6</span><span class="step-math">y = -2x + 10</span></div></div>
+                            </div>
+                            <div class="example-answer"><svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="answer-text">y = -2x + 10</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Example 3 -->
+                    <div class="example-card">
+                        <div class="example-header"><span class="example-number">3</span><span class="example-title">Garis Tegak Lurus</span></div>
+                        <div class="example-body">
+                            <p class="example-question">Tentukan persamaan garis yang tegak lurus dengan garis y = 3x + 5 dan melalui titik (3, 4).</p>
+                            <div class="solution-steps">
+                                <div class="solution-step"><span class="step-marker">1</span><div class="step-content"><span class="step-label">Gradien</span><p class="step-text">Gradien garis awal m₁ = 3. Gradien garis tegak lurus:</p><span class="step-math">m₂ = - <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">m₁</span></span> = - <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">3</span></span></span></div></div>
+                                <div class="solution-step"><span class="step-marker">2</span><div class="step-content"><span class="step-label">Substitusi</span><p class="step-text">Gunakan rumus:</p><span class="step-math">y - 4 = -<span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">3</span></span>(x - 3)</span></div></div>
+                                <div class="solution-step"><span class="step-marker">3</span><div class="step-content"><span class="step-label">Sederhanakan</span><p class="step-text"></p><span class="step-math">3(y - 4) = -1(x - 3)</span><span class="step-math">3y - 12 = -x + 3</span><span class="step-math">x + 3y - 15 = 0 (atau y = -x/3 + 5)</span></div></div>
+                            </div>
+                            <div class="example-answer"><svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span class="answer-text">x + 3y - 15 = 0</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Practice Problems -->
+                <section class="content-section" id="latihan-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        <h2 class="section-title">Latihan Soal</h2>
+                    </div>
+                    <div class="practice-grid">
+                        <div class="practice-item"><span class="practice-number">1</span><div class="practice-content"><p class="practice-question">Tentukan gradien garis yang melalui titik (1, 2) dan (4, 8).</p></div></div>
+                        <div class="practice-item"><span class="practice-number">2</span><div class="practice-content"><p class="practice-question">Tentukan persamaan garis dengan gradien 4 dan melalui titik (2, -1).</p></div></div>
+                        <div class="practice-item"><span class="practice-number">3</span><div class="practice-content"><p class="practice-question">Apakah garis y = 2x + 3 dan y = 2x - 5 sejajar, tegak lurus, atau berpotongan?</p></div></div>
+                        <div class="practice-item"><span class="practice-number">4</span><div class="practice-content"><p class="practice-question">Tentukan persamaan garis yang sejajar dengan y = 5x - 2 dan melalui titik asal.</p></div></div>
+                    </div>
+                </section>
+
+                <!-- Quiz Section -->
+                <section class="content-section" id="kuis">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <h2 class="section-title">Kuis Sistem Koordinat</h2>
+                    </div>
+                    <div id="quizContainer"></div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-name">Media Belajar Daffa</span>
+                    <span class="footer-class">Muhammad Daffa Athallah - XII-M4-1</span>
+                </div>
+                <div class="footer-info">Platform Pembelajaran Mandiri</div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+    <script>
+        // Quiz Data
+        const quizQuestions = [
+            { question: "Gradien garis yang melalui titik (2, 3) dan (4, 7) adalah...", options: ["2", "1", "3", "0.5"], correct: 0, explanation: "m = (7-3)/(4-2) = 4/2 = 2" },
+            { question: "Persamaan garis dengan gradien 3 dan melalui (0, -4) adalah...", options: ["y = 3x - 4", "y = 3x + 4", "y = 4x - 3", "y = -3x + 4"], correct: 0, explanation: "y = mx + c → y = 3x - 4" },
+            { question: "Jika gradien garis pertama adalah 2, maka gradien garis yang tegak lurus adalah...", options: ["-1/2", "1/2", "-2", "2"], correct: 0, explanation: "m1 * m2 = -1 → m2 = -1/2" },
+            { question: "Dua garis y = 2x + 1 dan y = 2x - 3 adalah...", options: ["Sejajar", "Tegak lurus", "Berpotongan", "Berimpit"], correct: 0, explanation: "Gradien sama (m1=m2=2) namun konstanta berbeda, maka sejajar." },
+            { question: "Titik potong garis y = 2x - 4 dengan sumbu-y adalah...", options: ["(0, -4)", "(0, 4)", "(2, 0)", "(-2, 0)"], correct: 0, explanation: "Substitusi x=0, maka y = -4. Titik potong (0, -4)." },
+            { question: "Persamaan garis yang sejajar dengan y = -x + 5 dan melalui (0, 0) adalah...", options: ["y = -x", "y = x", "y = x + 5", "y = -x + 1"], correct: 0, explanation: "Gradien sama m=-1, melalui (0,0) berarti c=0. Y = -x." },
+            { question: "Gradien garis 2x + 4y - 8 = 0 adalah...", options: ["-1/2", "1/2", "-2", "2"], correct: 0, explanation: "Ubah ke bentik y = mx + c: 4y = -2x + 8 → y = -1/2x + 2. m = -1/2" },
+            { question: "Jika garis y = mx + 5 sejajar dengan y = 3x - 1, maka m = ...", options: ["3", "-3", "1/3", "-1/3"], correct: 0, explanation: "Garis sejajar memiliki gradien sama, m = 3." },
+            { question: "Koordinat titik A(3, -2) memiliki arti...", options: ["Absis 3, Ordinat -2", "Absis -2, Ordinat 3", "Absis 5, Ordinat 1", "Absis 1, Ordinat 5"], correct: 0, explanation: "Format (x, y) → Absis = x, Ordinat = y" },
+            { question: "Hasil kali gradien dua garis yang saling tegak lurus adalah...", options: ["-1", "1", "0", "Tak terdefinisi"], correct: 0, explanation: "Syarat tegak lurus: m1 * m2 = -1" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Init Quiz
+            new QuizEngine('quizContainer', quizQuestions).init();
+
+            // Quick Nav Shadow
+            const quickNav = document.getElementById('quickNav');
+            window.addEventListener('scroll', () => quickNav.classList.toggle('scrolled', window.scrollY > 200));
+
+            // Animation 1: Moving Point
+            const pointX = document.getElementById('pointX');
+            const pointY = document.getElementById('pointY');
+            const movingPoint = document.getElementById('movingPoint');
+            const coordLabel = document.getElementById('coordLabel');
+
+            function updatePoint() {
+                const x = parseInt(pointX.value);
+                const y = parseInt(pointY.value);
+                document.getElementById('pointXVal').textContent = x;
+                document.getElementById('pointYVal').textContent = y;
+                
+                const svgX = 200 + x * 25;
+                const svgY = 150 - y * 25;
+                
+                movingPoint.setAttribute('cx', svgX);
+                movingPoint.setAttribute('cy', svgY);
+                coordLabel.setAttribute('x', svgX + 10);
+                coordLabel.setAttribute('y', svgY - 10);
+                coordLabel.textContent = `(${x}, ${y})`;
+            }
+
+            if(pointX) { pointX.oninput = updatePoint; pointY.oninput = updatePoint; updatePoint(); }
+
+            // Animation 2: Slope Visualization
+            const slopeSlider = document.getElementById('slopeSlider');
+            const slopeLine = document.getElementById('slopeLine');
+            const slopeEq = document.getElementById('slopeEq');
+
+            function updateSlope() {
+                const m = parseFloat(slopeSlider.value);
+                document.getElementById('slopeVal').textContent = m;
+                
+                // Line passing through center (200, 150)
+                // y - y0 = m(x - x0) -> Y = 150 - m*(X - 200)
+                const x1 = 0, x2 = 400;
+                const y1 = 150 - m * (x1 - 200);
+                const y2 = 150 - m * (x2 - 200);
+                
+                slopeLine.setAttribute('x1', x1);
+                slopeLine.setAttribute('y1', y1);
+                slopeLine.setAttribute('x2', x2);
+                slopeLine.setAttribute('y2', y2);
+                
+                let label = "y = ";
+                if (m === 0) label += "0";
+                else if (m === 1) label += "x";
+                else if (m === -1) label += "-x";
+                else label += m + "x";
+                
+                slopeEq.textContent = label;
+            }
+
+            if(slopeSlider) { slopeSlider.oninput = updateSlope; updateSlope(); }
+
+            // Animation 3: Two Lines Position
+            const line1 = document.getElementById('line1');
+            const line2 = document.getElementById('line2');
+            const lineInfo = document.getElementById('lineInfo');
+            const btnParallel = document.getElementById('btnParallel');
+            const btnPerpendicular = document.getElementById('btnPerpendicular');
+            const btnIntersect = document.getElementById('btnIntersect');
+
+            function setLines(type) {
+                if (type === 'parallel') {
+                    line1.setAttribute('x1', '0'); line1.setAttribute('y1', '100'); line1.setAttribute('x2', '400'); line1.setAttribute('y2', '200');
+                    line2.setAttribute('x1', '0'); line2.setAttribute('y1', '50'); line2.setAttribute('x2', '400'); line2.setAttribute('y2', '150');
+                    lineInfo.innerHTML = "Garis 1: y = 0.25x + 100<br>Garis 2: y = 0.25x + 50<br>Kedua garis sejajar karena gradiennya sama.";
+                } else if (type === 'perpendicular') {
+                    line1.setAttribute('x1', '0'); line1.setAttribute('y1', '300'); line1.setAttribute('x2', '400'); line1.setAttribute('y2', '0');
+                    line2.setAttribute('x1', '0'); line2.setAttribute('y1', '0'); line2.setAttribute('x2', '400'); line2.setAttribute('y2', '300');
+                    lineInfo.innerHTML = "Garis 1: y = x<br>Garis 2: y = -x<br>Tegak lurus karena m1 * m2 = -1 (1 * -1 = -1).";
+                } else {
+                    line1.setAttribute('x1', '0'); line1.setAttribute('y1', '250'); line1.setAttribute('x2', '400'); line1.setAttribute('y2', '50');
+                    line2.setAttribute('x1', '0'); line2.setAttribute('y1', '50'); line2.setAttribute('x2', '400'); line2.setAttribute('y2', '250');
+                    lineInfo.innerHTML = "Garis 1: y = 2x<br>Garis 2: y = -2x<br>Berpotongan di titik asal karena gradien berbeda.";
+                }
+            }
+
+            if(btnParallel) {
+                btnParallel.onclick = () => { btnParallel.classList.add('active'); btnPerpendicular.classList.remove('active'); btnIntersect.classList.remove('active'); setLines('parallel'); };
+                btnPerpendicular.onclick = () => { btnPerpendicular.classList.add('active'); btnParallel.classList.remove('active'); btnIntersect.classList.remove('active'); setLines('perpendicular'); };
+                btnIntersect.onclick = () => { btnIntersect.classList.add('active'); btnParallel.classList.remove('active'); btnPerpendicular.classList.remove('active'); setLines('intersect'); };
+                setLines('parallel');
+            }
+        });
+    </script>
+</body>
+</html>

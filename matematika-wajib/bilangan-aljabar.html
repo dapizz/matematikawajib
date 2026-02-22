@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bilangan dan Aljabar - Matematika Wajib SMA">
+    <title>Bilangan dan Aljabar - Media Belajar Daffa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ============================================
+           Fraction Styles - Pecahan Vertikal
+        ============================================ */
+        .fraction {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            font-family: var(--font-display);
+        }
+
+        .fraction-numerator {
+            padding: 2px 8px;
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .fraction-line {
+            width: 100%;
+            height: 2px;
+            background: var(--text-primary);
+            border-radius: 1px;
+        }
+
+        .fraction-denominator {
+            padding: 2px 8px;
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .fraction-sm .fraction-numerator,
+        .fraction-sm .fraction-denominator {
+            font-size: 0.875rem;
+            padding: 1px 6px;
+        }
+
+        .fraction-lg .fraction-numerator,
+        .fraction-lg .fraction-denominator {
+            font-size: 1.25rem;
+            padding: 4px 12px;
+        }
+
+        .formula-box .fraction {
+            background: var(--bg-card);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            margin: 0 8px;
+        }
+
+        .formula-box .fraction-line {
+            background: var(--accent-primary);
+        }
+
+        .step-math .fraction {
+            background: var(--bg-card);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        /* ============================================
+           Quick Navigation Bar Styles
+        ============================================ */
+        .quick-nav {
+            position: sticky;
+            top: 57px; /* Di bawah header */
+            z-index: 90;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
+            margin: 0 -20px; /* Offset container padding */
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            transition: box-shadow var(--transition-normal);
+        }
+
+        .quick-nav.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+
+        .quick-nav::-webkit-scrollbar {
+            display: none;
+        }
+        .quick-nav {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .quick-nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .quick-nav-btn:hover {
+            background: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        .quick-nav-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .quick-nav {
+                top: 52px;
+                padding: 10px 16px;
+                margin: 0 -16px;
+            }
+            .quick-nav-btn {
+                padding: 6px 12px;
+                font-size: 0.8125rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-inner">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none">
+                        <rect x="4" y="8" width="32" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4 14h32" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="10" cy="11" r="2" fill="currentColor"/>
+                        <circle cx="16" cy="11" r="2" fill="currentColor"/>
+                        <rect x="8" y="18" width="24" height="2" rx="1" fill="currentColor" opacity="0.5"/>
+                        <rect x="8" y="24" width="16" height="2" rx="1" fill="currentColor" opacity="0.3"/>
+                    </svg>
+                    <span class="logo-text">Media Belajar Daffa</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle tema">
+                    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <nav class="breadcrumb">
+                        <a href="../index.html">Beranda</a>
+                        <span>/</span>
+                        <a href="index.html">Matematika Wajib</a>
+                        <span>/</span>
+                        <span class="current">Bilangan dan Aljabar</span>
+                    </nav>
+                    <div class="accent-line"></div>
+                    <h1 class="page-title">Bilangan dan Aljabar</h1>
+                    <p class="page-subtitle">
+                        Memahami operasi bilangan real, pangkat, akar, notasi ilmiah, dan operasi aljabar dasar.
+                    </p>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="nav-btn-group">
+                    <a href="index.html" class="nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        Kembali ke Daftar Materi
+                    </a>
+                    <a href="../index.html" class="nav-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        Beranda
+                    </a>
+                </div>
+
+                <!-- Quick Navigation -->
+                <nav class="quick-nav" id="quickNav">
+                    <a href="#materi-inti" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg> Materi Inti</a>
+                    <a href="#animasi-interaktif" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Animasi</a>
+                    <a href="#contoh-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Contoh Soal</a>
+                    <a href="#latihan-soal" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Latihan</a>
+                    <a href="#kuis" class="quick-nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Kuis</a>
+                </nav>
+
+                <!-- Learning Objectives -->
+                <section class="content-section">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <h2 class="section-title">Tujuan Pembelajaran</h2>
+                    </div>
+                    <div class="objectives-list">
+                        <div class="objective-item">
+                            <span class="objective-number">1</span>
+                            <span class="objective-text">Memahami dan melakukan operasi bilangan real (penjumlahan, pengurangan, perkalian, pembagian)</span>
+                        </div>
+                        <div class="objective-item">
+                            <span class="objective-number">2</span>
+                            <span class="objective-text">Menghitung pangkat dan akar bilangan</span>
+                        </div>
+                        <div class="objective-item">
+                            <span class="objective-number">3</span>
+                            <span class="objective-text">Menyederhanakan bentuk akar dan melakukan rasionalisasi</span>
+                        </div>
+                        <div class="objective-item">
+                            <span class="objective-number">4</span>
+                            <span class="objective-text">Menulis dan menghitung bilangan dalam notasi ilmiah</span>
+                        </div>
+                        <div class="objective-item">
+                            <span class="objective-number">5</span>
+                            <span class="objective-text">Melakukan operasi aljabar dasar</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Material Content -->
+                <section class="content-section" id="materi-inti">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+                        </svg>
+                        <h2 class="section-title">Materi Inti</h2>
+                    </div>
+
+                    <div class="material-content">
+                        <h3>1. Operasi Bilangan Real</h3>
+                        <p>Bilangan real adalah gabungan dari bilangan rasional (seperti pecahan dan bulat) dan bilangan irasional (seperti akar dari bilangan yang tidak sempurna). Operasi dasar pada bilangan real meliputi:</p>
+                        
+                        <h4>Penjumlahan dan Pengurangan</h4>
+                        <p>Penjumlahan menggabungkan nilai dua bilangan atau lebih. Pengurangan mengurangi nilai satu bilangan dengan bilangan lainnya.</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Sifat Komutatif Penjumlahan</div>
+                            <div class="formula">a + b = b + a</div>
+                        </div>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Sifat Asosiatif Penjumlahan</div>
+                            <div class="formula">(a + b) + c = a + (b + c)</div>
+                        </div>
+
+                        <h4>Perkalian dan Pembagian</h4>
+                        <p>Perkalian adalah penjumlahan berulang. Pembagian adalah kebalikan dari perkalian.</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Sifat Distributif</div>
+                            <div class="formula">a × (b + c) = (a × b) + (a × c)</div>
+                        </div>
+
+                        <div class="info-box note">
+                            <svg class="info-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                            </svg>
+                            <div class="info-box-content">
+                                <div class="info-box-title">Catatan Penting</div>
+                                <p class="info-box-text">Urutan operasi (PEMDAS/BODMAS): Parentheses/Brackets, Exponents/Orders, Multiplication-Division, Addition-Subtraction.</p>
+                            </div>
+                        </div>
+
+                        <h3>2. Pangkat dan Akar</h3>
+                        <p>Pangkat menunjukkan berapa kali suatu bilangan dikalikan dengan dirinya sendiri. Akar adalah kebalikan dari pangkat.</p>
+
+                        <div class="formula-box">
+                            <div class="formula-label">Definisi Pangkat</div>
+                            <div class="formula">a<sup>n</sup> = a × a × a × ... × a (n kali)</div>
+                        </div>
+
+                        <h4>Sifat-sifat Pangkat:</h4>
+                        <ul>
+                            <li><strong>a<sup>m</sup> × a<sup>n</sup> = a<sup>m+n</sup></strong> (menjumlahkan eksponen saat basis sama)</li>
+                            <li><strong>a<sup>m</sup> ÷ a<sup>n</sup> = a<sup>m-n</sup></strong> (mengurangkan eksponen saat basis sama)</li>
+                            <li><strong>(a<sup>m</sup>)<sup>n</sup> = a<sup>m×n</sup></strong> (mengalikan eksponen)</li>
+                            <li><strong>a<sup>0</sup> = 1</strong> (setiap bilangan berpangkat 0 sama dengan 1)</li>
+                            <li><strong>a<sup>-n</sup> = <span class="fraction fraction-sm"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">a<sup>n</sup></span></span></strong> (pangkat negatif menjadi pecahan)</li>
+                        </ul>
+
+                        <h4>Akar Kuadrat:</h4>
+                        <p>Akar kuadrat dari a adalah bilangan yang jika dikuadratkan menghasilkan a.</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Akar Kuadrat</div>
+                            <div class="formula">√a = b, jika b² = a</div>
+                        </div>
+
+                        <h3>3. Bentuk Akar dan Rasionalisasi</h3>
+                        <p>Bentuk akar adalah bilangan yang mengandung akar dari bilangan yang tidak memiliki akar kuadrat sempurna (seperti √2, √3, √5).</p>
+
+                        <h4>Menyederhanakan Bentuk Akar:</h4>
+                        <p>Pecah bilangan di dalam akar menjadi faktor yang salah satunya adalah bilangan kuadrat sempurna.</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Contoh Penyederhanaan</div>
+                            <div class="formula">√12 = √(4 × 3) = √4 × √3 = 2√3</div>
+                        </div>
+
+                        <h4>Rasionalisasi Penyebut:</h4>
+                        <p>Menghilangkan akar dari penyebut pecahan dengan mengalikan bentuk sekawannya.</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Rasionalisasi Sederhana</div>
+                            <div class="formula">
+                                <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">√a</span></span>
+                                = 
+                                <span class="fraction"><span class="fraction-numerator">√a</span><span class="fraction-line"></span><span class="fraction-denominator">a</span></span>
+                            </div>
+                        </div>
+
+                        <div class="formula-box">
+                            <div class="formula-label">Bentuk Sekawan (a + √b)</div>
+                            <div class="formula">
+                                <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">a + √b</span></span>
+                                × 
+                                <span class="fraction"><span class="fraction-numerator">a - √b</span><span class="fraction-line"></span><span class="fraction-denominator">a - √b</span></span>
+                                = 
+                                <span class="fraction"><span class="fraction-numerator">a - √b</span><span class="fraction-line"></span><span class="fraction-denominator">a² - b</span></span>
+                            </div>
+                        </div>
+
+                        <h3>4. Notasi Ilmiah</h3>
+                        <p>Notasi ilmiah digunakan untuk menulis bilangan yang sangat besar atau sangat kecil dalam bentuk yang lebih ringkas.</p>
+
+                        <div class="formula-box">
+                            <div class="formula-label">Bentuk Notasi Ilmiah</div>
+                            <div class="formula">a × 10<sup>n</sup>, dengan 1 ≤ a < 10</div>
+                        </div>
+
+                        <h4>Contoh:</h4>
+                        <ul>
+                            <li>3.500.000 = 3,5 × 10<sup>6</sup></li>
+                            <li>0,00045 = 4,5 × 10<sup>-4</sup></li>
+                            <li>Jarak bumi ke matahari ≈ 1,5 × 10<sup>8</sup> km</li>
+                        </ul>
+
+                        <h3>5. Operasi Aljabar</h3>
+                        <p>Aljabar menggunakan huruf sebagai variabel untuk mewakili bilangan yang belum diketahui.</p>
+
+                        <h4>Penjumlahan dan Pengurangan Suku Sejenis:</h4>
+                        <p>Suku sejenis adalah suku yang memiliki variabel dan pangkat yang sama.</p>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Contoh</div>
+                            <div class="formula">3x + 5x = 8x</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula">7a² - 2a² = 5a²</div>
+                        </div>
+
+                        <h4>Perkalian Aljabar:</h4>
+                        <div class="formula-box">
+                            <div class="formula-label">Perkalian Suku Satu</div>
+                            <div class="formula">2x × 3x = 6x²</div>
+                        </div>
+                        
+                        <div class="formula-box">
+                            <div class="formula-label">Perkalian Suku Dua (FOIL)</div>
+                            <div class="formula">(a + b)(c + d) = ac + ad + bc + bd</div>
+                        </div>
+
+                        <div class="formula-box">
+                            <div class="formula-label">Identitas Khusus</div>
+                            <div class="formula">(a + b)² = a² + 2ab + b²</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula">(a - b)² = a² - 2ab + b²</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula">(a + b)(a - b) = a² - b²</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Interactive Animation -->
+                <section class="content-section" id="animasi-interaktif">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        <h2 class="section-title">Animasi Interaktif</h2>
+                    </div>
+
+                    <!-- Animation 1: Pangkat -->
+                    <div class="animation-container">
+                        <div class="animation-header">
+                            <span class="animation-title">Visualisasi Pangkat</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Pangkat (n):</span>
+                            <input type="range" class="slider-input" id="powerSlider" min="0" max="6" value="2">
+                            <span class="slider-value" id="powerValue">2</span>
+                        </div>
+                        <div class="animation-canvas" id="powerCanvas">
+                            <svg class="canvas-svg" viewBox="0 0 400 200" id="powerSvg">
+                                <defs>
+                                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--border-color)" stroke-width="0.5"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#grid)"/>
+                                <g id="powerBars"></g>
+                                <text x="200" y="190" text-anchor="middle" fill="var(--text-secondary)" font-size="14" id="powerLabel">2² = 4</text>
+                            </svg>
+                        </div>
+                        <div class="animation-info">
+                            Geser slider untuk melihat bagaimana nilai 2<sup>n</sup> berubah seiring bertambahnya pangkat.
+                        </div>
+                    </div>
+
+                    <!-- Animation 2: Akar Kuadrat -->
+                    <div class="animation-container">
+                        <div class="animation-header">
+                            <span class="animation-title">Visualisasi Akar Kuadrat</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Bilangan:</span>
+                            <input type="range" class="slider-input" id="sqrtSlider" min="1" max="100" value="25">
+                            <span class="slider-value" id="sqrtValue">25</span>
+                        </div>
+                        <div class="animation-canvas" id="sqrtCanvas">
+                            <svg class="canvas-svg" viewBox="0 0 400 200" id="sqrtSvg">
+                                <defs>
+                                    <pattern id="grid2" width="20" height="20" patternUnits="userSpaceOnUse">
+                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--border-color)" stroke-width="0.5"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#grid2)"/>
+                                <g id="sqrtSquare"></g>
+                                <text x="200" y="190" text-anchor="middle" fill="var(--text-secondary)" font-size="14" id="sqrtLabel">√25 = 5</text>
+                            </svg>
+                        </div>
+                        <div class="animation-info">
+                            Akar kuadrat dari n adalah panjang sisi persegi dengan luas n.
+                        </div>
+                    </div>
+
+                    <!-- Animation 3: Notasi Ilmiah -->
+                    <div class="animation-container">
+                        <div class="animation-header">
+                            <span class="animation-title">Pergeseran Desimal Notasi Ilmiah</span>
+                        </div>
+                        <div class="slider-control">
+                            <span class="slider-label">Pangkat 10:</span>
+                            <input type="range" class="slider-input" id="scientificSlider" min="-5" max="5" value="0">
+                            <span class="slider-value" id="scientificValue">0</span>
+                        </div>
+                        <div class="animation-canvas" id="scientificCanvas">
+                            <svg class="canvas-svg" viewBox="0 0 400 200" id="scientificSvg">
+                                <rect width="100%" height="100%" fill="var(--bg-secondary)"/>
+                                <text x="200" y="80" text-anchor="middle" fill="var(--text-primary)" font-size="24" font-weight="bold" id="scientificNumber">3,5</text>
+                                <text x="200" y="120" text-anchor="middle" fill="var(--text-secondary)" font-size="16" id="scientificNotation">3,5 × 10⁰ = 3,5</text>
+                                <line x1="50" y1="140" x2="350" y2="140" stroke="var(--border-color)" stroke-width="2"/>
+                                <g id="tickMarks"></g>
+                            </svg>
+                        </div>
+                        <div class="animation-info">
+                            Perhatikan bagaimana posisi desimal bergeser saat pangkat berubah.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Example Problems -->
+                <section class="content-section" id="contoh-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <h2 class="section-title">Contoh Soal dan Pembahasan</h2>
+                    </div>
+
+                    <!-- Example 1 -->
+                    <div class="example-card">
+                        <div class="example-header">
+                            <span class="example-number">1</span>
+                            <span class="example-title">Operasi Bilangan Real</span>
+                        </div>
+                        <div class="example-body">
+                            <p class="example-question">Hitunglah: 15 + 8 × 3 - 20 ÷ 4</p>
+                            <div class="solution-steps">
+                                <div class="solution-step">
+                                    <span class="step-marker">1</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 1</span>
+                                        <p class="step-text">Terapkan urutan operasi (perkalian dan pembagian terlebih dahulu)</p>
+                                        <span class="step-math">8 × 3 = 24 dan 20 ÷ 4 = 5</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">2</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 2</span>
+                                        <p class="step-text">Substitusi hasil ke dalam soal</p>
+                                        <span class="step-math">15 + 24 - 5</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">3</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 3</span>
+                                        <p class="step-text">Lakukan penjumlahan dan pengurangan dari kiri ke kanan</p>
+                                        <span class="step-math">15 + 24 = 39, lalu 39 - 5 = 34</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-answer">
+                                <svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                <span class="answer-text">Jawaban: 34</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 2 -->
+                    <div class="example-card">
+                        <div class="example-header">
+                            <span class="example-number">2</span>
+                            <span class="example-title">Sifat Pangkat</span>
+                        </div>
+                        <div class="example-body">
+                            <p class="example-question">Sederhanakan: 2³ × 2⁵ ÷ 2⁴</p>
+                            <div class="solution-steps">
+                                <div class="solution-step">
+                                    <span class="step-marker">1</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 1</span>
+                                        <p class="step-text">Gabungkan perkalian dengan menjumlahkan eksponen</p>
+                                        <span class="step-math">2³ × 2⁵ = 2³⁺⁵ = 2⁸</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">2</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 2</span>
+                                        <p class="step-text">Bagi dengan mengurangkan eksponen</p>
+                                        <span class="step-math">2⁸ ÷ 2⁴ = 2⁸⁻⁴ = 2⁴</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">3</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 3</span>
+                                        <p class="step-text">Hitung nilai</p>
+                                        <span class="step-math">2⁴ = 16</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-answer">
+                                <svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                <span class="answer-text">Jawaban: 16</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 3 -->
+                    <div class="example-card">
+                        <div class="example-header">
+                            <span class="example-number">3</span>
+                            <span class="example-title">Rasionalisasi</span>
+                        </div>
+                        <div class="example-body">
+                            <p class="example-question">Rasionalisasi penyebut dari: 
+                                <span class="fraction"><span class="fraction-numerator">6</span><span class="fraction-line"></span><span class="fraction-denominator">2 + √3</span></span>
+                            </p>
+                            <div class="solution-steps">
+                                <div class="solution-step">
+                                    <span class="step-marker">1</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 1</span>
+                                        <p class="step-text">Kalikan pembilang dan penyebut dengan bentuk sekawan (2 - √3)</p>
+                                        <span class="step-math">
+                                            <span class="fraction"><span class="fraction-numerator">6</span><span class="fraction-line"></span><span class="fraction-denominator">2 + √3</span></span>
+                                            × 
+                                            <span class="fraction"><span class="fraction-numerator">2 - √3</span><span class="fraction-line"></span><span class="fraction-denominator">2 - √3</span></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">2</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 2</span>
+                                        <p class="step-text">Hitung penyebut menggunakan identitas selisih kuadrat</p>
+                                        <span class="step-math">(2 + √3)(2 - √3) = 4 - 3 = 1</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">3</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 3</span>
+                                        <p class="step-text">Hitung pembilang</p>
+                                        <span class="step-math">6(2 - √3) = 12 - 6√3</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-answer">
+                                <svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                <span class="answer-text">Jawaban: 12 - 6√3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 4 -->
+                    <div class="example-card">
+                        <div class="example-header">
+                            <span class="example-number">4</span>
+                            <span class="example-title">Notasi Ilmiah</span>
+                        </div>
+                        <div class="example-body">
+                            <p class="example-question">Nyatakan 0,0000345 dalam notasi ilmiah, lalu hitung (3 × 10⁴) × (2 × 10⁻²)</p>
+                            <div class="solution-steps">
+                                <div class="solution-step">
+                                    <span class="step-marker">1</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Notasi Ilmiah</span>
+                                        <p class="step-text">Pindahkan desimal 5 tempat ke kanan</p>
+                                        <span class="step-math">0,0000345 = 3,45 × 10⁻⁵</span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">2</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Operasi</span>
+                                        <p class="step-text">Kalikan koefisien dan jumlahkan eksponen</p>
+                                        <span class="step-math">(3 × 2) × 10⁴⁺⁽⁻²⁾ = 6 × 10²</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-answer">
+                                <svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                <span class="answer-text">3,45 × 10⁻⁵ dan 6 × 10² = 600</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Example 5 -->
+                    <div class="example-card">
+                        <div class="example-header">
+                            <span class="example-number">5</span>
+                            <span class="example-title">Operasi Pecahan</span>
+                        </div>
+                        <div class="example-body">
+                            <p class="example-question">Hitunglah: 
+                                <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">2</span></span>
+                                + 
+                                <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">3</span></span>
+                                + 
+                                <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">6</span></span>
+                            </p>
+                            <div class="solution-steps">
+                                <div class="solution-step">
+                                    <span class="step-marker">1</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 1</span>
+                                        <p class="step-text">Cari KPK dari penyebut (2, 3, 6) = 6</p>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">2</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 2</span>
+                                        <p class="step-text">Ubah semua pecahan menjadi penyebut 6</p>
+                                        <span class="step-math">
+                                            <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">2</span></span>
+                                            = 
+                                            <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-line"></span><span class="fraction-denominator">6</span></span>
+                                            , 
+                                            <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">3</span></span>
+                                            = 
+                                            <span class="fraction"><span class="fraction-numerator">2</span><span class="fraction-line"></span><span class="fraction-denominator">6</span></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="solution-step">
+                                    <span class="step-marker">3</span>
+                                    <div class="step-content">
+                                        <span class="step-label">Langkah 3</span>
+                                        <p class="step-text">Jumlahkan pembilang</p>
+                                        <span class="step-math">
+                                            <span class="fraction"><span class="fraction-numerator">3</span><span class="fraction-line"></span><span class="fraction-denominator">6</span></span>
+                                            + 
+                                            <span class="fraction"><span class="fraction-numerator">2</span><span class="fraction-line"></span><span class="fraction-denominator">6</span></span>
+                                            + 
+                                            <span class="fraction"><span class="fraction-numerator">1</span><span class="fraction-line"></span><span class="fraction-denominator">6</span></span>
+                                            = 
+                                            <span class="fraction"><span class="fraction-numerator">6</span><span class="fraction-line"></span><span class="fraction-denominator">6</span></span>
+                                            = 1
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="example-answer">
+                                <svg class="answer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                <span class="answer-text">Jawaban: 1</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Practice Problems -->
+                <section class="content-section" id="latihan-soal">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                        <h2 class="section-title">Latihan Soal</h2>
+                    </div>
+                    <div class="practice-grid">
+                        <div class="practice-item">
+                            <span class="practice-number">1</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Hitung: 24 ÷ 4 + 3 × 5 - 10</p>
+                                <p class="practice-hint">Hint: Ingat urutan operasi - pembagian dan perkalian lebih dulu</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">2</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Sederhanakan: (2³)² × 2⁻²</p>
+                                <p class="practice-hint">Hint: Gunakan sifat (a<sup>m</sup>)<sup>n</sup> = a<sup>m×n</sup></p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">3</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Sederhanakan: √75 - √27 + √12</p>
+                                <p class="practice-hint">Hint: Pecah menjadi bentuk akar paling sederhana dulu</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">4</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Rasionalisasi: 
+                                    <span class="fraction fraction-sm"><span class="fraction-numerator">5</span><span class="fraction-line"></span><span class="fraction-denominator">√7 - 2</span></span>
+                                </p>
+                                <p class="practice-hint">Hint: Kalikan dengan bentuk sekawan (√7 + 2)</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">5</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Nyatakan 4.500.000 dalam notasi ilmiah</p>
+                                <p class="practice-hint">Hint: Pindahkan desimal hingga antara 1 dan 10</p>
+                            </div>
+                        </div>
+                        <div class="practice-item">
+                            <span class="practice-number">6</span>
+                            <div class="practice-content">
+                                <p class="practice-question">Hitung: 
+                                    <span class="fraction fraction-sm"><span class="fraction-numerator">2</span><span class="fraction-line"></span><span class="fraction-denominator">5</span></span>
+                                    × 
+                                    <span class="fraction fraction-sm"><span class="fraction-numerator">3</span><span class="fraction-line"></span><span class="fraction-denominator">4</span></span>
+                                </p>
+                                <p class="practice-hint">Hint: Kalikan pembilang dengan pembilang, penyebut dengan penyebut</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz Section -->
+                <section class="content-section" id="kuis">
+                    <div class="section-header">
+                        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        </svg>
+                        <h2 class="section-title">Kuis Bilangan dan Aljabar</h2>
+                    </div>
+                    <div id="quizContainer"></div>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <span class="footer-name">Media Belajar Daffa</span>
+                    <span class="footer-class">Muhammad Daffa Athallah - XII-M4-1</span>
+                </div>
+                <div class="footer-info">
+                    Platform Pembelajaran Mandiri
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="quiz-engine.js"></script>
+    <script>
+        // Quiz Questions for Bilangan dan Aljabar
+        const quizQuestions = [
+            {
+                question: "Hasil dari 18 + 6 × 4 - 30 ÷ 5 adalah...",
+                options: ["36", "42", "30", "24"],
+                correct: 0,
+                explanation: "Urutan operasi: 6×4=24, 30÷5=6, lalu 18+24-6=36"
+            },
+            {
+                question: "Nilai dari 2⁵ adalah...",
+                options: ["10", "16", "32", "64"],
+                correct: 2,
+                explanation: "2⁵ = 2×2×2×2×2 = 32"
+            },
+            {
+                question: "Sederhanakan: 3⁴ × 3² ÷ 3³",
+                options: ["3²", "3³", "3⁴", "3⁵"],
+                correct: 1,
+                explanation: "3⁴⁺²⁻³ = 3³"
+            },
+            {
+                question: "Bentuk sederhana dari √50 adalah...",
+                options: ["5√2", "2√5", "25√2", "10√5"],
+                correct: 0,
+                explanation: "√50 = √(25×2) = 5√2"
+            },
+            {
+                question: "Hasil rasionalisasi dari 4/√2 adalah...",
+                options: ["4√2", "2√2", "√2", "8√2"],
+                correct: 1,
+                explanation: "4/√2 × √2/√2 = 4√2/2 = 2√2"
+            },
+            {
+                question: "Notasi ilmiah dari 0,00025 adalah...",
+                options: ["2,5 × 10³", "2,5 × 10⁻³", "2,5 × 10⁴", "2,5 × 10⁻⁴"],
+                correct: 3,
+                explanation: "Desimal digeser 4 kali ke kanan, sehingga eksponen negatif"
+            },
+            {
+                question: "Hasil dari (2 × 10³) × (3 × 10²) adalah...",
+                options: ["6 × 10⁵", "6 × 10⁶", "5 × 10⁵", "6 × 10³"],
+                correct: 0,
+                explanation: "2×3=6, 10³⁺²=10⁵, sehingga 6×10⁵"
+            },
+            {
+                question: "Hasil dari (x + 3)(x - 2) adalah...",
+                options: ["x² + x - 6", "x² - x - 6", "x² + x + 6", "x² - x + 6"],
+                correct: 0,
+                explanation: "x² - 2x + 3x - 6 = x² + x - 6"
+            },
+            {
+                question: "Nilai dari 5⁰ + 3⁻² adalah...",
+                options: ["1 + 1/9", "0 + 1/9", "1 + 1/6", "5 + 9"],
+                correct: 0,
+                explanation: "5⁰ = 1, 3⁻² = 1/9, sehingga 1 + 1/9"
+            },
+            {
+                question: "Bentuk sederhana dari 2√3 + 5√3 - √3 adalah...",
+                options: ["6√3", "7√3", "8√3", "5√3"],
+                correct: 0,
+                explanation: "Suku sejenis dapat dijumlahkan: 2+5-1 = 6, sehingga 6√3"
+            }
+        ];
+
+        // Initialize Quiz
+        document.addEventListener('DOMContentLoaded', function() {
+            const quiz = new QuizEngine('quizContainer', quizQuestions);
+            quiz.init();
+            
+            // Quick Nav Scroll Shadow
+            const quickNav = document.getElementById('quickNav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 200) {
+                    quickNav.classList.add('scrolled');
+                } else {
+                    quickNav.classList.remove('scrolled');
+                }
+            });
+
+            // Animation 1: Power visualization
+            const powerSlider = document.getElementById('powerSlider');
+            const powerValue = document.getElementById('powerValue');
+            const powerBars = document.getElementById('powerBars');
+            const powerLabel = document.getElementById('powerLabel');
+
+            function superscript(num) {
+                const superscripts = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+                return String(num).split('').map(d => superscripts[parseInt(d)]).join('');
+            }
+
+            function updatePowerVisualization() {
+                const n = parseInt(powerSlider.value);
+                powerValue.textContent = n;
+                
+                const result = Math.pow(2, n);
+                const maxHeight = 150;
+                
+                let barsHTML = '';
+                for (let i = 0; i <= n && i < 7; i++) {
+                    const h = Math.min(Math.pow(2, i) * 3, maxHeight);
+                    const x = 50 + i * 50;
+                    barsHTML += `
+                        <rect x="${x}" y="${180-h}" width="30" height="${h}" fill="var(--accent-primary)" rx="4"/>
+                        <text x="${x+15}" y="175" text-anchor="middle" fill="var(--text-muted)" font-size="10">2<tspan baseline-shift="super" font-size="8">${i}</tspan></text>
+                    `;
+                }
+                powerBars.innerHTML = barsHTML;
+                powerLabel.textContent = `2${n > 0 ? superscript(n) : '⁰'} = ${result}`;
+            }
+
+            if (powerSlider) {
+                powerSlider.addEventListener('input', updatePowerVisualization);
+                updatePowerVisualization();
+            }
+
+            // Animation 2: Square root visualization
+            const sqrtSlider = document.getElementById('sqrtSlider');
+            const sqrtValue = document.getElementById('sqrtValue');
+            const sqrtSquare = document.getElementById('sqrtSquare');
+            const sqrtLabel = document.getElementById('sqrtLabel');
+
+            function updateSqrtVisualization() {
+                const n = parseInt(sqrtSlider.value);
+                sqrtValue.textContent = n;
+                
+                const sqrtN = Math.sqrt(n);
+                const intSqrt = Math.floor(sqrtN);
+                
+                const size = intSqrt * 20;
+                const x = 200 - size/2;
+                const y = 100 - size/2;
+                
+                let squareHTML = `
+                    <rect x="${x}" y="${y}" width="${size}" height="${size}" fill="var(--accent-primary)" opacity="0.3" stroke="var(--accent-primary)" stroke-width="2" rx="4"/>
+                `;
+                
+                for (let i = 0; i < intSqrt; i++) {
+                    for (let j = 0; j < intSqrt; j++) {
+                        const ux = x + i * 20;
+                        const uy = y + j * 20;
+                        squareHTML += `<rect x="${ux}" y="${uy}" width="18" height="18" fill="var(--accent-light)" opacity="0.5" rx="2"/>`;
+                    }
+                }
+                
+                sqrtSquare.innerHTML = squareHTML;
+                sqrtLabel.textContent = `√${n} ≈ ${sqrtN.toFixed(2)} (sisi persegi)`;
+            }
+
+            if (sqrtSlider) {
+                sqrtSlider.addEventListener('input', updateSqrtVisualization);
+                updateSqrtVisualization();
+            }
+
+            // Animation 3: Scientific notation
+            const scientificSlider = document.getElementById('scientificSlider');
+            const scientificValue = document.getElementById('scientificValue');
+            const scientificNumber = document.getElementById('scientificNumber');
+            const scientificNotation = document.getElementById('scientificNotation');
+
+            function updateScientificVisualization() {
+                const n = parseInt(scientificSlider.value);
+                scientificValue.textContent = n;
+                
+                const result = 3.5 * Math.pow(10, n);
+                const displayResult = result.toLocaleString('id-ID', {maximumFractionDigits: 10});
+                
+                scientificNumber.textContent = displayResult;
+                scientificNotation.textContent = `3,5 × 10${superscript(n)} = ${displayResult}`;
+            }
+
+            if (scientificSlider) {
+                scientificSlider.addEventListener('input', updateScientificVisualization);
+                updateScientificVisualization();
+            }
+        });
+    </script>
+</body>
+</html>
